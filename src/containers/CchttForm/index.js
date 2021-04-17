@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, bindActionCreators } from 'redux';
 import * as modalActions from '../../actions/modal';
-import * as OrderActions from '../../actions/orderActions';
+import * as cchttActions from '../../actions/cchttActions';
 import * as customerActions from '../../actions/customerActions';
 import Alert from '@material-ui/lab/Alert';
 
@@ -15,7 +15,7 @@ import renderTextField from '../../components/FormHelper/TextField';
 import moment from 'moment';
 import { ConsoleWriter } from 'istanbul-lib-report';
 
-class OrderForm extends Component {
+class CchttForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -32,7 +32,7 @@ class OrderForm extends Component {
 
     // if (isAuthenticated !== nextprops.isAuthenticated) {
     //   if (isAuthenticated) {
-    //     history.push('/admin/order');
+    //     history.push('/admin/cchtt');
     //   }
     // }
     if (msgError !== nextprops.msgError) {
@@ -47,35 +47,30 @@ class OrderForm extends Component {
     listAllCustomers();
   }
   handleSubmitForm = (data) => {
-    const { orderActionsCreator, orderEditting, user } = this.props;
-    // const { userIdSelect } = this.state;
-    const { addOrder, updateOrder } = orderActionsCreator;
-    const { WO, timeStart, timeStop, content, location, KKS } = data;
-    const newOrder = {
-      ...(orderEditting || {}),
+    const { cchttActionsCreator, cchttEditting, user } = this.props;
+    console.log(user)
+    const { addcchtt, updatecchtt } = cchttActionsCreator;
+    const { WO, PCT, timeChange, note } = data;
+    console.log(data)
+    const newcchtt = {
+      ...(cchttEditting || {}),
       WO,
-      timeStart,
-      timeStop,
-      location,
-      KKS,
+      PCT,
+      timeChange,
+      note: note || '',
       userId: user._id,
-      status: 'START',
-      statusTool: 'START',
-      content: content || ''
     }
-    if (orderEditting) {
-      newOrder.PCT = orderEditting.PCT
-      newOrder.toolId = orderEditting.toolId
-      newOrder.userId = orderEditting.userId
-      newOrder.status = orderEditting.status
-      newOrder.statusTool = orderEditting.statusTool
-      if (user.admin || newOrder.userId._id === user._id) {
-        updateOrder(newOrder);
+    if (cchttEditting) {
+      newcchtt.PCT = cchttEditting.PCT
+      newcchtt.WO = cchttEditting.WO
+      newcchtt.userId = cchttEditting.userId
+      newcchtt.timeChange = cchttEditting.timeChange
+      newcchtt.note = cchttEditting.note
+      if (user.admin || newcchtt.userId._id === user._id) {
+        updatecchtt(newcchtt);
       }
     } else {
-      newOrder.status = 'START'
-      newOrder.statusTool = 'START'
-      addOrder(newOrder);
+      addcchtt(newcchtt);
     }
   };
   handleChangeCustomer = (event) => {
@@ -84,7 +79,7 @@ class OrderForm extends Component {
       [name]: event.target.value,
     });
   };
-  renderOrderFail = () => {
+  rendercchttFail = () => {
     const { msgError } = this.state;
     console.log(msgError);
     let xhtml = null;
@@ -114,7 +109,7 @@ class OrderForm extends Component {
             <Field
               id="WO"
               name="WO"
-              label="Work Order"
+              label="Work cchtt"
               className={classes.TextField}
               margin="normal"
               component={renderTextField}
@@ -122,19 +117,9 @@ class OrderForm extends Component {
           </Grid>
           <Grid item md={12}>
             <Field
-              id="location"
-              name="location"
-              label="Địa điểm công tác"
-              className={classes.TextField}
-              margin="normal"
-              component={renderTextField}
-            ></Field>
-          </Grid>
-          <Grid item md={12}>
-            <Field
-              id="KKS"
-              name="KKS"
-              label="Hệ thống / KKS"
+              id="PCT"
+              name="PCT"
+              label="Tại PCT"
               className={classes.TextField}
               margin="normal"
               component={renderTextField}
@@ -149,9 +134,9 @@ class OrderForm extends Component {
           }
           <Grid item md={12}>
             <Field
-              id="timeStart"
-              name="timeStart"
-              label={initialValues.WO == null ? "Ngày bắt đầu dự kiến": "Ngày bắt đầu thực tế"} 
+              id="timeChange"
+              name="timeChange"
+              label="Thời gian thay đổi" 
               type="date"
               className={classes.TextField}
               margin="normal"
@@ -160,20 +145,9 @@ class OrderForm extends Component {
           </Grid>
           <Grid item md={12}>
             <Field
-              id="timeStop"
-              name="timeStop"
-              label=  {initialValues.WO == null ? "Ngày kết thúc dự kiến": "Ngày kết thúc thực tế"} 
-              type="date"
-              className={classes.TextField}
-              margin="normal"
-              component={renderTextField}
-            ></Field>
-          </Grid>
-          <Grid item md={12}>
-            <Field
-              id="content"
-              name="content"
-              label="Nội dung công tác"
+              id="note"
+              name="note"
+              label="Ghi chú"
               multiline
               rowsMax={4}
               className={classes.TextField}
@@ -182,30 +156,6 @@ class OrderForm extends Component {
             ></Field>
           </Grid>
           {
-            // user && user.admin && !initialValues.WO ?
-            //   <Grid item md={12}>
-            //     <FormControl className={classes.TextFieldCustomer}>
-            //       <InputLabel htmlFor="age-native-simple">Người dùng</InputLabel>
-            //       <Select
-            //         native
-            //         fullWidth
-            //         value={userIdSelect}
-            //         onChange={this.handleChangeCustomer}
-            //         inputProps={{
-            //           name: 'userIdSelect',
-            //           id: 'userId',
-            //         }}
-            //       >
-            //         <option aria-label="None" value="" />
-            //         {
-            //           customers.map((customer) => {
-            //             return <option key={customer._id} value={customer._id}>{customer.name}</option>
-            //           })
-            //         }
-            //       </Select>
-            //     </FormControl>
-            //   </Grid>
-            //   : <></>
           }
           <Grid
             container
@@ -214,7 +164,7 @@ class OrderForm extends Component {
             alignItems="flex-end"
           >
 
-            {this.renderOrderFail()}
+            {this.rendercchttFail()}
 
             <Button onClick={hideModal}>Hủy</Button>
             <Button disabled={invalid || submitting} type="submit">
@@ -227,23 +177,20 @@ class OrderForm extends Component {
   }
 }
 
-OrderForm.propTypes = {
+CchttForm.propTypes = {
   customerId: PropTypes.string,
   product: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    orderEditting: state.orders.order,
+    cchttEditting: state.cchtts.cchtt,
     initialValues: {
-      WO: state.orders.order ? state.orders.order.WO : null,
-      PCT: state.orders.order ? state.orders.order.PCT : null,
-      location: state.orders.order ? state.orders.order.location : null,
-      KKS: state.orders.order ? state.orders.order.KKS : null,
-      content: state.orders.order ? state.orders.order.content : '',
-      timeStart: state.orders.order ? moment(state.orders.order.timeStart).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
-      timeStop: state.orders.order ? moment(state.orders.order.timeStop).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
-    },
+      WO: state.cchtts.cchtt ? state.cchtts.cchtt.WO : null,
+      PCT: state.cchtts.cchtt ? state.cchtts.cchtt.PCT : null,
+      note: state.cchtts.cchtt ? state.cchtts.cchtt.note : '',
+      timeChange: state.cchtts.cchtt ? moment(state.cchtts.cchtt.timeChange).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
+      },
     customers: state.customers ? state.customers.customers : [],
     user: state.auth.user,
     msgError: state.error.msg
@@ -253,12 +200,12 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     modalActionsCreator: bindActionCreators(modalActions, dispatch),
-    orderActionsCreator: bindActionCreators(OrderActions, dispatch),
+    cchttActionsCreator: bindActionCreators(cchttActions, dispatch),
     customerActionCreator: bindActionCreators(customerActions, dispatch)
   };
 };
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
-const FORM_NAME = 'ORDER_MANAGEMENT';
+const FORM_NAME = 'cchtt_MANAGEMENT';
 const withReduxForm = reduxForm({
   form: FORM_NAME,
   validate,
@@ -267,4 +214,4 @@ export default compose(
   withStyles(styles),
   withConnect,
   withReduxForm,
-)(OrderForm);
+)(CchttForm);
