@@ -49,7 +49,7 @@ class CchttForm extends Component {
   handleSubmitForm = (data) => {
     const { cchttActionsCreator, cchttEditting, user } = this.props;
     console.log(user)
-    const { addcchtt, updatecchtt } = cchttActionsCreator;
+    const { addCchtt, updateCchtt } = cchttActionsCreator;
     const { WO, PCT, timeChange, note } = data;
     console.log(data)
     const newcchtt = {
@@ -67,10 +67,10 @@ class CchttForm extends Component {
       newcchtt.timeChange = cchttEditting.timeChange
       newcchtt.note = cchttEditting.note
       if (user.admin || newcchtt.userId._id === user._id) {
-        updatecchtt(newcchtt);
+        updateCchtt(newcchtt);
       }
     } else {
-      addcchtt(newcchtt);
+      addCchtt(newcchtt);
     }
   };
   handleChangeCustomer = (event) => {
