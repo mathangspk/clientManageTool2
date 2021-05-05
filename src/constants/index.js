@@ -6,6 +6,7 @@ import PageNotFound from '../containers/PageNotFound';
 import Orders from '../containers/Orders';
 import Changechtts from '../containers/Changechtts';
 import OrderDetail from '../containers/OrderDetail';
+import CchttDetail from '../containers/CchttDetail';
 import Tools from '../containers/Tools';
 import Customers from '../containers/Customers';
 import OrderForm from '../containers/OrderForm';
@@ -95,6 +96,17 @@ export const ADMIN_ROUTES = [
     exact: false,
     component: OrderDetail,
     form: OrderForm,
+    onlyAdmin: false,
+    iconSidebar : ChromeReaderModeIcon,
+    isHide: true
+  },
+  {
+    path: '/admin/cchtt-detail',
+    params: [":cchttId"],
+    name: 'Chi tiết thay đổi chỉ huy trực tiếp',
+    exact: false,
+    component: CchttDetail,
+    form: CchttForm,
     onlyAdmin: false,
     iconSidebar : ChromeReaderModeIcon,
     isHide: true

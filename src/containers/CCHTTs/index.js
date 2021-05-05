@@ -38,9 +38,7 @@ class Cchtts extends Component {
             let { user } = this.props;
             let data = JSON.parse(JSON.stringify(params));
             let checkUser = (user.admin || user._id === params.userId._id);
-            
-
-            //console.log(user)
+            console.log(user)
             return <>
               <Fab
                 color="default"

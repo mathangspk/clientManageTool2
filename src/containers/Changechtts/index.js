@@ -40,7 +40,7 @@ class Changechtts extends Component {
             let checkUser = (user.admin || user._id === params.userId._id);
             
 
-            //console.log(user)
+            console.log(user)
             return <>
               <Fab
                 color="default"
@@ -123,101 +123,101 @@ class Changechtts extends Component {
     searchCchtt(params);
     listAllCustomers();
   }
-  // onClickDelete = (cchtt) => {
-  //   let { user } = this.props;
-  //   const { dataSearch } = this.state;
-  //   if (!user.admin && user._id !== cchtt.userId._id) return;
-  //   let self = this
-  //   popupConfirm({
-  //     title: 'Delete',
-  //     html: "Bạn muốn xóa Work Cchtt này?",
-  //     ifOk: () => {
-  //       const { cchttActionCreator } = self.props;
-  //       const { deleteCchtt } = cchttActionCreator;
-  //       let params = JSON.parse(JSON.stringify(dataSearch))
-  //       deleteCchtt(cchtt, params);
-  //     }
-  //   })
-  // }
-  // onClickView = (idRedirect) => {
-  //   this.setState({
-  //     redirect: true,
-  //     idRedirect
-  //   })
-  // };
-  // onCloseWo = (data) => {
-  //   const { cchttActionCreator, user } = this.props;
-  //   const { updateCchtt } = cchttActionCreator;
-  //   const newCchtt = JSON.parse(JSON.stringify(data));
-  //   switch (newCchtt.status) {
-  //     case 'COMPLETE':
-  //       if (user.pkt) {
-  //         newCchtt.status = 'CLOSE'
-  //       }
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  //   updateCchtt(newCchtt);
-  // };
-  // onClickEdit = (data) => {
-  //   const { cchttActionCreator, modalActionsCreator, user } = this.props;
-  //   const { setCchttEditing } = cchttActionCreator;
-  //   if (!user.admin && user._id !== data.userId._id) return;
-  //   setCchttEditing(data);
-  //   const {
-  //     showModal,
-  //     changeModalTitle,
-  //     changeModalContent,
-  //   } = modalActionsCreator;
-  //   showModal();
-  //   changeModalTitle('Sửa Work Cchtt');
-  //   changeModalContent(<CchttForm />);
-  // }
-  // handleSearch = (event) => {
-  //   const { cchttActionCreator } = this.props;
-  //   const { pagination, dataSearch } = this.state;
-  //   const { searchCchtt } = cchttActionCreator;
-  //   let search = {
-  //     ...dataSearch,
-  //     skip: 0,
-  //     limit: pagination.rowPerPage,
-  //     [event.target.name]: event.target.value
-  //   }
-  //   this.setState({ dataSearch: search });
-  //   searchCchtt(search);
-  // }
-  // handleChangePage = (page, total) => {
-  //   const { cchttActionCreator } = this.props;
-  //   const { pagination, dataSearch } = this.state;
-  //   const { searchCchtt } = cchttActionCreator;
-  //   pagination.page = page;
-  //   this.setState({ pagination })
-  //   let params = JSON.parse(JSON.stringify(dataSearch))
-  //   params = {
-  //     ...params,
-  //     skip: (pagination.page - 1) * pagination.rowPerPage,
-  //     limit: pagination.rowPerPage
-  //   }
-  //   this.setState({ dataSearch: params })
-  //   searchCchtt(params);
-  // }
-  // handleChangeRowsPerPage = (rowPerPage, total) => {
-  //   const { cchttActionCreator } = this.props;
-  //   const { pagination, dataSearch } = this.state;
-  //   const { searchCchtt } = cchttActionCreator;
-  //   pagination.rowPerPage = rowPerPage;
-  //   pagination.page = 1;
-  //   this.setState({ pagination })
-  //   let params = JSON.parse(JSON.stringify(dataSearch))
-  //   params = {
-  //     ...params,
-  //     skip: (pagination.page - 1) * pagination.rowPerPage,
-  //     limit: pagination.rowPerPage
-  //   }
-  //   this.setState({ dataSearch: params })
-  //   searchCchtt(params);
-  // }
+  onClickDelete = (cchtt) => {
+    let { user } = this.props;
+    const { dataSearch } = this.state;
+    if (!user.admin && user._id !== cchtt.userId._id) return;
+    let self = this
+    popupConfirm({
+      title: 'Delete',
+      html: "Bạn muốn xóa Work Cchtt này?",
+      ifOk: () => {
+        const { cchttActionCreator } = self.props;
+        const { deleteCchtt } = cchttActionCreator;
+        let params = JSON.parse(JSON.stringify(dataSearch))
+        deleteCchtt(cchtt, params);
+      }
+    })
+  }
+  onClickView = (idRedirect) => {
+    this.setState({
+      redirect: true,
+      idRedirect
+    })
+  };
+  onCloseWo = (data) => {
+    const { cchttActionCreator, user } = this.props;
+    const { updateCchtt } = cchttActionCreator;
+    const newCchtt = JSON.parse(JSON.stringify(data));
+    switch (newCchtt.status) {
+      case 'COMPLETE':
+        if (user.pkt) {
+          newCchtt.status = 'CLOSE'
+        }
+        break;
+      default:
+        break;
+    }
+    updateCchtt(newCchtt);
+  };
+  onClickEdit = (data) => {
+    const { cchttActionCreator, modalActionsCreator, user } = this.props;
+    const { setCchttEditing } = cchttActionCreator;
+    if (!user.admin && user._id !== data.userId._id) return;
+    setCchttEditing(data);
+    const {
+      showModal,
+      changeModalTitle,
+      changeModalContent,
+    } = modalActionsCreator;
+    showModal();
+    changeModalTitle('Sửa Work Cchtt');
+    changeModalContent(<CchttForm />);
+  }
+  handleSearch = (event) => {
+    const { cchttActionCreator } = this.props;
+    const { pagination, dataSearch } = this.state;
+    const { searchCchtt } = cchttActionCreator;
+    let search = {
+      ...dataSearch,
+      skip: 0,
+      limit: pagination.rowPerPage,
+      [event.target.name]: event.target.value
+    }
+    this.setState({ dataSearch: search });
+    searchCchtt(search);
+  }
+  handleChangePage = (page, total) => {
+    const { cchttActionCreator } = this.props;
+    const { pagination, dataSearch } = this.state;
+    const { searchCchtt } = cchttActionCreator;
+    pagination.page = page;
+    this.setState({ pagination })
+    let params = JSON.parse(JSON.stringify(dataSearch))
+    params = {
+      ...params,
+      skip: (pagination.page - 1) * pagination.rowPerPage,
+      limit: pagination.rowPerPage
+    }
+    this.setState({ dataSearch: params })
+    searchCchtt(params);
+  }
+  handleChangeRowsPerPage = (rowPerPage, total) => {
+    const { cchttActionCreator } = this.props;
+    const { pagination, dataSearch } = this.state;
+    const { searchCchtt } = cchttActionCreator;
+    pagination.rowPerPage = rowPerPage;
+    pagination.page = 1;
+    this.setState({ pagination })
+    let params = JSON.parse(JSON.stringify(dataSearch))
+    params = {
+      ...params,
+      skip: (pagination.page - 1) * pagination.rowPerPage,
+      limit: pagination.rowPerPage
+    }
+    this.setState({ dataSearch: params })
+    searchCchtt(params);
+  }
 
   render() {
     const { Cchtts, customers, CchttsTotal, classes } = this.props;
@@ -287,7 +287,7 @@ class Changechtts extends Component {
               noHeader={true}
               keyField={'_id'}
               columns={columnsGrid}
-             // data={this.genData(Cchtts)}
+              data={this.genData(Cchtts)}
               striped={true}
               pagination
               paginationServer
@@ -304,11 +304,11 @@ class Changechtts extends Component {
       </Fragment>
     );
   }
-  // genData = (Cchtts) => {
-  //   let { user } = this.props;
-  //   if (!user) return [];
-  //   return Cchtts.filter(cchtt => cchtt.userId)
-  // }
+  genData = (Cchtts) => {
+    let { user } = this.props;
+    if (!user) return [];
+    return Cchtts.filter(cchtt => cchtt.userId)
+  }
 }
 const mapStateToProps = (state, ownProps) => {
   return {

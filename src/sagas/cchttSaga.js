@@ -51,6 +51,7 @@ function* getAllCchttSaga({ payload }) {
 }
 
 function* searchCchttSaga({ payload }) {
+  console.log("search")
   yield put(showLoading());
   const token = yield call(getToken);
   const resp = yield call(searchCchtt, token, payload);
