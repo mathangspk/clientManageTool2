@@ -17,7 +17,6 @@ import { Add, GetApp } from '@material-ui/icons';
 
 import * as modalActions from '../../../actions/modal';
 import * as orderActions from '../../../actions/orderActions';
-import * as cchttActions from '../../../actions/cchttActions';
 import * as customerActions from '../../../actions/customerActions';
 import * as toolActions from '../../../actions/toolActions';
 
@@ -100,12 +99,51 @@ class Header extends Component {
       onToggleSidebar(!showSidebar)
     }
   }
+
+  openFormOrder = () => {
+    const { modalActionsCreator, orderActionsCreator } = this.props;
+    const { setOrderEditing } = orderActionsCreator;
+    setOrderEditing(null);
+    const {
+      showModal,
+      changeModalTitle,
+      changeModalContent,
+    } = modalActionsCreator;
+    showModal();
+    changeModalTitle('Thêm Work Order');
+    changeModalContent(<OrderForm />);
+  }
+  openFormCustomer = () => {
+    const { modalActionsCreator, customerActionsCreator } = this.props;
+    const { setCustomerEditing } = customerActionsCreator;
+    setCustomerEditing(null);
+    const {
+      showModal,
+      changeModalTitle,
+      changeModalContent,
+    } = modalActionsCreator;
+    showModal();
+    changeModalTitle('Thêm người dùng');
+    changeModalContent(<CustomerForm />);
+  }
+  openFormTool = () => {
+    const { modalActionsCreator, toolActionsCreator } = this.props;
+    const { setToolEditing } = toolActionsCreator;
+    setToolEditing(null);
+    const {
+      showModal,
+      changeModalTitle,
+      changeModalContent,
+    } = modalActionsCreator;
+    showModal();
+    changeModalTitle('Thêm sản phẩm');
+    changeModalContent(<ToolForm />);
+  }
   openForm = () => {
     const { modalActionsCreator,
       toolActionsCreator,
       customerActionsCreator,
       orderActionsCreator,
-      cchttActionsCreator,
       form: FormComponent,
       labelButtonAdd } = this.props;
     const { setToolEditing } = toolActionsCreator;
@@ -114,8 +152,6 @@ class Header extends Component {
     setCustomerEditing(null);
     const { setOrderEditing } = orderActionsCreator;
     setOrderEditing(null);
-    const { setCchttEditing } = cchttActionsCreator;
-    setCchttEditing(null);
     const {
       showModal,
       changeModalTitle,
@@ -139,40 +175,37 @@ class Header extends Component {
 
   convertArrayOfObjectsToCSV = (array) => {
     let result;
-
+  
     const columnDelimiter = ',';
     const lineDelimiter = '\n';
     const keys = Object.keys(array[0]);
-
+  
     result = '';
     result += keys.join(columnDelimiter);
     result += lineDelimiter;
-
+  
     array.forEach(item => {
       let ctr = 0;
       keys.forEach(key => {
         if (ctr > 0) result += columnDelimiter;
-
+  
         result += item[key];
-
+        
         ctr++;
       });
       result += lineDelimiter;
     });
-
+  
     return result;
   }
   generateOrder = (item) => {
-    return [item.PCT, item.userId.department, item.location, item.KKS, item.content, moment(item.timeStart).format('DD-MM-YYYY'), moment(item.timeStop).format('DD-MM-YYYY'), item.userId.name, item.WO]
-  }
-  generateCchtt = (item) => {
-    return [item.PCCHTT,  item.WO,item.PCT, item.userId.name,  moment(item.timeChange).format('HH:mm DD-MM-YYYY'), item.note]
+    return [item.PCT, item.userId.department, item.location, item.KKS, item.content,  moment(item.timeStart).format('DD-MM-YYYY'), moment(item.timeStop).format('DD-MM-YYYY'),item.userId.name, item.WO]
   }
   generateTool = (item) => {
     if (item.woInfo && item.woInfo.length > 0) {
       let woInfo = item.woInfo.filter(wo => wo.status !== 'COMPLETE');
       if (woInfo.length > 0) {
-        item.woName = woInfo[0].WO;
+        item.woName  = woInfo[0].WO;
         item.userName = woInfo[0].userInfo.name
       }
     }
@@ -197,7 +230,7 @@ class Header extends Component {
     return [item.name, item.manufacturer, item.type, item.woName || '', item.userName || '', status]
   }
   handleExport = async () => {
-    const { labelButtonAdd, order, tools, cchtt } = this.props;
+    const { labelButtonAdd, order, tools } = this.props;
     let url = '';
     let params = {};
     let header = [];
@@ -213,59 +246,37 @@ class Header extends Component {
         genData = this.generateOrder;
         url = 'api/orders/search';
         dataBind = 'data.Data.Row';
-        nameSheet = "Work Order";
-        console.log(params)
+        nameSheet = "Work Order"
         break;
-
-      case 'CÔNG CỤ':
-        params = JSON.parse(JSON.stringify(tools && tools.params ? tools.params : {}));
-        if (tools && tools.params) {
-          delete params.skip;
-          delete params.limit;
-        }
-        header = ["Tên công cụ", "Hãng", "Loại", 'Work Order', "Người dùng", "Trạng thái"];
-        genData = this.generateTool;
-        url = 'api/tools/search';
-        dataBind = 'data';
-        nameSheet = "Tool"
-        break;
-
-      case 'Phiếu Đổi CHTT':
-        params = JSON.parse(JSON.stringify(cchtt.params));
-        delete params.skip;
-        delete params.limit;
-        delete params.userId;
-        header = ["Số thay đổi CHTT", "Work Order", "Số PCT", 'Người viết phiếu', "Thời gian thay đổi", "Ghi chú"];
-        genData = this.generateCchtt;
-        url = 'api/cchtts/search';
-        dataBind = 'data.Data.Row';
-        nameSheet = "ChangeCHTT"
-        console.log(params)
-        break;
-
+    
+      // case 'CÔNG CỤ':
+      //   params = JSON.parse(JSON.stringify(tools && tools.params ? tools.params : {}));
+      //   if (tools && tools.params) {
+      //     delete params.skip;
+      //     delete params.limit;
+      //   }
+      //   header = ["Tên công cụ", "Hãng", "Loại", 'Work Order', "Người dùng", "Trạng thái"];
+      //   genData = this.generateTool;
+      //   url = 'api/tools/search';
+      //   dataBind = 'data';
+      //   nameSheet = "Tool"
+      //   break;
+    
       default:
         break;
     }
-
     let token = await getToken();
     getWithToken(url, token, { params }).then(res => {
-      console.log(res)
       let path = dataBind.split('.')
-
       let array = res;
       path.forEach(i => {
         array = array[i];
       })
-      console.log(array)
       let users = [];
       users.push(header);
       array.forEach((item) => {
-        console.log(item)
         users.push(genData(item));
-        console.log(users)
       })
-      console.log(users)
-      console.log('aloalo')
       const wb = XLSX.utils.book_new();
       const wsAll = XLSX.utils.aoa_to_sheet(users);
       let cols = []
@@ -318,14 +329,14 @@ class Header extends Component {
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
-              {isHide || !isGetToolforOrder ? name : <>{`Thêm Công Cụ vào Work Order: ${order && order.order ? order.order.WO : ''}`}&nbsp;<Button variant="contained" className={classes.btnBack} onClick={() => { this.onClickGotoUrl('/admin/order-detail/' + order.order._id) }}>Quay lại</Button></>}
+              { isHide || !isGetToolforOrder ? name : <>{`Thêm Công Cụ vào Work Order: ${order && order.order ? order.order.WO : ''}`}&nbsp;<Button variant="contained" className={classes.btnBack} onClick={() => {this.onClickGotoUrl('/admin/order-detail/' + order.order._id)}}>Quay lại</Button></>}
             </Typography>
             {labelButtonAdd && !isGetToolforOrder && this.checkPermissionAdd() ? <Button variant="contained" color="primary" onClick={this.openForm}>
               <Add />
-              {`THÊM MỚI ${labelButtonAdd}`}
+              { `THÊM MỚI ${labelButtonAdd}`}
             </Button> : null}
-            {isExport && user && user.admin ? <>&nbsp;&nbsp;&nbsp;&nbsp;<Button variant="contained" color="primary" onClick={this.handleExport}><GetApp />&nbsp;Xuất file</Button></> : null}
-            {this.showExportToolType() ? <>&nbsp;&nbsp;&nbsp;&nbsp;<Button variant="contained" color="primary" onClick={this.handleExportToolType}><GetApp />&nbsp;Thống kê dữ liệu</Button></> : null}
+            { isExport && user && user.admin ? <>&nbsp;&nbsp;&nbsp;&nbsp;<Button variant="contained" color="primary" onClick={this.handleExport}><GetApp />&nbsp;Xuất file</Button></> : null }
+            { this.showExportToolType() ? <>&nbsp;&nbsp;&nbsp;&nbsp;<Button variant="contained" color="primary" onClick={this.handleExportToolType}><GetApp />&nbsp;Thống kê dữ liệu</Button></> : null }
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
               <label>{user.name}</label>
@@ -364,7 +375,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     modalActionsCreator: bindActionCreators(modalActions, dispatch),
     orderActionsCreator: bindActionCreators(orderActions, dispatch),
-    cchttActionsCreator: bindActionCreators(cchttActions, dispatch),
     customerActionsCreator: bindActionCreators(customerActions, dispatch),
     toolActionsCreator: bindActionCreators(toolActions, dispatch)
   };
@@ -375,7 +385,6 @@ const mapStateToProps = (state, ownProps) => {
     showModalStatus: state.modal.showModal,
     user: state.auth.user || {},
     order: state.orders,
-    cchtt: state.cchtts,
     tools: state.tools
   };
 };
@@ -387,5 +396,3 @@ export default compose(
   withConnect,
   withRouter,
 )(Header);
-
-//export default withStyles(styles)(withRouter(Header));
