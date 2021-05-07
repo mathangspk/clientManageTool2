@@ -3,7 +3,7 @@ const validate = values => {
   const errors = {}
   const requiredFields = [
     'WO',
-    'dateStart',
+    'timeChange',
     'dateStop'
   ]
   requiredFields.forEach(field => {
@@ -17,6 +17,9 @@ const validate = values => {
     if (timeStop - timeStart < 0) {
       errors.timeStop = 'Ngày kết thúc > Ngày bắt đầu';
     }
+  }
+  if (values.timeChange){
+    let timeChange = moment(values.timeStart, "YYYY-MM-DD")._d.valueOf()
   }
   return errors
 }

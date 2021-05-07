@@ -351,7 +351,6 @@ class Orders extends Component {
     );
   }
   genData = (orders) => {
-    console.log(orders)
     let { user } = this.props;
     if (!user) return [];
     return orders.filter(order => order.userId)

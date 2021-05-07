@@ -55,6 +55,7 @@ function* searchCchttSaga({ payload }) {
   yield put(showLoading());
   const token = yield call(getToken);
   const resp = yield call(searchCchtt, token, payload);
+  console.log(resp)
   const { status, data } = resp;
   if (status === STATUS_CODE.SUCCESS) {
     yield put(searchCchttSuccess(data, payload))
@@ -117,6 +118,7 @@ function* updateCchttSaga({ payload }) {
   const token = yield call(getToken);
   const cchttEdited = payload;
   const cchttEditting = yield select((state) => state.cchtts.cchtt);
+  console.log(cchttEdited)
   const { _id } = cchttEditting;
   const cchttSendReducer = { _id, ...cchttEdited }
   yield put(showLoading());

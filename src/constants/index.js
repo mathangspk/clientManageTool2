@@ -85,7 +85,7 @@ export const ADMIN_ROUTES = [
     component: Changechtts,
     form: CchttForm,
     onlyAdmin: false,
-    labelButtonAdd: 'Change CHTT',
+    labelButtonAdd: 'Phiếu Đổi CHTT',
     iconSidebar : ChromeReaderModeIcon,
     isExport: true
   },

@@ -26,10 +26,9 @@ class Changechtts extends Component {
       redirect: false,
       idRedirect: '',
       dataSearch: {
-        WO: '',
-        PCT: '',
+        wo: '',
+        pct: '',
         userId: [],
-        status: 'ALL'
       },
       columnsGrid: [
         {
@@ -37,9 +36,8 @@ class Changechtts extends Component {
           cell: (params) => {
             let { user } = this.props;
             let data = JSON.parse(JSON.stringify(params));
+            console.log(data)
             let checkUser = (user.admin || user._id === params.userId._id);
-            
-
             console.log(user)
             return <>
               <Fab
@@ -68,7 +66,7 @@ class Changechtts extends Component {
                     </Fab>
                   &nbsp;&nbsp;
 
-                    {/* <Fab
+                    <Fab
                     color="default"
                     aria-label="Xóa WO"
                     size='small'
@@ -77,29 +75,21 @@ class Changechtts extends Component {
                     }}
                     >
                     <DeleteForever color="error" fontSize="small" />
-                  </Fab> */}
+                  </Fab>
                   </> : <></>
               }
             </>
           }
         },
-        { selector: 'WO', name: 'Work Cchtt', width: '120px', sortable: true, center: true },
-        { selector: 'PCT', name: 'PCT', width: '120px', sortable: true, center: true },
-        { selector: 'userId.name', name: 'Tạo bởi', width: '180px', sortable: true },
-        
-        { selector: 'location', name: 'Địa điểm công tác', width: '150px' },
-        { selector: 'KKS', name: 'Hệ thống/KKS', width: '150px' },
-        { selector: 'content', name: 'Nội dung công tác', width: '500px' },
+        { selector: 'PCCHTT', name: 'Số Thay đổi CHTT', width: '200px', sortable: true, center: true },
+        { selector: 'WO', name: 'Work Order', width: '120px', sortable: true, center: true },
+        { selector: 'PCT', name: 'Số PCT', width: '120px', sortable: true, center: true },
+        { selector: 'userId.name', name: 'Người viết phiếu', width: '180px', sortable: true },
         {
-          selector: 'timeStart', name: 'Ngày bắt đầu', width: '130px', sortable: true, center: true,
-          cell: (params) => moment(params.timeStart).format('DD/MM/YYYY')
+          selector: 'timeChange', name: 'Thời gian thay đổi', width: '200px', sortable: true, center: true,
+          cell: (params) => moment(params.timeChange).format('HH:mm DD/MM/YYYY')
         },
-        {
-          selector: 'timeStop', name: 'Ngày kết thúc', width: '130px', sortable: true, center: true,
-          cell: (params) => moment(params.timeStop).format('DD/MM/YYYY')
-        },
-
-        { selector: 'userId.department', name: 'Phân xưởng', width: '150px', sortable: true },
+        { selector: 'note', name: 'Ghi chú', width: '300px', sortable: true },
       ]
     }
   }
@@ -171,7 +161,7 @@ class Changechtts extends Component {
       changeModalContent,
     } = modalActionsCreator;
     showModal();
-    changeModalTitle('Sửa Work Cchtt');
+    changeModalTitle('Sửa Phiếu Đổi CHTT');
     changeModalContent(<CchttForm />);
   }
   handleSearch = (event) => {
@@ -220,7 +210,7 @@ class Changechtts extends Component {
   }
 
   render() {
-    const { Cchtts, customers, CchttsTotal, classes } = this.props;
+    const { cchtts, customers, CchttsTotal, classes } = this.props;
     const { columnsGrid, pagination, dataSearch } = this.state;
     return (
       <Fragment>
@@ -232,7 +222,7 @@ class Changechtts extends Component {
                 fullWidth
                 id="search_WO"
                 name="wo"
-                label="Work Cchtt"
+                label="Work Order"
                 variant="filled"
                 onInput={this.handleSearch}
               />
@@ -242,14 +232,14 @@ class Changechtts extends Component {
                 fullWidth
                 id="search_pct"
                 name="pct"
-                label="PCT"
+                label="Số PCT"
                 variant="filled"
                 onInput={this.handleSearch}
               />
             </div>
             <div className="field-search">
               <FormControl fullWidth className="multiple-select">
-                <InputLabel className="lb-user" id="lb-user">Tạo bởi</InputLabel>
+                <InputLabel className="lb-user" id="lb-user">Người viết phiếu</InputLabel>
                 <Select
                   labelId="lb-user"
                   id="user-id"
@@ -271,23 +261,13 @@ class Changechtts extends Component {
                 </Select>
               </FormControl>
             </div>
-            <div className="field-search">
-              <TextField
-                fullWidth
-                id="search_content"
-                name="content"
-                label="Nội dung công tác"
-                variant="filled"
-                onInput={this.handleSearch}
-              />
-            </div>
           </div>
           <Grid className={classes.dataTable}>
             <DataTable
               noHeader={true}
               keyField={'_id'}
               columns={columnsGrid}
-              data={this.genData(Cchtts)}
+              data={this.genData(cchtts)}
               striped={true}
               pagination
               paginationServer
@@ -304,10 +284,11 @@ class Changechtts extends Component {
       </Fragment>
     );
   }
-  genData = (Cchtts) => {
+  genData = (cchtts) => {
     let { user } = this.props;
+    console.log(cchtts)
     if (!user) return [];
-    return Cchtts.filter(cchtt => cchtt.userId)
+    return cchtts.filter(cchtt => cchtt.userId)
   }
 }
 const mapStateToProps = (state, ownProps) => {

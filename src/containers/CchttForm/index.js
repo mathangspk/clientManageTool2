@@ -9,7 +9,7 @@ import * as customerActions from '../../actions/customerActions';
 import Alert from '@material-ui/lab/Alert';
 
 import { reduxForm, Field } from 'redux-form';
-import validate from './validate';
+//import validate from './validate';
 import styles from './style';
 import renderTextField from '../../components/FormHelper/TextField';
 import moment from 'moment';
@@ -51,8 +51,7 @@ class CchttForm extends Component {
     console.log(user)
     const { addCchtt, updateCchtt } = cchttActionsCreator;
     const { WO, PCT, timeChange, note } = data;
-    console.log(data)
-    const newcchtt = {
+    const newCchtt = {
       ...(cchttEditting || {}),
       WO,
       PCT,
@@ -61,16 +60,16 @@ class CchttForm extends Component {
       userId: user._id,
     }
     if (cchttEditting) {
-      newcchtt.PCT = cchttEditting.PCT
-      newcchtt.WO = cchttEditting.WO
-      newcchtt.userId = cchttEditting.userId
-      newcchtt.timeChange = cchttEditting.timeChange
-      newcchtt.note = cchttEditting.note
-      if (user.admin || newcchtt.userId._id === user._id) {
-        updateCchtt(newcchtt);
+      // newCchtt.PCT = cchttEditting.PCT
+      // newCchtt.WO = cchttEditting.WO
+       newCchtt.userId = cchttEditting.userId
+      // newCchtt.timeChange = cchttEditting.timeChange
+      // newCchtt.note = cchttEditting.note
+      if (user.admin || newCchtt.userId._id === user._id) {
+        updateCchtt(newCchtt);
       }
     } else {
-      addCchtt(newcchtt);
+      addCchtt(newCchtt);
     }
   };
   handleChangeCustomer = (event) => {
@@ -95,8 +94,7 @@ class CchttForm extends Component {
       handleSubmit,
       invalid,
       submitting,
-      // customers,
-      // user,
+
       initialValues
     } = this.props;
 
@@ -128,7 +126,7 @@ class CchttForm extends Component {
           {
             initialValues.WO ?
               <Grid style={{ fontSize: "16px", paddingTop: "16px" }} item md={12}>
-                <label>PCT: {initialValues.PCT}</label>
+                <label>Phiếu Thay Đổi CHTT: {initialValues.PCCHTT}</label>
               </Grid>
               : <></>
           }
@@ -136,9 +134,13 @@ class CchttForm extends Component {
             <Field
               id="timeChange"
               name="timeChange"
-              label="Thời gian thay đổi" 
-              type="date"
+              label="Thời gian thay đổi"
+              type="datetime-local"
+              //type="date"
               className={classes.TextField}
+              InputLabelProps={{
+                shrink: true,
+              }}
               margin="normal"
               component={renderTextField}
             ></Field>
@@ -188,9 +190,10 @@ const mapStateToProps = (state, ownProps) => {
     initialValues: {
       WO: state.cchtts.cchtt ? state.cchtts.cchtt.WO : null,
       PCT: state.cchtts.cchtt ? state.cchtts.cchtt.PCT : null,
+      PCCHTT: state.cchtts.cchtt ? state.cchtts.cchtt.PCCHTT : null,
       note: state.cchtts.cchtt ? state.cchtts.cchtt.note : '',
-      timeChange: state.cchtts.cchtt ? moment(state.cchtts.cchtt.timeChange).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
-      },
+      timeChange: state.cchtts.cchtt ? moment(state.cchtts.cchtt.timeChange).format('YYYY-MM-DDTHH:mm:SS') : moment(Date.now()).format('YYYY-MM-DDThh:mm:ss'),
+    },
     customers: state.customers ? state.customers.customers : [],
     user: state.auth.user,
     msgError: state.error.msg
@@ -208,7 +211,7 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps);
 const FORM_NAME = 'cchtt_MANAGEMENT';
 const withReduxForm = reduxForm({
   form: FORM_NAME,
-  validate,
+  //validate,
 });
 export default compose(
   withStyles(styles),

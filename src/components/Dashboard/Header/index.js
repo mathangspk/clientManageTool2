@@ -17,6 +17,7 @@ import { Add, GetApp } from '@material-ui/icons';
 
 import * as modalActions from '../../../actions/modal';
 import * as orderActions from '../../../actions/orderActions';
+import * as cchttActions from '../../../actions/cchttActions';
 import * as customerActions from '../../../actions/customerActions';
 import * as toolActions from '../../../actions/toolActions';
 
@@ -99,51 +100,12 @@ class Header extends Component {
       onToggleSidebar(!showSidebar)
     }
   }
-
-  openFormOrder = () => {
-    const { modalActionsCreator, orderActionsCreator } = this.props;
-    const { setOrderEditing } = orderActionsCreator;
-    setOrderEditing(null);
-    const {
-      showModal,
-      changeModalTitle,
-      changeModalContent,
-    } = modalActionsCreator;
-    showModal();
-    changeModalTitle('Thêm Work Order');
-    changeModalContent(<OrderForm />);
-  }
-  openFormCustomer = () => {
-    const { modalActionsCreator, customerActionsCreator } = this.props;
-    const { setCustomerEditing } = customerActionsCreator;
-    setCustomerEditing(null);
-    const {
-      showModal,
-      changeModalTitle,
-      changeModalContent,
-    } = modalActionsCreator;
-    showModal();
-    changeModalTitle('Thêm người dùng');
-    changeModalContent(<CustomerForm />);
-  }
-  openFormTool = () => {
-    const { modalActionsCreator, toolActionsCreator } = this.props;
-    const { setToolEditing } = toolActionsCreator;
-    setToolEditing(null);
-    const {
-      showModal,
-      changeModalTitle,
-      changeModalContent,
-    } = modalActionsCreator;
-    showModal();
-    changeModalTitle('Thêm sản phẩm');
-    changeModalContent(<ToolForm />);
-  }
   openForm = () => {
     const { modalActionsCreator,
       toolActionsCreator,
       customerActionsCreator,
       orderActionsCreator,
+      cchttActionsCreator,
       form: FormComponent,
       labelButtonAdd } = this.props;
     const { setToolEditing } = toolActionsCreator;
@@ -152,6 +114,8 @@ class Header extends Component {
     setCustomerEditing(null);
     const { setOrderEditing } = orderActionsCreator;
     setOrderEditing(null);
+    const { setCchttEditing } = cchttActionsCreator;
+    setCchttEditing(null);
     const {
       showModal,
       changeModalTitle,
@@ -375,6 +339,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     modalActionsCreator: bindActionCreators(modalActions, dispatch),
     orderActionsCreator: bindActionCreators(orderActions, dispatch),
+    cchttActionsCreator: bindActionCreators(cchttActions, dispatch),
     customerActionsCreator: bindActionCreators(customerActions, dispatch),
     toolActionsCreator: bindActionCreators(toolActions, dispatch)
   };
@@ -385,6 +350,7 @@ const mapStateToProps = (state, ownProps) => {
     showModalStatus: state.modal.showModal,
     user: state.auth.user || {},
     order: state.orders,
+    cchtt: state.cchtts,
     tools: state.tools
   };
 };

@@ -63,6 +63,9 @@ class OrderForm extends Component {
       statusTool: 'START',
       content: content || ''
     }
+    console.log(data)
+    console.log(newOrder)
+    console.log(orderEditting)
     if (orderEditting) {
       newOrder.PCT = orderEditting.PCT
       newOrder.toolId = orderEditting.toolId
