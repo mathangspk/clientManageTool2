@@ -18,13 +18,13 @@ import { Add, GetApp } from '@material-ui/icons';
 import * as modalActions from '../../../actions/modal';
 import * as orderActions from '../../../actions/orderActions';
 import * as cchttActions from '../../../actions/cchttActions';
+import * as cgsatActions from '../../../actions/cgsatActions';
+import * as bbdgktActions from '../../../actions/bbdgktActions';
 import * as customerActions from '../../../actions/customerActions';
 import * as toolActions from '../../../actions/toolActions';
 
 import styles from './styles';
-import OrderForm from '../../../containers/OrderForm';
 import CustomerForm from '../../../containers/CustomerForm';
-import ToolForm from '../../../containers/ToolForm';
 import ExportToolForm from '../../../containers/ExportToolForm';
 import { Redirect } from "react-router-dom";
 import { getWithToken } from '../../../commons/utils/apiCaller';
@@ -106,6 +106,8 @@ class Header extends Component {
       customerActionsCreator,
       orderActionsCreator,
       cchttActionsCreator,
+      cgsatActionsCreator,
+      bbdgktActionsCreator,
       form: FormComponent,
       labelButtonAdd } = this.props;
     const { setToolEditing } = toolActionsCreator;
@@ -116,6 +118,10 @@ class Header extends Component {
     setOrderEditing(null);
     const { setCchttEditing } = cchttActionsCreator;
     setCchttEditing(null);
+    const { setCgsatEditing } = cgsatActionsCreator;
+    setCgsatEditing(null);
+    const { setBbdgktEditing } = bbdgktActionsCreator;
+    setBbdgktEditing(null);
     const {
       showModal,
       changeModalTitle,
@@ -166,7 +172,13 @@ class Header extends Component {
     return [item.PCT, item.userId.department, item.location, item.KKS, item.content, moment(item.timeStart).format('DD-MM-YYYY'), moment(item.timeStop).format('DD-MM-YYYY'), item.userId.name, item.WO]
   }
   generateCchtt = (item) => {
-    return [item.PCCHTT,  item.WO,item.PCT, item.userId.name,  moment(item.timeChange).format('HH:mm DD-MM-YYYY'), item.note]
+    return [item.PCCHTT, item.WO, item.PCT, item.userId.name, moment(item.timeChange).format('HH:mm DD-MM-YYYY'), item.note]
+  }
+  generateCgsat = (item) => {
+    return [item.PCGSAT, item.WO, item.PCT, item.userId.name, moment(item.timeChange).format('HH:mm DD-MM-YYYY'), item.note]
+  }
+  generateBbdgkt = (item) => {
+    return [item.BBDGKT, item.userId.department, item.content, item.WO, moment(item.time).format('DD-MM-YYYY'), item.note]
   }
   generateTool = (item) => {
     if (item.woInfo && item.woInfo.length > 0) {
@@ -191,14 +203,15 @@ class Header extends Component {
         status = 'LOST'
         break;
       default:
-        
+
         status = 'READY'
         break;
     }
     return [item.name, item.manufacturer, item.type, item.woName || '', item.userName || '', status]
   }
   handleExport = async () => {
-    const { labelButtonAdd, order, tools, cchtt } = this.props;
+    const { labelButtonAdd, order, tools, cchtt, cgsat, bbdgkt } = this.props;
+    console.log(labelButtonAdd)
     let url = '';
     let params = {};
     let header = [];
@@ -215,7 +228,6 @@ class Header extends Component {
         url = 'api/orders/search';
         dataBind = 'data.Data.Row';
         nameSheet = "Work Order";
-        console.log(params)
         break;
 
       case 'CÔNG CỤ':
@@ -241,6 +253,28 @@ class Header extends Component {
         url = 'api/cchtts/search';
         dataBind = 'data.Data.Row';
         nameSheet = "ChangeCHTT"
+        break;
+      case 'Phiếu Đổi GSAT':
+        params = JSON.parse(JSON.stringify(cgsat.params));
+        delete params.skip;
+        delete params.limit;
+        delete params.userId;
+        header = ["Số thay đổi GSAT", "Work Order", "Số PCT", 'Người viết phiếu', "Thời gian thay đổi", "Ghi chú"];
+        genData = this.generateCgsat;
+        url = 'api/cgsats/search';
+        dataBind = 'data.Data.Row';
+        nameSheet = "ChangeGSAT"
+        break;
+      case 'Biên bản ĐGKT':
+        params = JSON.parse(JSON.stringify(bbdgkt.params));
+        delete params.skip;
+        delete params.limit;
+        delete params.userId;
+        header = ["Số BBDGKT","Phân xưởng thực hiện","Nội dung công tác", "Work Order", "Ngày thực hiện", "Ghi chú"];
+        genData = this.generateBbdgkt;
+        url = 'api/bbdgkts/search';
+        dataBind = 'data.Data.Row';
+        nameSheet = "BBDGKT"
         console.log(params)
         break;
 
@@ -250,7 +284,6 @@ class Header extends Component {
 
     let token = await getToken();
     getWithToken(url, token, { params }).then(res => {
-      console.log(res)
       let path = dataBind.split('.')
 
       let array = res;
@@ -263,10 +296,8 @@ class Header extends Component {
       array.forEach((item) => {
         console.log(item)
         users.push(genData(item));
-        console.log(users)
       })
       console.log(users)
-      console.log('aloalo')
       const wb = XLSX.utils.book_new();
       const wsAll = XLSX.utils.aoa_to_sheet(users);
       let cols = []
@@ -366,6 +397,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     modalActionsCreator: bindActionCreators(modalActions, dispatch),
     orderActionsCreator: bindActionCreators(orderActions, dispatch),
     cchttActionsCreator: bindActionCreators(cchttActions, dispatch),
+    cgsatActionsCreator: bindActionCreators(cgsatActions, dispatch),
+    bbdgktActionsCreator: bindActionCreators(bbdgktActions, dispatch),
     customerActionsCreator: bindActionCreators(customerActions, dispatch),
     toolActionsCreator: bindActionCreators(toolActions, dispatch)
   };
@@ -377,6 +410,8 @@ const mapStateToProps = (state, ownProps) => {
     user: state.auth.user || {},
     order: state.orders,
     cchtt: state.cchtts,
+    bbdgkt: state.bbdgkts,
+    cgsat: state.cgsats,
     tools: state.tools
   };
 };
@@ -388,5 +423,3 @@ export default compose(
   withConnect,
   withRouter,
 )(Header);
-
-//export default withStyles(styles)(withRouter(Header));

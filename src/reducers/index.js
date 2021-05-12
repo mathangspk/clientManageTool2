@@ -6,6 +6,8 @@ import auth from './authReducer';
 import errorReducer from './errorReducer';
 import orders from './order';
 import cchtts from './cchtt';
+import cgsats from './cgsat';
+import bbdgkts from './bbdgkt';
 import customers from './customer';
 import tools from './tool';
 import images from './image';
@@ -20,6 +22,8 @@ const rootReducer = combineReducers({
   error: errorReducer,
   orders,
   cchtts,
+  bbdgkts,
+  cgsats,
   customers,
   tools,
   images,

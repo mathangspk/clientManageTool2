@@ -3,16 +3,29 @@ import Taskboard from '../containers/Taskboard';
 import LoginPage from '../containers/LoginPage';
 import SignupPage from '../containers/SignupPage';
 import PageNotFound from '../containers/PageNotFound';
+
 import Orders from '../containers/Orders';
-import Changechtts from '../containers/Changechtts';
 import OrderDetail from '../containers/OrderDetail';
-import CchttDetail from '../containers/CchttDetail';
-import Tools from '../containers/Tools';
-import Customers from '../containers/Customers';
 import OrderForm from '../containers/OrderForm';
+
+import Changechtts from '../containers/Changechtts';
+import CchttDetail from '../containers/CchttDetail';
 import CchttForm from '../containers/CchttForm';
+
+import Changegsats from '../containers/Changegsats';
+import CgsatDetail from '../containers/CgsatDetail';
+import CgsatForm from '../containers/CgsatForm';
+
+import Bbdgkts from '../containers/Bbdgkts';
+import BbdgktDetail from '../containers/BbdgktDetail';
+import BbdgktForm from '../containers/BbdgktForm';
+
+import Tools from '../containers/Tools';
 import ToolForm from '../containers/ToolForm';
+
+import Customers from '../containers/Customers';
 import CustomerForm from '../containers/CustomerForm';
+
 import BallotIcon from '@material-ui/icons/Ballot';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import PagesIcon from '@material-ui/icons/Pages';
@@ -90,6 +103,30 @@ export const ADMIN_ROUTES = [
     isExport: true
   },
   {
+    path: '/admin/cgsat',
+    params: [":cgsatId?"],
+    name: 'Thay đổi GSAT',
+    exact: false,
+    component: Changegsats,
+    form: CgsatForm,
+    onlyAdmin: false,
+    labelButtonAdd: 'Phiếu Đổi GSAT',
+    iconSidebar : ChromeReaderModeIcon,
+    isExport: true
+  },
+  {
+    path: '/admin/bbdgkt',
+    params: [":bbdgktId?"],
+    name: 'Biên bản ĐGKT',
+    exact: false,
+    component: Bbdgkts,
+    form: BbdgktForm,
+    onlyAdmin: false,
+    labelButtonAdd: 'Biên bản ĐGKT',
+    iconSidebar : ChromeReaderModeIcon,
+    isExport: true
+  },
+  {
     path: '/admin/order-detail',
     params: [":orderId"],
     name: 'Chi tiết Work Order',
@@ -107,6 +144,28 @@ export const ADMIN_ROUTES = [
     exact: false,
     component: CchttDetail,
     form: CchttForm,
+    onlyAdmin: false,
+    iconSidebar : ChromeReaderModeIcon,
+    isHide: true
+  },
+  {
+    path: '/admin/cgsat-detail',
+    params: [":cgsatId"],
+    name: 'Chi tiết thay đổi giám sát an toàn',
+    exact: false,
+    component: CgsatDetail,
+    form: CgsatForm,
+    onlyAdmin: false,
+    iconSidebar : ChromeReaderModeIcon,
+    isHide: true
+  },
+  {
+    path: '/admin/bbdgkt-detail',
+    params: [":bbdgktId"],
+    name: 'Chi tiết Biên Bản ĐGKT',
+    exact: false,
+    component: BbdgktDetail,
+    form: BbdgktForm,
     onlyAdmin: false,
     iconSidebar : ChromeReaderModeIcon,
     isHide: true

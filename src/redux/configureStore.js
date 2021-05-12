@@ -6,6 +6,8 @@ import thunk from 'redux-thunk';
 import loginSaga from '../sagas/login';
 import orderSaga from '../sagas/orderSaga';
 import cchttSaga from '../sagas/cchttSaga';
+import cgsatSaga from '../sagas/cgsatSaga';
+import bbdgktSaga from '../sagas/bbdgktSaga';
 import customerSaga from '../sagas/customerSaga';
 import toolSaga from '../sagas/toolSaga';
 import imageSaga from '../sagas/imageSaga';
@@ -30,6 +32,8 @@ const configureStore = () => {
   sagaMiddleware.run(toolSaga);
   sagaMiddleware.run(imageSaga);
   sagaMiddleware.run(cchttSaga);
+  sagaMiddleware.run(cgsatSaga);
+  sagaMiddleware.run(bbdgktSaga);
   return store;
 };
 export default configureStore;
