@@ -191,6 +191,7 @@ class Header extends Component {
         status = 'LOST'
         break;
       default:
+        
         status = 'READY'
         break;
     }

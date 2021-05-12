@@ -9,7 +9,7 @@ import * as customerActions from '../../actions/customerActions';
 import Alert from '@material-ui/lab/Alert';
 
 import { reduxForm, Field } from 'redux-form';
-//import validate from './validate';
+import validate from './validate';
 import styles from './style';
 import renderTextField from '../../components/FormHelper/TextField';
 import moment from 'moment';
@@ -165,9 +165,7 @@ class CchttForm extends Component {
             justify="flex-end"
             alignItems="flex-end"
           >
-
             {this.rendercchttFail()}
-
             <Button onClick={hideModal}>Hủy</Button>
             <Button disabled={invalid || submitting} type="submit">
               Lưu
@@ -211,7 +209,7 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps);
 const FORM_NAME = 'cchtt_MANAGEMENT';
 const withReduxForm = reduxForm({
   form: FORM_NAME,
-  //validate,
+  validate,
 });
 export default compose(
   withStyles(styles),
