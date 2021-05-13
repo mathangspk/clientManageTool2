@@ -20,6 +20,7 @@ import * as orderActions from '../../../actions/orderActions';
 import * as cchttActions from '../../../actions/cchttActions';
 import * as cgsatActions from '../../../actions/cgsatActions';
 import * as bbdgktActions from '../../../actions/bbdgktActions';
+import * as bptcActions from '../../../actions/bptcActions';
 import * as customerActions from '../../../actions/customerActions';
 import * as toolActions from '../../../actions/toolActions';
 
@@ -108,6 +109,7 @@ class Header extends Component {
       cchttActionsCreator,
       cgsatActionsCreator,
       bbdgktActionsCreator,
+      bptcActionsCreator,
       form: FormComponent,
       labelButtonAdd } = this.props;
     const { setToolEditing } = toolActionsCreator;
@@ -122,6 +124,8 @@ class Header extends Component {
     setCgsatEditing(null);
     const { setBbdgktEditing } = bbdgktActionsCreator;
     setBbdgktEditing(null);
+    const { setBptcEditing } = bptcActionsCreator;
+    setBptcEditing(null);
     const {
       showModal,
       changeModalTitle,
@@ -178,7 +182,10 @@ class Header extends Component {
     return [item.PCGSAT, item.WO, item.PCT, item.userId.name, moment(item.timeChange).format('HH:mm DD-MM-YYYY'), item.note]
   }
   generateBbdgkt = (item) => {
-    return [item.BBDGKT, item.userId.department, item.content, item.WO, moment(item.time).format('DD-MM-YYYY'), item.note]
+    return [item.BBDGKT, item.userId.department, item.content, item.WO, moment(item.time).format('DD-MM-YYYY'), item.userId.name]
+  }
+  generateBbdgkt = (item) => {
+    return [item.BPTC, item.JSA, item.content, item.note]
   }
   generateTool = (item) => {
     if (item.woInfo && item.woInfo.length > 0) {
@@ -277,6 +284,18 @@ class Header extends Component {
         nameSheet = "BBDGKT"
         console.log(params)
         break;
+      case 'BPTC & JSA':
+        params = JSON.parse(JSON.stringify(bbdgkt.params));
+        delete params.skip;
+        delete params.limit;
+        delete params.userId;
+        header = ["Số BPTC","Số JSA","Nội dung công tác", "Ghi chú"];
+        genData = this.generateBptc;
+        url = 'api/bptcs/search';
+        dataBind = 'data.Data.Row';
+        nameSheet = "BPTC&JSA"
+        console.log(params)
+        break;
 
       default:
         break;
@@ -312,7 +331,11 @@ class Header extends Component {
   }
   checkPermissionAdd = () => {
     const { labelButtonAdd, user } = this.props;
-    if (labelButtonAdd !== 'WORK ORDER' && user && !user.admin) return false
+    if (labelButtonAdd === 'WORK ORDER' && user && !user.admin) return true
+    if (labelButtonAdd === 'Phiếu Đổi CHTT' && user && !user.admin) return true
+    if (labelButtonAdd === 'Phiếu Đổi GSAT' && user && !user.admin) return true
+    if (labelButtonAdd === 'Biên bản ĐGKT' && user && !user.admin) return true
+    if (labelButtonAdd === 'BPTC & JSA' && user && !user.admin) return true
     return true
   }
   showExportToolType = () => {
@@ -399,6 +422,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     cchttActionsCreator: bindActionCreators(cchttActions, dispatch),
     cgsatActionsCreator: bindActionCreators(cgsatActions, dispatch),
     bbdgktActionsCreator: bindActionCreators(bbdgktActions, dispatch),
+    bptcActionsCreator: bindActionCreators(bptcActions, dispatch),
     customerActionsCreator: bindActionCreators(customerActions, dispatch),
     toolActionsCreator: bindActionCreators(toolActions, dispatch)
   };

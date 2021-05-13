@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { withStyles, Grid, Button, FormControl, InputLabel, Select } from '@material-ui/core';
+import { withStyles, Grid, Button, FormControl, InputLabel, Select, MenuItem } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { compose, bindActionCreators } from 'redux';
 import * as modalActions from '../../actions/modal';
-import * as bbdgktActions from '../../actions/bbdgktActions';
+import * as bptcActions from '../../actions/bptcActions';
 import * as customerActions from '../../actions/customerActions';
 import Alert from '@material-ui/lab/Alert';
 
@@ -12,10 +12,11 @@ import { reduxForm, Field } from 'redux-form';
 import validate from './validate';
 import styles from './style';
 import renderTextField from '../../components/FormHelper/TextField';
+import renderSelectField from '../../components/FormHelper/Select';
 import moment from 'moment';
 import { ConsoleWriter } from 'istanbul-lib-report';
 
-class BbdgktForm extends Component {
+class BptcForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -41,29 +42,27 @@ class BbdgktForm extends Component {
     listAllCustomers();
   }
   handleSubmitForm = (data) => {
-    const { bbdgktActionsCreator, bbdgktEditting, user } = this.props;
-    const { addBbdgkt, updateBbdgkt } = bbdgktActionsCreator;
-    const { WO, content, time, note } = data;
-    const newBbdgkt = {
-      ...(bbdgktEditting || {}),
-      WO,
+    const { bptcActionsCreator, bptcEditting, user } = this.props;
+    const { addBptc, updateBptc } = bptcActionsCreator;
+    const { content, note } = data;
+    const newBptc = {
+      ...(bptcEditting || {}),
       content,
-      time,
       note: note || '',
       userId: user._id,
       group: user.group,
     }
-    if (bbdgktEditting) {
-      // newBbdgkt.PCT = bbdgktEditting.PCT
-      // newBbdgkt.WO = bbdgktEditting.WO
-       newBbdgkt.userId = bbdgktEditting.userId
-      // newBbdgkt.timeChange = bbdgktEditting.timeChange
-      // newBbdgkt.note = bbdgktEditting.note
-      if (user.admin || newBbdgkt.userId._id === user._id) {
-        updateBbdgkt(newBbdgkt);
+    if (bptcEditting) {
+      // newBptc.PCT = bptcEditting.PCT
+      // newBptc.WO = bptcEditting.WO
+      newBptc.userId = bptcEditting.userId
+      // newBptc.timeChange = bptcEditting.timeChange
+      // newBptc.note = bptcEditting.note
+      if (user.admin || newBptc.userId._id === user._id) {
+        updateBptc(newBptc);
       }
     } else {
-      addBbdgkt(newBbdgkt);
+      addBptc(newBptc);
     }
   };
   handleChangeCustomer = (event) => {
@@ -72,7 +71,7 @@ class BbdgktForm extends Component {
       [name]: event.target.value,
     });
   };
-  renderbbdgktFail = () => {
+  renderbptcFail = () => {
     const { msgError } = this.state;
     console.log(msgError);
     let xhtml = null;
@@ -96,17 +95,6 @@ class BbdgktForm extends Component {
     return (
       <form onSubmit={handleSubmit(this.handleSubmitForm)}>
         <Grid container className={classes.form}>
-
-          <Grid item md={12}>
-            <Field
-              id="WO"
-              name="WO"
-              label="Work Order"
-              className={classes.TextField}
-              margin="normal"
-              component={renderTextField}
-            ></Field>
-          </Grid>
           <Grid item md={12}>
             <Field
               id="content"
@@ -118,38 +106,29 @@ class BbdgktForm extends Component {
             ></Field>
           </Grid>
           {
-            initialValues.WO ?
-              <Grid style={{ fontSize: "16px", paddingTop: "16px" }} item md={12}>
-                <label>Số Biên Bản ĐGKT: {initialValues.BBDGKT}</label>
-              </Grid>
+            initialValues.BPTC ?
+              <div>
+                <Grid style={{ fontSize: "16px", paddingTop: "16px" }} item md={12}>
+                  <label>Số Biện Pháp Thi Công: {initialValues.BPTC}</label>
+                </Grid>
+                <Grid style={{ fontSize: "16px", paddingTop: "16px", paddingBottom: "16px" }} item md={12}>
+                  <label>Số JSA: {initialValues.JSA}</label>
+                </Grid></div>
+
               : <></>
           }
           <Grid item md={12}>
             <Field
-              id="time"
-              name="time"
-              label="Ngày thực hiện"
-              type="date"
-              //type="date"
-              className={classes.TextField}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              margin="normal"
-              component={renderTextField}
-            ></Field>
-          </Grid>
-          <Grid item md={12}>
-            <Field
               id="note"
               name="note"
+              component={renderSelectField}
               label="Ghi chú"
-              multiline
-              rowsMax={4}
               className={classes.TextField}
-              margin="normal"
-              component={renderTextField}
-            ></Field>
+            >
+              <option value="" />
+              <option value={'Cà Mau 1'}>Cà Mau 1</option>
+              <option value={'Cà Mau 2'}>Cà Mau 2</option>
+            </Field>
           </Grid>
           {
           }
@@ -159,7 +138,7 @@ class BbdgktForm extends Component {
             justify="flex-end"
             alignItems="flex-end"
           >
-            {this.renderbbdgktFail()}
+            {this.renderbptcFail()}
             <Button onClick={hideModal}>Hủy</Button>
             <Button disabled={invalid || submitting} type="submit">
               Lưu
@@ -171,20 +150,19 @@ class BbdgktForm extends Component {
   }
 }
 
-BbdgktForm.propTypes = {
+BptcForm.propTypes = {
   customerId: PropTypes.string,
   product: PropTypes.string,
 };
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    bbdgktEditting: state.bbdgkts.bbdgkt,
+    bptcEditting: state.bptcs.bptc,
     initialValues: {
-      WO: state.bbdgkts.bbdgkt ? state.bbdgkts.bbdgkt.WO : null,
-      content: state.bbdgkts.bbdgkt ? state.bbdgkts.bbdgkt.content : null,
-      BBDGKT: state.bbdgkts.bbdgkt ? state.bbdgkts.bbdgkt.BBDGKT : null,
-      note: state.bbdgkts.bbdgkt ? state.bbdgkts.bbdgkt.note : '',
-      time: state.bbdgkts.bbdgkt ? moment(state.bbdgkts.bbdgkt.time).format('YYYY-MM-DD') : moment(Date.now()).format('YYYY-MM-DD'),
+      content: state.bptcs.bptc ? state.bptcs.bptc.content : null,
+      BPTC: state.bptcs.bptc ? state.bptcs.bptc.BPTC : null,
+      JSA: state.bptcs.bptc ? state.bptcs.bptc.JSA : null,
+      note: state.bptcs.bptc ? state.bptcs.bptc.note : '',
     },
     customers: state.customers ? state.customers.customers : [],
     user: state.auth.user,
@@ -195,12 +173,12 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     modalActionsCreator: bindActionCreators(modalActions, dispatch),
-    bbdgktActionsCreator: bindActionCreators(bbdgktActions, dispatch),
+    bptcActionsCreator: bindActionCreators(bptcActions, dispatch),
     customerActionCreator: bindActionCreators(customerActions, dispatch)
   };
 };
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
-const FORM_NAME = 'bbdgkt_MANAGEMENT';
+const FORM_NAME = 'bptc_MANAGEMENT';
 const withReduxForm = reduxForm({
   form: FORM_NAME,
   validate,
@@ -209,4 +187,4 @@ export default compose(
   withStyles(styles),
   withConnect,
   withReduxForm,
-)(BbdgktForm);
+)(BptcForm);

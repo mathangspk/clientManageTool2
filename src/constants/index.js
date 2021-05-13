@@ -20,6 +20,10 @@ import Bbdgkts from '../containers/Bbdgkts';
 import BbdgktDetail from '../containers/BbdgktDetail';
 import BbdgktForm from '../containers/BbdgktForm';
 
+import Bptcs from '../containers/Bptcs';
+import BptcDetail from '../containers/BptcDetail';
+import BptcForm from '../containers/BptcForm';
+
 import Tools from '../containers/Tools';
 import ToolForm from '../containers/ToolForm';
 
@@ -127,6 +131,18 @@ export const ADMIN_ROUTES = [
     isExport: true
   },
   {
+    path: '/admin/bptc',
+    params: [":bptcId?"],
+    name: 'BPTC & JSA',
+    exact: false,
+    component: Bptcs,
+    form: BptcForm,
+    onlyAdmin: false,
+    labelButtonAdd: 'BPTC & JSA',
+    iconSidebar : ChromeReaderModeIcon,
+    isExport: true
+  },
+  {
     path: '/admin/order-detail',
     params: [":orderId"],
     name: 'Chi tiết Work Order',
@@ -166,6 +182,17 @@ export const ADMIN_ROUTES = [
     exact: false,
     component: BbdgktDetail,
     form: BbdgktForm,
+    onlyAdmin: false,
+    iconSidebar : ChromeReaderModeIcon,
+    isHide: true
+  },
+  {
+    path: '/admin/bptc-detail',
+    params: [":bptcId"],
+    name: 'Chi tiết Biện pháp thi công & JSA',
+    exact: false,
+    component: BptcDetail,
+    form: BptcForm,
     onlyAdmin: false,
     iconSidebar : ChromeReaderModeIcon,
     isHide: true

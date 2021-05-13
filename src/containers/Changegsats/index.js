@@ -220,6 +220,16 @@ class Changegsats extends Component {
             <div className="field-search">
               <TextField
                 fullWidth
+                id="search_GSAT"
+                name="gsat"
+                label="Phiếu Thay Đổi GSAT"
+                variant="filled"
+                onInput={this.handleSearch}
+              />
+            </div>
+            <div className="field-search">
+              <TextField
+                fullWidth
                 id="search_WO"
                 name="wo"
                 label="Work Order"

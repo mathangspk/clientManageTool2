@@ -223,6 +223,16 @@ class Bbdgkts extends Component {
             <div className="field-search">
               <TextField
                 fullWidth
+                id="search_BBDGKT"
+                name="bbdgkt"
+                label="Biên bản ĐGKT"
+                variant="filled"
+                onInput={this.handleSearch}
+              />
+            </div>
+            <div className="field-search">
+              <TextField
+                fullWidth
                 id="search_WO"
                 name="wo"
                 label="Work Order"
@@ -233,9 +243,9 @@ class Bbdgkts extends Component {
             <div className="field-search">
               <TextField
                 fullWidth
-                id="search_pct"
-                name="pct"
-                label="Số PCT"
+                id="search_content"
+                name="content"
+                label="Nội dung công tác"
                 variant="filled"
                 onInput={this.handleSearch}
               />
@@ -261,6 +271,30 @@ class Bbdgkts extends Component {
                       {c.name}
                     </MenuItem>
                   ))}
+                </Select>
+              </FormControl>
+            </div>
+            <div className="field-search">
+              <FormControl fullWidth variant="filled">
+                <InputLabel htmlFor="status">Trạng thái</InputLabel>
+                <Select
+                  fullWidth
+                  native
+                  value={dataSearch.status}
+                  onChange={this.handleSearch}
+                  inputProps={{
+                    name: 'status',
+                    id: 'status',
+                  }}
+                >
+                  <option value="ALL">Tất cả</option>
+                  <option value="START">START</option>
+                  <option value="READY">READY</option>
+                  <option value="IN PROGRESS">IN PROGRESS</option>
+                  <option value="INPRG NO TOOL">INPRG NO TOOL</option>
+                  <option value="INPRG HAVE TOOL">INPRG HAVE TOOL</option>
+                  <option value="COMPLETE">COMPLETE</option>
+                  <option value="CLOSE">CLOSE</option>
                 </Select>
               </FormControl>
             </div>

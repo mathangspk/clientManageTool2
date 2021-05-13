@@ -24,16 +24,18 @@ const renderSelectField = ({
   children,
   ...custom
 }) => (
-  <FormControl className={classes.formControl} error={touched && error}>
+  <FormControl
+    className={classes.formControl}
+    error={touched && error}>
     <InputLabel htmlFor="age-native-simple">{label}</InputLabel>
     <Select
       {...input}
       {...custom}
-      // inputProps={{
-      //   name: 'age',
-      //   id: 'age-native-simple',
-      // }}
-      //value={input.value} //lấy từ Initial của redux-form
+    // inputProps={{
+    //   name: 'age',
+    //   id: 'age-native-simple',
+    // }}
+    //value={input.value} //lấy từ Initial của redux-form
     >
       {children}
     </Select>

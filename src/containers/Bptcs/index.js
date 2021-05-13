@@ -1,12 +1,12 @@
 import React, { Component, Fragment, } from 'react';
 
 import { connect } from 'react-redux';
-import * as cchttActions from '../../actions/cchttActions';
+import * as bptcActions from '../../actions/bptcActions';
 import * as modalActions from '../../actions/modal';
 import * as customerActions from '../../actions/customerActions';
 import { bindActionCreators, compose } from 'redux';
 import styles from './style';
-import CchttForm from '../CchttForm';
+import BptcForm from '../BptcForm';
 import { Grid, withStyles, Fab, TextField, FormControl, InputLabel, Select, MenuItem, Input } from '@material-ui/core';
 import { DeleteForever, Edit, Visibility, Lock } from '@material-ui/icons';
 import { Redirect } from "react-router-dom";
@@ -14,7 +14,7 @@ import DataTable from 'react-data-table-component';
 import moment from 'moment';
 import { popupConfirm } from '../../actions/ui';
 
-class Changechtts extends Component {
+class Bptcs extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -81,28 +81,23 @@ class Changechtts extends Component {
             </>
           }
         },
-        { selector: 'PCCHTT', name: 'Số Thay đổi CHTT', width: '200px', sortable: true, center: true },
-        { selector: 'WO', name: 'Work Order', width: '120px', sortable: true, center: true },
-        { selector: 'PCT', name: 'Số PCT', width: '120px', sortable: true, center: true },
-        { selector: 'userId.name', name: 'Người viết phiếu', width: '180px', sortable: true },
-        {
-          selector: 'timeChange', name: 'Thời gian thay đổi', width: '200px', sortable: true, center: true,
-          cell: (params) => moment(params.timeChange).format('HH:mm DD/MM/YYYY')
-        },
+        { selector: 'BPTC', name: 'Số Biện Pháp Thi Công', width: '200px', sortable: true, center: true },
+        { selector: 'JSA', name: 'Số JSA', width: '200px', sortable: true, center: true },
+        { selector: 'content', name: 'Nội dung công tác', width: '500px', sortable: true, center: true },       
         { selector: 'note', name: 'Ghi chú', width: '300px', sortable: true },
       ]
     }
   }
   renderRedirect = () => {
     if (this.state.redirect && this.state.idRedirect) {
-      let tool = '/admin/cchtt-detail/' + this.state.idRedirect;
+      let tool = '/admin/bptc-detail/' + this.state.idRedirect;
       return <Redirect to={tool} />
     }
   }
   componentDidMount() {
-    const { cchttActionCreator, customerActionCreator } = this.props;
+    const { bptcActionCreator, customerActionCreator } = this.props;
     const { pagination, dataSearch } = this.state;
-    const { searchCchtt } = cchttActionCreator;
+    const { searchBptc } = bptcActionCreator;
     const { listAllCustomers } = customerActionCreator;
     let params = JSON.parse(JSON.stringify(dataSearch));
     params = {
@@ -110,22 +105,22 @@ class Changechtts extends Component {
       skip: (pagination.page - 1) * pagination.rowPerPage,
       limit: pagination.rowPerPage
     }
-    searchCchtt(params);
+    searchBptc(params);
     listAllCustomers();
   }
-  onClickDelete = (cchtt) => {
+  onClickDelete = (bptc) => {
     let { user } = this.props;
     const { dataSearch } = this.state;
-    if (!user.admin && user._id !== cchtt.userId._id) return;
+    if (!user.admin && user._id !== bptc.userId._id) return;
     let self = this
     popupConfirm({
       title: 'Delete',
-      html: "Bạn muốn xóa Work Cchtt này?",
+      html: "Bạn muốn xóa Biện pháp thi công và JSA này?",
       ifOk: () => {
-        const { cchttActionCreator } = self.props;
-        const { deleteCchtt } = cchttActionCreator;
+        const { bptcActionCreator } = self.props;
+        const { deleteBptc } = bptcActionCreator;
         let params = JSON.parse(JSON.stringify(dataSearch))
-        deleteCchtt(cchtt, params);
+        deleteBptc(bptc, params);
       }
     })
   }
@@ -136,38 +131,38 @@ class Changechtts extends Component {
     })
   };
   onCloseWo = (data) => {
-    const { cchttActionCreator, user } = this.props;
-    const { updateCchtt } = cchttActionCreator;
-    const newCchtt = JSON.parse(JSON.stringify(data));
-    switch (newCchtt.status) {
+    const { bptcActionCreator, user } = this.props;
+    const { updateBptc } = bptcActionCreator;
+    const newBptc = JSON.parse(JSON.stringify(data));
+    switch (newBptc.status) {
       case 'COMPLETE':
         if (user.pkt) {
-          newCchtt.status = 'CLOSE'
+          newBptc.status = 'CLOSE'
         }
         break;
       default:
         break;
     }
-    updateCchtt(newCchtt);
+    updateBptc(newBptc);
   };
   onClickEdit = (data) => {
-    const { cchttActionCreator, modalActionsCreator, user } = this.props;
-    const { setCchttEditing } = cchttActionCreator;
+    const { bptcActionCreator, modalActionsCreator, user } = this.props;
+    const { setBptcEditing } = bptcActionCreator;
     if (!user.admin && user._id !== data.userId._id) return;
-    setCchttEditing(data);
+    setBptcEditing(data);
     const {
       showModal,
       changeModalTitle,
       changeModalContent,
     } = modalActionsCreator;
     showModal();
-    changeModalTitle('Sửa Phiếu Đổi CHTT');
-    changeModalContent(<CchttForm />);
+    changeModalTitle('Sửa BPTC & JSA');
+    changeModalContent(<BptcForm />);
   }
   handleSearch = (event) => {
-    const { cchttActionCreator } = this.props;
+    const { bptcActionCreator } = this.props;
     const { pagination, dataSearch } = this.state;
-    const { searchCchtt } = cchttActionCreator;
+    const { searchBptc } = bptcActionCreator;
     let search = {
       ...dataSearch,
       skip: 0,
@@ -175,12 +170,12 @@ class Changechtts extends Component {
       [event.target.name]: event.target.value
     }
     this.setState({ dataSearch: search });
-    searchCchtt(search);
+    searchBptc(search);
   }
   handleChangePage = (page, total) => {
-    const { cchttActionCreator } = this.props;
+    const { bptcActionCreator } = this.props;
     const { pagination, dataSearch } = this.state;
-    const { searchCchtt } = cchttActionCreator;
+    const { searchBptc } = bptcActionCreator;
     pagination.page = page;
     this.setState({ pagination })
     let params = JSON.parse(JSON.stringify(dataSearch))
@@ -190,12 +185,12 @@ class Changechtts extends Component {
       limit: pagination.rowPerPage
     }
     this.setState({ dataSearch: params })
-    searchCchtt(params);
+    searchBptc(params);
   }
   handleChangeRowsPerPage = (rowPerPage, total) => {
-    const { cchttActionCreator } = this.props;
+    const { bptcActionCreator } = this.props;
     const { pagination, dataSearch } = this.state;
-    const { searchCchtt } = cchttActionCreator;
+    const { searchBptc } = bptcActionCreator;
     pagination.rowPerPage = rowPerPage;
     pagination.page = 1;
     this.setState({ pagination })
@@ -206,11 +201,11 @@ class Changechtts extends Component {
       limit: pagination.rowPerPage
     }
     this.setState({ dataSearch: params })
-    searchCchtt(params);
+    searchBptc(params);
   }
 
   render() {
-    const { cchtts, customers, CchttsTotal, classes } = this.props;
+    const { bptcs, customers, BptcsTotal, classes } = this.props;
     const { columnsGrid, pagination, dataSearch } = this.state;
     return (
       <Fragment>
@@ -220,9 +215,9 @@ class Changechtts extends Component {
             <div className="field-search">
               <TextField
                 fullWidth
-                id="search_CHTT"
-                name="pcchtt"
-                label="Số thay đổi CHTT"
+                id="search_BPTC"
+                name="bptc"
+                label="Số Biện pháp thi công"
                 variant="filled"
                 onInput={this.handleSearch}
               />
@@ -230,9 +225,9 @@ class Changechtts extends Component {
             <div className="field-search">
               <TextField
                 fullWidth
-                id="search_WO"
-                name="wo"
-                label="Work Order"
+                id="search_jsa"
+                name="jsa"
+                label="Số JSA"
                 variant="filled"
                 onInput={this.handleSearch}
               />
@@ -240,16 +235,16 @@ class Changechtts extends Component {
             <div className="field-search">
               <TextField
                 fullWidth
-                id="search_pct"
-                name="pct"
-                label="Số PCT"
+                id="search_content"
+                name="content"
+                label="Nội dung công tác"
                 variant="filled"
                 onInput={this.handleSearch}
               />
             </div>
             <div className="field-search">
               <FormControl fullWidth className="multiple-select">
-                <InputLabel className="lb-user" id="lb-user">Người viết phiếu</InputLabel>
+                <InputLabel className="lb-user" id="lb-user">Người lấy số phiếu</InputLabel>
                 <Select
                   labelId="lb-user"
                   id="user-id"
@@ -277,14 +272,14 @@ class Changechtts extends Component {
               noHeader={true}
               keyField={'_id'}
               columns={columnsGrid}
-              data={this.genData(cchtts)}
+              data={this.genData(bptcs)}
               striped={true}
               pagination
               paginationServer
               paginationDefaultPage={pagination.page}
               paginationPerPage={pagination.rowPerPage}
               paginationRowsPerPageOptions={pagination.rowPerPageOption}
-              paginationTotalRows={CchttsTotal}
+              paginationTotalRows={BptcsTotal}
               onChangePage={this.handleChangePage}
               onChangeRowsPerPage={this.handleChangeRowsPerPage}
             />
@@ -294,18 +289,18 @@ class Changechtts extends Component {
       </Fragment>
     );
   }
-  genData = (cchtts) => {
+  genData = (bptcs) => {
     let { user } = this.props;
-    console.log(cchtts)
+    console.log(bptcs)
     if (!user) return [];
-    return cchtts.filter(cchtt => cchtt.userId)
+    return bptcs.filter(bptc => bptc.userId)
   }
 }
 const mapStateToProps = (state, ownProps) => {
   return {
     customers: state.customers.customers,
-    cchtts: state.cchtts.cchtts,
-    cchttsTotal: state.cchtts.total,
+    bptcs: state.bptcs.bptcs,
+    bptcsTotal: state.bptcs.total,
     user: state.auth.user
   }
 }
@@ -313,7 +308,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     customerActionCreator: bindActionCreators(customerActions, dispatch),
-    cchttActionCreator: bindActionCreators(cchttActions, dispatch),
+    bptcActionCreator: bindActionCreators(bptcActions, dispatch),
     modalActionsCreator: bindActionCreators(modalActions, dispatch)
   }
 }
@@ -322,4 +317,4 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps);
 export default compose(
   withStyles(styles),
   withConnect,
-)(Changechtts);
+)(Bptcs);
