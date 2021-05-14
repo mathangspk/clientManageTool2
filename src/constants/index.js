@@ -35,7 +35,12 @@ import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import PagesIcon from '@material-ui/icons/Pages';
 import ChromeReaderModeIcon from '@material-ui/icons/ChromeReaderMode';
 import DateRangeIcon from '@material-ui/icons/DateRange';
+import WorkIcon from '@material-ui/icons/Work';
+import SwapHorizontalCircleIcon from '@material-ui/icons/SwapHorizontalCircle';
 import FaceIcon from '@material-ui/icons/Face';
+import DescriptionIcon from '@material-ui/icons/Description';
+import MenuBookIcon from '@material-ui/icons/MenuBook';
+import BuildIcon from '@material-ui/icons/Build';
 //export const API_ENDPOINT = 'https://api.yensaochampa.icu';
 export const API_ENDPOINT = 'http://localhost:4000';
 //export const API_ENDPOINT = 'http://128.199.82.173:4000';
@@ -91,7 +96,7 @@ export const ADMIN_ROUTES = [
     form: OrderForm,
     onlyAdmin: false,
     labelButtonAdd: 'WORK ORDER',
-    iconSidebar : ChromeReaderModeIcon,
+    iconSidebar : WorkIcon,
     isExport: true
   },
   {
@@ -103,7 +108,7 @@ export const ADMIN_ROUTES = [
     form: CchttForm,
     onlyAdmin: false,
     labelButtonAdd: 'Phiếu Đổi CHTT',
-    iconSidebar : ChromeReaderModeIcon,
+    iconSidebar : SwapHorizontalCircleIcon,
     isExport: true
   },
   {
@@ -115,7 +120,7 @@ export const ADMIN_ROUTES = [
     form: CgsatForm,
     onlyAdmin: false,
     labelButtonAdd: 'Phiếu Đổi GSAT',
-    iconSidebar : ChromeReaderModeIcon,
+    iconSidebar : SwapHorizontalCircleIcon,
     isExport: true
   },
   {
@@ -127,7 +132,7 @@ export const ADMIN_ROUTES = [
     form: BbdgktForm,
     onlyAdmin: false,
     labelButtonAdd: 'Biên bản ĐGKT',
-    iconSidebar : ChromeReaderModeIcon,
+    iconSidebar : DescriptionIcon,
     isExport: true
   },
   {
@@ -139,7 +144,7 @@ export const ADMIN_ROUTES = [
     form: BptcForm,
     onlyAdmin: false,
     labelButtonAdd: 'BPTC & JSA',
-    iconSidebar : ChromeReaderModeIcon,
+    iconSidebar : MenuBookIcon,
     isExport: true
   },
   {
@@ -206,7 +211,7 @@ export const ADMIN_ROUTES = [
     form: ToolForm,
     onlyAdmin: false,
     labelButtonAdd: 'CÔNG CỤ',
-    iconSidebar : DateRangeIcon,
+    iconSidebar : BuildIcon,
     isExport: true
   },
   {

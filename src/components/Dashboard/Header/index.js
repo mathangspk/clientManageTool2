@@ -184,7 +184,7 @@ class Header extends Component {
   generateBbdgkt = (item) => {
     return [item.BBDGKT, item.userId.department, item.content, item.WO, moment(item.time).format('DD-MM-YYYY'), item.userId.name]
   }
-  generateBbdgkt = (item) => {
+  generateBptc = (item) => {
     return [item.BPTC, item.JSA, item.content, item.note]
   }
   generateTool = (item) => {
@@ -217,14 +217,14 @@ class Header extends Component {
     return [item.name, item.manufacturer, item.type, item.woName || '', item.userName || '', status]
   }
   handleExport = async () => {
-    const { labelButtonAdd, order, tools, cchtt, cgsat, bbdgkt } = this.props;
+    const { labelButtonAdd, order, tools, cchtt, cgsat, bbdgkt, bptc } = this.props;
     console.log(labelButtonAdd)
     let url = '';
     let params = {};
     let header = [];
     let dataBind = '';
     let genData = null;
-    let nameSheet = ''
+    let nameSheet = '';
     switch (labelButtonAdd) {
       case 'WORK ORDER':
         params = JSON.parse(JSON.stringify(order.params));
@@ -285,7 +285,7 @@ class Header extends Component {
         console.log(params)
         break;
       case 'BPTC & JSA':
-        params = JSON.parse(JSON.stringify(bbdgkt.params));
+        params = JSON.parse(JSON.stringify(bptc.params));
         delete params.skip;
         delete params.limit;
         delete params.userId;
@@ -315,6 +315,7 @@ class Header extends Component {
       array.forEach((item) => {
         console.log(item)
         users.push(genData(item));
+        console.log(users)
       })
       console.log(users)
       const wb = XLSX.utils.book_new();
@@ -435,6 +436,7 @@ const mapStateToProps = (state, ownProps) => {
     order: state.orders,
     cchtt: state.cchtts,
     bbdgkt: state.bbdgkts,
+    bptc: state.bptcs,
     cgsat: state.cgsats,
     tools: state.tools
   };
