@@ -66,7 +66,7 @@ class Bptcs extends Component {
                     </Fab>
                   &nbsp;&nbsp;
 
-                    <Fab
+                    {/* <Fab
                     color="default"
                     aria-label="Xóa WO"
                     size='small'
@@ -75,7 +75,7 @@ class Bptcs extends Component {
                     }}
                     >
                     <DeleteForever color="error" fontSize="small" />
-                  </Fab>
+                  </Fab> */}
                   </> : <></>
               }
             </>

@@ -371,6 +371,7 @@ class Header extends Component {
               aria-label="open drawer"
               onClick={this.handleToggleSidebar}
             >
+              
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>

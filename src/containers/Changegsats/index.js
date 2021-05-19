@@ -66,7 +66,7 @@ class Changegsats extends Component {
                     </Fab>
                   &nbsp;&nbsp;
 
-                    <Fab
+                    {/* <Fab
                     color="default"
                     aria-label="Xóa WO"
                     size='small'
@@ -75,7 +75,7 @@ class Changegsats extends Component {
                     }}
                     >
                     <DeleteForever color="error" fontSize="small" />
-                  </Fab>
+                  </Fab> */}
                   </> : <></>
               }
             </>

@@ -9,6 +9,7 @@ import cchttSaga from '../sagas/cchttSaga';
 import cgsatSaga from '../sagas/cgsatSaga';
 import bbdgktSaga from '../sagas/bbdgktSaga';
 import bptcSaga from '../sagas/bptcSaga';
+import thongkeSaga from '../sagas/thongkeSaga';
 import customerSaga from '../sagas/customerSaga';
 import toolSaga from '../sagas/toolSaga';
 import imageSaga from '../sagas/imageSaga';
@@ -36,6 +37,7 @@ const configureStore = () => {
   sagaMiddleware.run(cgsatSaga);
   sagaMiddleware.run(bbdgktSaga);
   sagaMiddleware.run(bptcSaga);
+  sagaMiddleware.run(thongkeSaga);
   return store;
 };
 export default configureStore;

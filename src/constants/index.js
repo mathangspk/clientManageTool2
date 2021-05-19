@@ -20,7 +20,10 @@ import Bbdgkts from '../containers/Bbdgkts';
 import BbdgktDetail from '../containers/BbdgktDetail';
 import BbdgktForm from '../containers/BbdgktForm';
 
+import Thongkes from '../containers/ThongKes';
+
 import Bptcs from '../containers/Bptcs';
+
 import BptcDetail from '../containers/BptcDetail';
 import BptcForm from '../containers/BptcForm';
 
@@ -42,8 +45,8 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import BuildIcon from '@material-ui/icons/Build';
 //export const API_ENDPOINT = 'https://api.yensaochampa.icu';
-export const API_ENDPOINT = 'http://localhost:4000';
-//export const API_ENDPOINT = 'http://128.199.82.173:4000';
+export const API_ENDPOINT = 'http://localhost:4001';
+//export const API_ENDPOINT = 'http://128.199.82.173:4001';
 
 export const STATUSES = [
   {
@@ -222,6 +225,15 @@ export const ADMIN_ROUTES = [
     form: CustomerForm,
     onlyAdmin: true,
     labelButtonAdd: 'NGƯỜI DÙNG',
+    iconSidebar : FaceIcon,
+  },
+  {
+    path: '/admin/thongke',
+    name: 'Dash Board',
+    exact: false,
+    component: Thongkes,
+    onlyAdmin: false,
+    labelButtonAdd: 'DASHBOARD',
     iconSidebar : FaceIcon,
   },
 ];

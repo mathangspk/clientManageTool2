@@ -9,6 +9,7 @@ import cchtts from './cchtt';
 import cgsats from './cgsat';
 import bbdgkts from './bbdgkt';
 import bptcs from './bptc';
+import thongkes from './thongke';
 import customers from './customer';
 import tools from './tool';
 import images from './image';
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   cchtts,
   bbdgkts,
   bptcs,
+  thongkes,
   cgsats,
   customers,
   tools,
