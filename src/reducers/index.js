@@ -5,6 +5,7 @@ import modalReducer from './modal';
 import auth from './authReducer';
 import errorReducer from './errorReducer';
 import orders from './order';
+import fastReports from './fastReport';
 import cchtts from './cchtt';
 import cgsats from './cgsat';
 import bbdgkts from './bbdgkt';
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   auth,
   error: errorReducer,
   orders,
+  fastReports,
   cchtts,
   bbdgkts,
   bptcs,

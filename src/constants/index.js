@@ -4,6 +4,10 @@ import LoginPage from '../containers/LoginPage';
 import SignupPage from '../containers/SignupPage';
 import PageNotFound from '../containers/PageNotFound';
 
+import FastReports from '../containers/FastReports';
+import FastReportDetail from '../containers/FastReportDetail';
+import FastReportForm from '../containers/FastReportForm';
+
 import Orders from '../containers/Orders';
 import OrderDetail from '../containers/OrderDetail';
 import OrderForm from '../containers/OrderForm';
@@ -45,8 +49,8 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import BuildIcon from '@material-ui/icons/Build';
 //export const API_ENDPOINT = 'https://api.yensaochampa.icu';
-//export const API_ENDPOINT = 'http://localhost:4001';
-export const API_ENDPOINT = 'http://128.199.82.173:4001';
+export const API_ENDPOINT = 'http://localhost:4001';
+//export const API_ENDPOINT = 'http://113.161.220.166:4001';
 
 export const STATUSES = [
   {
@@ -77,7 +81,7 @@ export const ADMIN_ROUTES = [
     component: AdminHomePage,
     form: null,
     onlyAdmin: false,
-    iconSidebar : SupervisorAccountIcon,
+    iconSidebar: SupervisorAccountIcon,
     isHide: true
   },
   {
@@ -87,7 +91,7 @@ export const ADMIN_ROUTES = [
     component: AdminHomePage,
     form: null,
     onlyAdmin: false,
-    iconSidebar : PagesIcon,
+    iconSidebar: PagesIcon,
     isHide: true
   },
   {
@@ -99,7 +103,19 @@ export const ADMIN_ROUTES = [
     form: OrderForm,
     onlyAdmin: false,
     labelButtonAdd: 'WORK ORDER',
-    iconSidebar : WorkIcon,
+    iconSidebar: WorkIcon,
+    isExport: true
+  },
+  {
+    path: '/admin/fastReport',
+    params: [":fastReportId?"],
+    name: 'Báo cáo nhanh',
+    exact: false,
+    component: FastReports,
+    form: FastReportForm,
+    onlyAdmin: false,
+    labelButtonAdd: 'FAST REPORT',
+    iconSidebar: WorkIcon,
     isExport: true
   },
   {
@@ -111,7 +127,7 @@ export const ADMIN_ROUTES = [
     form: CchttForm,
     onlyAdmin: false,
     labelButtonAdd: 'Phiếu Đổi CHTT',
-    iconSidebar : SwapHorizontalCircleIcon,
+    iconSidebar: SwapHorizontalCircleIcon,
     isExport: true
   },
   {
@@ -123,7 +139,7 @@ export const ADMIN_ROUTES = [
     form: CgsatForm,
     onlyAdmin: false,
     labelButtonAdd: 'Phiếu Đổi GSAT',
-    iconSidebar : SwapHorizontalCircleIcon,
+    iconSidebar: SwapHorizontalCircleIcon,
     isExport: true
   },
   {
@@ -135,7 +151,7 @@ export const ADMIN_ROUTES = [
     form: BbdgktForm,
     onlyAdmin: false,
     labelButtonAdd: 'Biên bản ĐGKT',
-    iconSidebar : DescriptionIcon,
+    iconSidebar: DescriptionIcon,
     isExport: true
   },
   {
@@ -147,7 +163,7 @@ export const ADMIN_ROUTES = [
     form: BptcForm,
     onlyAdmin: false,
     labelButtonAdd: 'BPTC & JSA',
-    iconSidebar : MenuBookIcon,
+    iconSidebar: MenuBookIcon,
     isExport: true
   },
   {
@@ -158,7 +174,7 @@ export const ADMIN_ROUTES = [
     component: OrderDetail,
     form: OrderForm,
     onlyAdmin: false,
-    iconSidebar : ChromeReaderModeIcon,
+    iconSidebar: ChromeReaderModeIcon,
     isHide: true
   },
   {
@@ -169,7 +185,7 @@ export const ADMIN_ROUTES = [
     component: CchttDetail,
     form: CchttForm,
     onlyAdmin: false,
-    iconSidebar : ChromeReaderModeIcon,
+    iconSidebar: ChromeReaderModeIcon,
     isHide: true
   },
   {
@@ -180,7 +196,7 @@ export const ADMIN_ROUTES = [
     component: CgsatDetail,
     form: CgsatForm,
     onlyAdmin: false,
-    iconSidebar : ChromeReaderModeIcon,
+    iconSidebar: ChromeReaderModeIcon,
     isHide: true
   },
   {
@@ -191,7 +207,7 @@ export const ADMIN_ROUTES = [
     component: BbdgktDetail,
     form: BbdgktForm,
     onlyAdmin: false,
-    iconSidebar : ChromeReaderModeIcon,
+    iconSidebar: ChromeReaderModeIcon,
     isHide: true
   },
   {
@@ -202,7 +218,7 @@ export const ADMIN_ROUTES = [
     component: BptcDetail,
     form: BptcForm,
     onlyAdmin: false,
-    iconSidebar : ChromeReaderModeIcon,
+    iconSidebar: ChromeReaderModeIcon,
     isHide: true
   },
   {
@@ -214,7 +230,7 @@ export const ADMIN_ROUTES = [
     form: ToolForm,
     onlyAdmin: false,
     labelButtonAdd: 'CÔNG CỤ',
-    iconSidebar : BuildIcon,
+    iconSidebar: BuildIcon,
     isExport: true
   },
   {
@@ -225,7 +241,7 @@ export const ADMIN_ROUTES = [
     form: CustomerForm,
     onlyAdmin: true,
     labelButtonAdd: 'NGƯỜI DÙNG',
-    iconSidebar : FaceIcon,
+    iconSidebar: FaceIcon,
   },
   {
     path: '/admin/thongke',
@@ -234,7 +250,7 @@ export const ADMIN_ROUTES = [
     component: Thongkes,
     onlyAdmin: false,
     labelButtonAdd: 'DASHBOARD',
-    iconSidebar : FaceIcon,
+    iconSidebar: FaceIcon,
   },
 ];
 

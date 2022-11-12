@@ -5,6 +5,7 @@ import thunk from 'redux-thunk';
 //IMPORT SAGA
 import loginSaga from '../sagas/login';
 import orderSaga from '../sagas/orderSaga';
+import fastReportSaga from '../sagas/fastReportSaga';
 import cchttSaga from '../sagas/cchttSaga';
 import cgsatSaga from '../sagas/cgsatSaga';
 import bbdgktSaga from '../sagas/bbdgktSaga';
@@ -16,11 +17,11 @@ import imageSaga from '../sagas/imageSaga';
 
 const composeEnhancers =
   process.env.NODE_ENV !== 'toolion' &&
-  typeof window === 'object' &&
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
+    typeof window === 'object' &&
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
     ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
-        shouldHotReload: false,
-      })
+      shouldHotReload: false,
+    })
     : compose;
 const sagaMiddleware = createSagaMiddleware();
 
@@ -30,6 +31,7 @@ const configureStore = () => {
   const store = createStore(rootReducer, composeEnhancers(...enhancers));
   sagaMiddleware.run(loginSaga);
   sagaMiddleware.run(orderSaga);
+  sagaMiddleware.run(fastReportSaga);
   sagaMiddleware.run(customerSaga);
   sagaMiddleware.run(toolSaga);
   sagaMiddleware.run(imageSaga);
