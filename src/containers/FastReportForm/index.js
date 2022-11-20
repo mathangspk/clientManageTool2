@@ -50,7 +50,7 @@ class FastReportForm extends Component {
     const { fastReportActionsCreator, fastReportEditting, user } = this.props;
     // const { userIdSelect } = this.state;
     const { addFastReport, updateFastReport } = fastReportActionsCreator;
-    const { WO, timeStart, timeStop, content, location, KKS } = data;
+    const { WO, timeStart, timeStop, content, location, KKS, error, result, employ, time } = data;
     const newFastReport = {
       ...(fastReportEditting || {}),
       WO,
@@ -61,7 +61,11 @@ class FastReportForm extends Component {
       userId: user._id,
       status: 'START',
       statusTool: 'START',
-      content: content || ''
+      content: content || '',
+      error,
+      result,
+      employ,
+      time
     }
     console.log(data)
     console.log(newFastReport)
@@ -184,6 +188,54 @@ class FastReportForm extends Component {
               component={renderTextField}
             ></Field>
           </Grid>
+          <Grid item md={12}>
+            <Field
+              id="error"
+              name="error"
+              label="Hiện tượng lỗi"
+              multiline
+              rowsMax={4}
+              className={classes.TextField}
+              margin="normal"
+              component={renderTextField}
+            ></Field>
+          </Grid>
+          <Grid item md={12}>
+            <Field
+              id="result"
+              name="result"
+              label="Cách khắc phục, kết quả"
+              multiline
+              rowsMax={4}
+              className={classes.TextField}
+              margin="normal"
+              component={renderTextField}
+            ></Field>
+          </Grid>
+          <Grid item md={12}>
+            <Field
+              id="employ"
+              name="employ"
+              label="Nhân sự"
+              multiline
+              rowsMax={4}
+              className={classes.TextField}
+              margin="normal"
+              component={renderTextField}
+            ></Field>
+          </Grid>
+          <Grid item md={12}>
+            <Field
+              id="time"
+              name="time"
+              label="Thời gian"
+              multiline
+              rowsMax={4}
+              className={classes.TextField}
+              margin="normal"
+              component={renderTextField}
+            ></Field>
+          </Grid>
           {
             // user && user.admin && !initialValues.WO ?
             //   <Grid item md={12}>
@@ -244,6 +296,10 @@ const mapStateToProps = (state, ownProps) => {
       location: state.fastReports.fastReport ? state.fastReports.fastReport.location : null,
       KKS: state.fastReports.fastReport ? state.fastReports.fastReport.KKS : null,
       content: state.fastReports.fastReport ? state.fastReports.fastReport.content : '',
+      error: state.fastReports.fastReport ? state.fastReports.fastReport.error : '',
+      result: state.fastReports.fastReport ? state.fastReports.fastReport.result : '',
+      employ: state.fastReports.fastReport ? state.fastReports.fastReport.employ : '',
+      time: state.fastReports.fastReport ? state.fastReports.fastReport.time : '',
       timeStart: state.fastReports.fastReport ? moment(state.fastReports.fastReport.timeStart).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
       timeStop: state.fastReports.fastReport ? moment(state.fastReports.fastReport.timeStop).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD')
     },

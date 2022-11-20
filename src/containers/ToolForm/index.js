@@ -7,6 +7,7 @@ import { API_ENDPOINT } from '../../constants';
 import * as modalActions from '../../actions/modal';
 import * as ToolActions from '../../actions/toolActions';
 import * as imageActions from '../../actions/imageActions';
+import * as tempImageForToolAction from '../../actions/tempImageForToolAction';
 
 import { reduxForm, Field } from 'redux-form';
 import validate from './validate';
@@ -14,7 +15,7 @@ import styles from './style';
 import renderTextField from '../../components/FormHelper/TextField';
 import Alert from '@material-ui/lab/Alert';
 //  import DropzoneArea from '../../components/DropzoneArea';
- import DropzoneDialog from '../../components/DropzoneDialog';
+import DropzoneDialog from '../../components/DropzoneDialog';
 
 const menuId = 'primary-search-account-menu';
 class ToolForm extends Component {
@@ -28,6 +29,10 @@ class ToolForm extends Component {
     }
   }
   //@check login success adn error
+  componentDidMount() {
+    console.log('First time')
+
+  }
   componentDidUpdate(nextprops) {
     const { msgError, } = this.props;
     if (msgError !== nextprops.msgError) {
@@ -36,6 +41,8 @@ class ToolForm extends Component {
       })
     }
   }
+
+
   handleSubmitForm = (data) => {
     const { toolActionsCreator, toolEditting, images } = this.props;
     const { statusSelected } = this.state;
@@ -65,8 +72,8 @@ class ToolForm extends Component {
     return xhtml;
   }
   renderToolImages = () => {
-    let { images, classes} = this.props;
-    let xhtml = null; 
+    let { images, classes } = this.props;
+    let xhtml = null;
     if (images.length > 0) {
       xhtml = images.map((image, index) => {
         return <Grid item key={image.filename} >
@@ -85,7 +92,7 @@ class ToolForm extends Component {
     return xhtml;
   };
   renderToolImagesNew = () => {
-    let { images, classes} = this.props;
+    let { images, classes } = this.props;
     let xhtml = null;
     if (images && images.length > 0) {
       xhtml = images.map((image, index) => {
@@ -124,6 +131,8 @@ class ToolForm extends Component {
       anchorEl: null,
     });
   }
+
+
   renderDetailPicture = () => {
     const { anchorEl } = this.state;
     const isMenuOpen = Boolean(anchorEl);
@@ -204,27 +213,27 @@ class ToolForm extends Component {
             </Grid>
             {
               toolEditting ?
-              <Grid item md={12} xs={12}>
-                <FormControl fullWidth style={{'marginTop': '16px'}}>
-                  <InputLabel htmlFor="status">Trạng thái</InputLabel>
-                  <Select
-                    fullWidth
-                    native
-                    value={statusSelected}
-                    onChange={this.setValueStatus}
-                    inputProps={{
-                      name: 'status',
-                      id: 'status',
-                    }}
-                  >
-                    <option value="1">READY</option>
-                    <option value="2">IN USE</option>
-                    <option value="3">BAD</option>
-                    <option value="4">LOST</option>
-                  </Select>
-                </FormControl>
-              </Grid>
-              : <></>
+                <Grid item md={12} xs={12}>
+                  <FormControl fullWidth style={{ 'marginTop': '16px' }}>
+                    <InputLabel htmlFor="status">Trạng thái</InputLabel>
+                    <Select
+                      fullWidth
+                      native
+                      value={statusSelected}
+                      onChange={this.setValueStatus}
+                      inputProps={{
+                        name: 'status',
+                        id: 'status',
+                      }}
+                    >
+                      <option value="1">READY</option>
+                      <option value="2">IN USE</option>
+                      <option value="3">BAD</option>
+                      <option value="4">LOST</option>
+                    </Select>
+                  </FormControl>
+                </Grid>
+                : <></>
             }
             <Grid item md={12} xs={12} className={classes.showImage}>
               <Grid item>
@@ -245,7 +254,7 @@ class ToolForm extends Component {
               <Button onClick={hideModal}>Hủy</Button>
               <Button disabled={invalid || submitting} type="submit">
                 Lưu
-            </Button>
+              </Button>
             </Grid>
           </Grid>
         </form>
@@ -265,16 +274,19 @@ const mapStateToProps = (state, ownProps) => {
     initialValues: {
       name: state.tools.toolEditting
         ? state.tools.toolEditting.name
-        : null,
-      manufacturer: state.tools.toolEditting ? state.tools.toolEditting.manufacturer : null,
-      type: state.tools.toolEditting ? state.tools.toolEditting.type : null,
+        : state.tempImageForTool ? state.tempImageForTool.name : null,
+      manufacturer: state.tools.toolEditting
+        ? state.tools.toolEditting.manufacturer
+        : state.tempImageForTool ? state.tempImageForTool.manufacturer : null,
+      type: state.tools.toolEditting
+        ? state.tools.toolEditting.type
+        : state.tempImageForTool ? state.tempImageForTool.type : null,
       status: state.tools.toolEditting ? state.tools.toolEditting.status : null,
-
     },
     msgError: state.error.msg,
     showModalStatus: state.modal.showModal,
     images: state.images.images,
-    imagesInTool: state.tools.toolEditting ? state.tools.toolEditting.images: null,
+    imagesInTool: state.tools.toolEditting ? state.tools.toolEditting.images : null,
   };
 };
 
@@ -283,6 +295,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     modalActionsCreator: bindActionCreators(modalActions, dispatch),
     toolActionsCreator: bindActionCreators(ToolActions, dispatch),
     imageActionsCreator: bindActionCreators(imageActions, dispatch),
+    tempImageForToolActionCreator: bindActionCreators(tempImageForToolAction, dispatch),
   };
 };
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

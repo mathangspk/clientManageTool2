@@ -14,6 +14,7 @@ import thongkes from './thongke';
 import customers from './customer';
 import tools from './tool';
 import images from './image';
+import tempImageForTool from './tempImageForTool';
 import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
@@ -33,7 +34,7 @@ const rootReducer = combineReducers({
   customers,
   tools,
   images,
-
+  tempImageForTool,
 });
 
 export default rootReducer;

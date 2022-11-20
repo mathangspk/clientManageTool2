@@ -1,10 +1,9 @@
 import * as modalTypes from './../constants/modal';
-
 export const showModal = () => ({
   type: modalTypes.SHOW_MODAL,
 });
 export const hideModal = () => ({
-  type: modalTypes.HIDE_MODAL,
+  type: modalTypes.HIDE_MODAL
 });
 export const hideTempModal = () => ({
   type: modalTypes.HIDE_TEMP_MODAL,

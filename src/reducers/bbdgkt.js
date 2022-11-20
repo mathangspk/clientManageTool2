@@ -35,7 +35,7 @@ var myReducer = (state = initialState, action) => {
                 ...state,
             }
         case types.ADD_BBDGKT_SUCCESS: {
-            const  data  = action.payload;
+            const data = action.payload;
             toastSuccess('Thêm mới Work Bbdgkt thành công!')
             return {
                 ...state,
@@ -67,14 +67,14 @@ var myReducer = (state = initialState, action) => {
             };
         }
         case types.UPDATE_BBDGKT_NOTE: {
-            const  bbdgktEditting  = action.payload;
+            const bbdgktEditting = action.payload;
             return {
                 ...state,
                 bbdgkt: bbdgktEditting
             };
         }
         case types.UPDATE_BBDGKT_SUCCESS: {
-            const  bbdgktEditting  = action.payload;
+            const bbdgktEditting = action.payload;
             const { bbdgkts } = state;
             const index = bbdgkts.findIndex((item) => item._id === bbdgktEditting._id);
             if (index !== -1) {

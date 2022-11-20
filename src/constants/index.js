@@ -178,6 +178,17 @@ export const ADMIN_ROUTES = [
     isHide: true
   },
   {
+    path: '/admin/fastReport-detail',
+    params: [":fastReportId"],
+    name: 'Chi tiết Bao cao nhanh',
+    exact: false,
+    component: FastReportDetail,
+    form: FastReportForm,
+    onlyAdmin: false,
+    iconSidebar: ChromeReaderModeIcon,
+    isHide: true
+  },
+  {
     path: '/admin/cchtt-detail',
     params: [":cchttId"],
     name: 'Chi tiết thay đổi chỉ huy trực tiếp',

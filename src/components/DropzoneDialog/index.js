@@ -7,6 +7,7 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import imageCompression from 'browser-image-compression';
 import * as imageActions from '../../actions/imageActions';
+import * as tempImageForToolAction from '../../actions/tempImageForToolAction';
 
 var resizeImage = function (settings) {
     var file = settings.file;
@@ -64,7 +65,8 @@ class DropzoneDialogExample extends Component {
         this.state = {
             open: false,
             files: [],
-            listFile: []
+            listFile: [],
+            nameTool: null
         };
     }
 
@@ -78,11 +80,14 @@ class DropzoneDialogExample extends Component {
         //Saving files to state for further use and closing Modal.
         this.setState({
             files: files,
-            open: false
+            open: false,
         });
-        
-        const { imageActionsCreator } = this.props;
+
+        const { imageActionsCreator, name, manufacturer, type, tempImageForToolActionCreator } = this.props;
         const { uploadImages, uploadImagesSuccess } = imageActionsCreator;
+        const { getImageForTool } = tempImageForToolActionCreator;
+        console.log('dropzone submit')
+        getImageForTool({ name, manufacturer, type })
         if (this.state.listFile && this.state.listFile.length > 0) {
             var { listFile } = this.state;
             uploadImages(listFile[listFile.length - 1]);
@@ -101,48 +106,51 @@ class DropzoneDialogExample extends Component {
 
     async compressImage(_image) {
         // return new Promise(async (resolve, reject) => {
-            const options = {
-                maxSizeMB: 1,
-                maxWidthOrHeight: 600,
-                useWebWorker: true,
-                fileType: 'image/*'
-            }
-            try {
-                const compressedFile = await imageCompression(_image, options);
-                return compressedFile
-                // var FR = new FileReader();
+        const options = {
+            maxSizeMB: 1,
+            maxWidthOrHeight: 600,
+            useWebWorker: true,
+            fileType: 'image/*'
+        }
+        try {
+            const compressedFile = await imageCompression(_image, options);
+            return compressedFile
+            // var FR = new FileReader();
 
-                // await FR.addEventListener("load", function(e) {
-                //     let data = {
-                //         filename: e.target.result,
-                //         mimetype: _image.type,
-                //         name: _image.name,
-                //         size: _image.size
-                //     }
-                //     resolve(data)
-                // }); 
-                
-                // await FR.readAsDataURL(compressedFile);
-            } catch (error) {
-                console.log(error);
-            }
+            // await FR.addEventListener("load", function(e) {
+            //     let data = {
+            //         filename: e.target.result,
+            //         mimetype: _image.type,
+            //         name: _image.name,
+            //         size: _image.size
+            //     }
+            //     resolve(data)
+            // }); 
+
+            // await FR.readAsDataURL(compressedFile);
+        } catch (error) {
+            console.log(error);
+        }
         // })
     }
 
     onChange = async (image) => {
+        const { name, manufacturer, type } = this.props;
         let arrayImage = [];
         // Read in file
         for (let i = 0; i < image.length; i++) {
             var fileCompress = await this.compressImage(image[i])
-            var fileFinal = new File([fileCompress], image[i].name, {type: image[i].type, lastModified: Date.now()});
+            console.log(name)
+            //var fileFinal = new File([fileCompress], image[i].name, { type: image[i].type, lastModified: Date.now() });
+            var fileFinal = new File([fileCompress], `test-${name}.jpg`, { type: image[i].type, lastModified: Date.now() });
             // await promise.then(async function (result) {
             //     await arrayImage.push(result);
             // })
             arrayImage.push(fileFinal);
         }
         //@ after resize image success
-        // console.log(arrayImage);
-        // console.log("upload resized image")
+        console.log(arrayImage);
+        console.log("upload resized image")
         this.setState({
             listFile: [...this.state.listFile, [arrayImage]]
         })
@@ -153,7 +161,7 @@ class DropzoneDialogExample extends Component {
         return (
             <div>
                 <Button onClick={this.handleOpen.bind(this)}>
-                    Add Image
+                    add images
                 </Button>
                 <DropzoneDialog
                     dialogTitle="Tải ảnh lên"
@@ -171,13 +179,16 @@ class DropzoneDialogExample extends Component {
 }
 const mapStateToProps = (state, ownProps) => {
     return {
-
+        name: state.form.TOOL_MANAGEMENT ? state.form.TOOL_MANAGEMENT.values.name : null,
+        manufacturer: state.form.TOOL_MANAGEMENT ? state.form.TOOL_MANAGEMENT.values.manufacturer : null,
+        type: state.form.TOOL_MANAGEMENT ? state.form.TOOL_MANAGEMENT.values.type : null,
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         imageActionsCreator: bindActionCreators(imageActions, dispatch),
+        tempImageForToolActionCreator: bindActionCreators(tempImageForToolAction, dispatch),
     };
 };
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

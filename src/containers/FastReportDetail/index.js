@@ -11,7 +11,7 @@ import { Redirect } from "react-router-dom";
 import { DeleteForever, ArrowBackIos, Edit, KeyboardReturn, Add } from '@material-ui/icons';
 import DataTable from 'react-data-table-component';
 import { API_ENDPOINT as URL } from '../../constants';
-import OrderForm from '../OrderForm';
+import FastReportForm from '../FastReportForm';
 import moment from 'moment';
 import { popupConfirm, popupConfirmYesNo } from '../../actions/ui';
 import ImageGallery from 'react-image-gallery';
@@ -27,7 +27,7 @@ const EMAIL = "info@pvps.vn";
 
 
 class DocumentCreator {
-  create([employees, workOrderInfo, listTool]) {
+  create([employees, workFastReportInfo, listTool]) {
     const document = new Document();
 
     document.addSection({
@@ -39,8 +39,8 @@ class DocumentCreator {
         }),
         this.createContactInfo(PHONE_NUMBER, PROFILE_URL, EMAIL),
         new Paragraph("\n"),
-        this.createHeading("Thông tin Work Order:"),
-        ...workOrderInfo
+        this.createHeading("Thông tin Work FastReport:"),
+        ...workFastReportInfo
           .map((wo) => {
             const arr = [];
             arr.push(
@@ -367,7 +367,7 @@ class DocumentCreator {
   }
 }
 
-class OrderDetail extends Component {
+class FastReportDetail extends Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -540,7 +540,7 @@ class OrderDetail extends Component {
         quantity: quantity
       });
     }
-    const workOrderInfo = [
+    const workFastReportInfo = [
       {
         WO: fastReport.WO,
         PCT: fastReport.PCT,
@@ -550,7 +550,7 @@ class OrderDetail extends Component {
     const documentCreator = new DocumentCreator();
     const doc = documentCreator.create([
       employees,
-      workOrderInfo,
+      workFastReportInfo,
       listTool
     ]);
 
@@ -563,9 +563,9 @@ class OrderDetail extends Component {
 
   componentDidMount() {
     const { fastReportActionCreator, customerActionCreator, match: { params }, fastReport } = this.props;
-    const { getIdOrder } = fastReportActionCreator;
+    const { getIdFastReport } = fastReportActionCreator;
     const { listAllCustomers } = customerActionCreator;
-    getIdOrder(params.fastReportId);
+    getIdFastReport(params.fastReportId);
     listAllCustomers();
   }
   onClickShowTool = (data) => {
@@ -600,21 +600,21 @@ class OrderDetail extends Component {
       ifOk: () => {
         const { fastReportActionCreator, toolActionCreator, fastReport } = self.props;
         const { currentIdTool } = self.state;
-        const { updateOrder } = fastReportActionCreator;
+        const { updateFastReport } = fastReportActionCreator;
         const { updateTool } = toolActionCreator;
-        const newOrder = JSON.parse(JSON.stringify(fastReport));
+        const newFastReport = JSON.parse(JSON.stringify(fastReport));
         const newTool = JSON.parse(JSON.stringify(data));
-        let indexTool = newOrder.toolId.findIndex(function (item, i) {
+        let indexTool = newFastReport.toolId.findIndex(function (item, i) {
           return item._id === data._id
         });
-        //let indexTool = newOrder.toolId.indexOf(data._id);
-        newOrder.toolId.splice(indexTool, 1);
+        //let indexTool = newFastReport.toolId.indexOf(data._id);
+        newFastReport.toolId.splice(indexTool, 1);
         newTool.wo = "";
         newTool.status = 1;
         if (currentIdTool._id === data._id) {
           self.setState({ currentIdTool: {} });
         }
-        updateOrder(newOrder);
+        updateFastReport(newFastReport);
         updateTool(newTool);
       }
     })
@@ -627,20 +627,20 @@ class OrderDetail extends Component {
       ifOk: () => {
         const { fastReportActionCreator, toolActionCreator, fastReport } = self.props;
         const { currentIdTool } = self.state;
-        const { updateOrder } = fastReportActionCreator;
+        const { updateFastReport } = fastReportActionCreator;
         const { updateTool } = toolActionCreator;
-        const newOrder = JSON.parse(JSON.stringify(fastReport));
+        const newFastReport = JSON.parse(JSON.stringify(fastReport));
         const newTool = JSON.parse(JSON.stringify(data));
-        let indexTool = newOrder.toolId.findIndex(function (item, i) {
+        let indexTool = newFastReport.toolId.findIndex(function (item, i) {
           return item._id === data._id
         });
         newTool.wo = "";
         newTool.status = 1;
-        newOrder.toolId[indexTool].status = newTool.status;
+        newFastReport.toolId[indexTool].status = newTool.status;
         if (currentIdTool._id === data._id) {
           self.setState({ currentIdTool: {} });
         }
-        updateOrder(newOrder);
+        updateFastReport(newFastReport);
         updateTool(newTool);
       }
     })
@@ -653,63 +653,63 @@ class OrderDetail extends Component {
       ifOk: () => {
         const { fastReportActionCreator, toolActionCreator, fastReport } = self.props;
         const { currentIdTool } = self.state;
-        const { updateOrder } = fastReportActionCreator;
+        const { updateFastReport } = fastReportActionCreator;
         const { updateTool } = toolActionCreator;
-        const newOrder = JSON.parse(JSON.stringify(fastReport));
+        const newFastReport = JSON.parse(JSON.stringify(fastReport));
         const newTool = JSON.parse(JSON.stringify(data));
-        let indexTool = newOrder.toolId.findIndex(function (item, i) {
+        let indexTool = newFastReport.toolId.findIndex(function (item, i) {
           return item._id === data._id
         });
-        newTool.wo = newOrder.WO;
+        newTool.wo = newFastReport.WO;
         newTool.status = 2;
-        newOrder.toolId[indexTool].status = newTool.status;
+        newFastReport.toolId[indexTool].status = newTool.status;
         if (currentIdTool._id === data._id) {
           self.setState({ currentIdTool: {} });
         }
-        updateOrder(newOrder);
+        updateFastReport(newFastReport);
         updateTool(newTool);
       }
     })
   }
   onClickEdit = (data) => {
     const { fastReportActionCreator, modalActionsCreator } = this.props;
-    const { setOrderEditing } = fastReportActionCreator;
-    setOrderEditing(data);
+    const { setFastReportEditing } = fastReportActionCreator;
+    setFastReportEditing(data);
     const {
       showModal,
       changeModalTitle,
       changeModalContent,
     } = modalActionsCreator;
     showModal();
-    changeModalTitle('Sửa Work Order');
-    changeModalContent(<OrderForm />);
+    changeModalTitle('Sửa Work FastReport');
+    changeModalContent(<FastReportForm />);
   }
   onClickVerify = (data) => {
     const { fastReportActionCreator, user, fastReport } = this.props;
-    const { updateOrder } = fastReportActionCreator;
-    const newOrder = JSON.parse(JSON.stringify(data));
+    const { updateFastReport } = fastReportActionCreator;
+    const newFastReport = JSON.parse(JSON.stringify(data));
     const haveToolInList = data.toolId;
-    switch (newOrder.status) {
+    switch (newFastReport.status) {
       case 'START':
         if (haveToolInList.length === 0) {
-          newOrder.status = 'INPRG NO TOOL'
-          newOrder.statusTool = "INPRG NO TOOL"
+          newFastReport.status = 'INPRG NO TOOL'
+          newFastReport.statusTool = "INPRG NO TOOL"
         }
         else {
-          newOrder.status = 'READY'
-          newOrder.statusTool = 'READY'
+          newFastReport.status = 'READY'
+          newFastReport.statusTool = 'READY'
         }
         break;
       case 'READY':
         if (user.admin) {
-          newOrder.status = 'INPRG HAVE TOOL'
-          newOrder.statusTool = 'INPRG HAVE TOOL'
+          newFastReport.status = 'INPRG HAVE TOOL'
+          newFastReport.statusTool = 'INPRG HAVE TOOL'
         }
         break;
       case 'INPRG HAVE TOOL':
         if (user.admin) {
-          newOrder.status = 'INPRG NO TOOL'
-          newOrder.statusTool = "INPRG NO TOOL"
+          newFastReport.status = 'INPRG NO TOOL'
+          newFastReport.statusTool = "INPRG NO TOOL"
         }
         break;
       case 'INPRG NO TOOL':
@@ -719,10 +719,10 @@ class OrderDetail extends Component {
           html: "Bạn vui lòng kiểm tra lại ngày kết thúc theo phiếu công tác, nếu đúng nhấn 'Đúng', nếu sai chọn 'Sai' ",
           ifOk: () => {
             const { fastReport } = self.props;
-            const newOrder = JSON.parse(JSON.stringify(fastReport));
-            newOrder.status = 'COMPLETE'
-            newOrder.statusTool = "COMPLETE"
-            updateOrder(newOrder);
+            const newFastReport = JSON.parse(JSON.stringify(fastReport));
+            newFastReport.status = 'COMPLETE'
+            newFastReport.statusTool = "COMPLETE"
+            updateFastReport(newFastReport);
           },
           ifCancel: () => {
             this.onClickEdit(fastReport)
@@ -731,18 +731,18 @@ class OrderDetail extends Component {
         break;
       case 'COMPLETE':
         if (user.pkt) {
-          newOrder.status = 'CLOSE'
+          newFastReport.status = 'CLOSE'
         }
         break;
       default:
         break;
     }
-    updateOrder(newOrder);
+    updateFastReport(newFastReport);
   };
   groupButtonActions = () => {
     const { fastReport, user, fastReportActionCreator } = this.props
-    const { updateOrder } = fastReportActionCreator;
-    const newOrder = JSON.parse(JSON.stringify(fastReport));
+    const { updateFastReport } = fastReportActionCreator;
+    const newFastReport = JSON.parse(JSON.stringify(fastReport));
     let returnToolComplete = fastReport.toolId.filter(tool => tool.status === 1)
     let countToolId = fastReport.toolId.length;
     let haveTool = fastReport.toolId;
@@ -810,27 +810,27 @@ class OrderDetail extends Component {
   }
   addandremoveUserNV = (data) => {
     const { fastReportActionCreator, fastReport } = this.props;
-    const { updateOrder } = fastReportActionCreator;
-    const newOrder = JSON.parse(JSON.stringify(fastReport));
-    newOrder.NV = data
-    updateOrder(newOrder);
+    const { updateFastReport } = fastReportActionCreator;
+    const newFastReport = JSON.parse(JSON.stringify(fastReport));
+    newFastReport.NV = data
+    updateFastReport(newFastReport);
   }
   onChangeNote = (event) => {
     const { fastReportActionCreator, fastReport } = this.props;
-    const { updateOrderNote } = fastReportActionCreator;
-    const newOrder = JSON.parse(JSON.stringify(fastReport));
-    newOrder.note = event.target.value;
+    const { updateFastReportNote } = fastReportActionCreator;
+    const newFastReport = JSON.parse(JSON.stringify(fastReport));
+    newFastReport.note = event.target.value;
     this.setState({ isChange: true });
-    updateOrderNote(newOrder);
+    updateFastReportNote(newFastReport);
   }
   onBlurNote = (event) => {
     const { fastReportActionCreator, fastReport } = this.props;
     const { isChange } = this.state;
-    const newOrder = JSON.parse(JSON.stringify(fastReport));
+    const newFastReport = JSON.parse(JSON.stringify(fastReport));
     if (isChange) {
-      const { updateOrder } = fastReportActionCreator;
-      newOrder.note = event.target.value;
-      updateOrder(newOrder);
+      const { updateFastReport } = fastReportActionCreator;
+      newFastReport.note = event.target.value;
+      updateFastReport(newFastReport);
       this.setState({ isChange: false });
     }
   }
@@ -868,7 +868,7 @@ class OrderDetail extends Component {
                 <div className='info-wo'>
                   <div className='col-wo-50'>
                     <FormControl className='field' fullWidth>
-                      <TextField id="wo" value={fastReport.WO} label="Work Order" InputProps={{ readOnly: true }} />
+                      <TextField id="wo" value={fastReport.WO} label="Work FastReport" InputProps={{ readOnly: true }} />
                     </FormControl>
                     <FormControl className='field' fullWidth>
                       <TextField id="pct" value={fastReport.PCT} label="PCT" InputProps={{ readOnly: true }} />
@@ -999,4 +999,4 @@ const withConnect = connect(mapStateToProps, mapDispatchToProps);
 export default compose(
   withStyles(styles),
   withConnect,
-)(OrderDetail);
+)(FastReportDetail);
