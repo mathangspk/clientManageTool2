@@ -42,7 +42,6 @@ class ToolForm extends Component {
     }
   }
 
-
   handleSubmitForm = (data) => {
     const { toolActionsCreator, toolEditting, images } = this.props;
     const { statusSelected } = this.state;
@@ -105,6 +104,7 @@ class ToolForm extends Component {
               className={classes.picture}
               onClick={this.onClickPicture}
             />
+
           </Paper>
         </Grid>
       })

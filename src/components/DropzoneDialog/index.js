@@ -142,7 +142,7 @@ class DropzoneDialogExample extends Component {
             var fileCompress = await this.compressImage(image[i])
             console.log(name)
             //var fileFinal = new File([fileCompress], image[i].name, { type: image[i].type, lastModified: Date.now() });
-            var fileFinal = new File([fileCompress], `test-${name}.jpg`, { type: image[i].type, lastModified: Date.now() });
+            var fileFinal = new File([fileCompress], `${name}.jpg`, { type: image[i].type, lastModified: Date.now() });
             // await promise.then(async function (result) {
             //     await arrayImage.push(result);
             // })
