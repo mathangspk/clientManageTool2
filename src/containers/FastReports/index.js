@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as fastReportActions from '../../actions/fastReportActions';
 import * as modalActions from '../../actions/modal';
 import * as customerActions from '../../actions/customerActions';
+import * as imageActions from '../../actions/imageActions';
 import { bindActionCreators, compose } from 'redux';
 import styles from './style';
 import FastReportForm from '../FastReportForm';
@@ -183,10 +184,13 @@ class FastReports extends Component {
     updateFastReport(newFastReport);
   };
   onClickEdit = (data) => {
-    const { fastReportActionCreator, modalActionsCreator, user } = this.props;
+    const { fastReportActionCreator, modalActionsCreator, user, imageActionsCreator } = this.props;
     const { setFastReportEditing } = fastReportActionCreator;
+    const { uploadImagesSuccess } = imageActionsCreator;
     if (!user.admin && user._id !== data.userId._id) return;
+    uploadImagesSuccess(data.images);
     setFastReportEditing(data);
+    console.log(data);
     const {
       showModal,
       changeModalTitle,
@@ -369,7 +373,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     customerActionCreator: bindActionCreators(customerActions, dispatch),
     fastReportActionCreator: bindActionCreators(fastReportActions, dispatch),
-    modalActionsCreator: bindActionCreators(modalActions, dispatch)
+    modalActionsCreator: bindActionCreators(modalActions, dispatch),
+    imageActionsCreator: bindActionCreators(imageActions, dispatch)
   }
 }
 

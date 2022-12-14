@@ -29,9 +29,10 @@ function* uploadImagesSaga({ payload }) {
   const token = yield call(getToken);
   yield put(hideTempModal());
   yield put(showLoading());
+  console.log('image saga')
   console.log(payload)
   const resp = yield call(uploadImagesRequest, token, payload);
-  // console.log(resp)
+  console.log(resp)
   const { data, status } = resp;
   if (status === STATUS_CODE.SUCCESS) {
     yield put(uploadImagesSuccess(data.data));
@@ -44,7 +45,7 @@ function* uploadImagesSaga({ payload }) {
 }
 
 function* deleteImageSaga({ payload }) {
-  const  filename  = payload;
+  const filename = payload;
   console.log(filename);
   const token = yield call(getToken);
   yield put(showLoading());

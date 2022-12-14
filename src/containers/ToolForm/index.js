@@ -71,17 +71,21 @@ class ToolForm extends Component {
     return xhtml;
   }
   renderToolImages = () => {
-    let { images, classes } = this.props;
+    let { images } = this.props;
     let xhtml = null;
+    let link = images[0]
+    //console.log(link.webViewLink);
     if (images.length > 0) {
       xhtml = images.map((image, index) => {
-        return <Grid item key={image.filename} >
+        console.log(image)
+        return <Grid item key={image.id} >
           <Paper>
             <img
-              src={`${API_ENDPOINT}/api/upload/image/${image.filename}`}
-              alt={image.name}
-              className={classes.picture}
-              data-filename={image.filename}
+              //src={`${API_ENDPOINT}/api/upload/image/${image.filename}`}
+              src={`https://drive.google.com/uc?export=view&id=${image.idImage}`}
+              // alt={image.name}
+              // className={classes.picture}
+              data-filename={image.idImage}
               onClick={this.onClickPicture}
             />
           </Paper>
@@ -98,10 +102,10 @@ class ToolForm extends Component {
         return <Grid item key={index} >
           <Paper>
             <img
-              src={image.filename}
-              alt={image.name}
-              data-filename={image.name}
-              className={classes.picture}
+              src={`https://drive.google.com/uc?export=view&id=${image.idImage}`}
+              // alt={image.name}
+              data-filename={image.idImage}
+              // className={classes.picture}
               onClick={this.onClickPicture}
             />
 
@@ -112,6 +116,7 @@ class ToolForm extends Component {
     return xhtml;
   };
   onClickPicture = (event) => {
+    //console.log(event.currentTarget.dataset.filename)
     this.setState({
       anchorEl: event.currentTarget,
       filename: event.currentTarget.dataset.filename,
@@ -123,9 +128,10 @@ class ToolForm extends Component {
     });
   };
   deleteImage = () => {
-    const { imageActionsCreator } = this.props;
+    const { imageActionsCreator, images } = this.props;
     const { deleteImage } = imageActionsCreator;
     const { filename } = this.state;
+
     deleteImage(filename);
     this.setState({
       anchorEl: null,
@@ -294,8 +300,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
   return {
     modalActionsCreator: bindActionCreators(modalActions, dispatch),
     toolActionsCreator: bindActionCreators(ToolActions, dispatch),
-    imageActionsCreator: bindActionCreators(imageActions, dispatch),
-    tempImageForToolActionCreator: bindActionCreators(tempImageForToolAction, dispatch),
+    imageActionsCreator: bindActionCreators(imageActions, dispatch)
   };
 };
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

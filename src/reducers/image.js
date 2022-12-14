@@ -14,7 +14,7 @@ var myReducer = (state = initialState, action) => {
             }
         case types.UPLOAD_IMAGE_SUCCESS: {
             const data = action.payload;
-            for(let i=0; i< data.length ; i++){
+            for (let i = 0; i < data.length; i++) {
                 state.images.push(data[i])
             }
             if (state.images && state.images.length > 0) {
@@ -34,9 +34,10 @@ var myReducer = (state = initialState, action) => {
         }
         case types.DELETE_IMAGE_SUCCESS:
             console.log(action)
+            toastError("Đã xóa ảnh thành công");
             return {
                 ...state,
-                images: [...state.images.filter(image => image.filename !== action.payload)]
+                images: [...state.images.filter(image => image.idImage !== action.payload)]
             }
         case types.CLEAN_IMAGES:
         case modalTypes.HIDE_MODAL:

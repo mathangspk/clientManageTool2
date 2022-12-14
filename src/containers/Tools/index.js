@@ -90,7 +90,7 @@ class Tools extends Component {
                           >
                             <Edit color="primary" />
                           </Fab>
-                      &nbsp;&nbsp;
+                          &nbsp;&nbsp;
                           {/* <Fab
                             color="default"
                             aria-label="Delete"
@@ -101,7 +101,7 @@ class Tools extends Component {
                           >
                             <DeleteForever color="error" fontSize="small" />
                           </Fab> */}
-                      &nbsp;&nbsp;
+                          &nbsp;&nbsp;
                         </>
                         : <></>
                     }
@@ -213,9 +213,9 @@ class Tools extends Component {
       newTool.wo = newOrder.WO;
     }
     newOrder.toolId = lstTool
-    if (lstTool.length !==0 && newOrder.status === 'START'){
+    if (lstTool.length !== 0 && newOrder.status === 'START') {
       //newOrder.status = 'INPRG'
-    } else if(lstTool.length !== 0 && newOrder.status === 'INPRG NO TOOL'){
+    } else if (lstTool.length !== 0 && newOrder.status === 'INPRG NO TOOL') {
       newOrder.status = 'INPRG HAVE TOOL'
     }
     newTool.woInfo = newOrder
@@ -278,6 +278,7 @@ class Tools extends Component {
   }
   handleRowClicked = (data) => {
     let { dataSelected } = this.state;
+    console.log(dataSelected)
     if (dataSelected._id === data._id) {
       dataSelected = {}
     } else {
@@ -286,9 +287,11 @@ class Tools extends Component {
     this.setState({ dataSelected });
   }
   getImage = (images) => {
-    return images.map(img => ({
-      original: `${URL}/api/upload/image/${img.filename}`,
-      thumbnail: `${URL}/api/upload/image/${img.filename}`
+    console.log(images)
+    //console.log(`https://drive.google.com/uc?export=view&id=${images[0].idImage}`)
+    return images.map(image => ({
+      original: `https://drive.google.com/uc?export=view&id=${image.idImage}`,
+      thumbnail: `https://drive.google.com/uc?export=view&id=${image.idImage}`
     }))
   }
   render() {
@@ -382,6 +385,7 @@ class Tools extends Component {
               <div>Hình ảnh:</div>
               {
                 (dataSelected.images || []).length === 0 ? <></>
+                  //: <ImageGallery className="field-gallery" items={this.getImage(dataSelected.images)} />
                   : <ImageGallery className="field-gallery" items={this.getImage(dataSelected.images)} />
               }
             </div>
@@ -447,19 +451,19 @@ class Tools extends Component {
       })
     }
     if (dataSearch.userName && dataSearch.status == '2') {
-      
+
       _tools = _tools.filter(t =>
         this.removeVietnameseTones(t.woInfo[0].userInfo.name).toLowerCase().indexOf(dataSearch.userName.toLowerCase()) > -1
       )
     }
-    
+
 
     _tools.forEach(t => {
       if (t.woInfo && t.woInfo.length > 0) {
         let woInfo = t.woInfo.filter(wo => (wo.status !== "COMPLETE"));
         if (woInfo.length > 0 && t.status === 2) {
           let showInfo = t.woInfo.filter(wo => (wo.WO === t.wo));
-          
+
           if (showInfo.length > 0) {
             t.woName = showInfo[0].WO;
             t.userName = showInfo[0].userInfo.name

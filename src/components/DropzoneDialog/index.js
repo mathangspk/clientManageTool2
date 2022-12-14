@@ -83,11 +83,9 @@ class DropzoneDialogExample extends Component {
             open: false,
         });
 
-        const { imageActionsCreator, name, manufacturer, type, tempImageForToolActionCreator } = this.props;
+        const { imageActionsCreator } = this.props;
         const { uploadImages, uploadImagesSuccess } = imageActionsCreator;
-        const { getImageForTool } = tempImageForToolActionCreator;
         console.log('dropzone submit')
-        getImageForTool({ name, manufacturer, type })
         if (this.state.listFile && this.state.listFile.length > 0) {
             var { listFile } = this.state;
             uploadImages(listFile[listFile.length - 1]);
@@ -135,14 +133,17 @@ class DropzoneDialogExample extends Component {
     }
 
     onChange = async (image) => {
-        const { name, manufacturer, type } = this.props;
+        const { name, kks } = this.props;
+        console.log(kks)
         let arrayImage = [];
         // Read in file
         for (let i = 0; i < image.length; i++) {
             var fileCompress = await this.compressImage(image[i])
-            console.log(name)
+            console.log(kks)
             //var fileFinal = new File([fileCompress], image[i].name, { type: image[i].type, lastModified: Date.now() });
-            var fileFinal = new File([fileCompress], `${name}.jpg`, { type: image[i].type, lastModified: Date.now() });
+            if (name) var fileFinal = new File([fileCompress], `${name}.jpg`, { type: image[i].type, lastModified: Date.now() });
+            if (kks) var fileFinal = new File([fileCompress], `${kks}.jpg`, { type: image[i].type, lastModified: Date.now() });
+
             // await promise.then(async function (result) {
             //     await arrayImage.push(result);
             // })
@@ -180,15 +181,13 @@ class DropzoneDialogExample extends Component {
 const mapStateToProps = (state, ownProps) => {
     return {
         name: state.form.TOOL_MANAGEMENT ? state.form.TOOL_MANAGEMENT.values.name : null,
-        manufacturer: state.form.TOOL_MANAGEMENT ? state.form.TOOL_MANAGEMENT.values.manufacturer : null,
-        type: state.form.TOOL_MANAGEMENT ? state.form.TOOL_MANAGEMENT.values.type : null,
+        kks: state.form.FASTREPORT_MANAGEMENT ? state.form.FASTREPORT_MANAGEMENT.values.KKS : null,
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         imageActionsCreator: bindActionCreators(imageActions, dispatch),
-        tempImageForToolActionCreator: bindActionCreators(tempImageForToolAction, dispatch),
     };
 };
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

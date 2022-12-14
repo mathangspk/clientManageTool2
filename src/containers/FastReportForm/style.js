@@ -46,6 +46,9 @@ const styles = (theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  showImage: {
+    marginTop: 20,
+  },
 });
 
 export default styles;
