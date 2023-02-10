@@ -4,6 +4,7 @@ import * as fastReportActions from '../../actions/fastReportActions';
 import * as modalActions from '../../actions/modal';
 import * as toolActions from '../../actions/toolActions';
 import * as customerActions from '../../actions/customerActions';
+import * as imageActions from '../../actions/imageActions';
 import { bindActionCreators, compose } from 'redux';
 import styles from './style';
 import { Grid, withStyles, Fab, TextField, FormControl, Button, Table } from '@material-ui/core';
@@ -672,9 +673,12 @@ class FastReportDetail extends Component {
     })
   }
   onClickEdit = (data) => {
-    const { fastReportActionCreator, modalActionsCreator } = this.props;
+    const { fastReportActionCreator, modalActionsCreator, imageActionsCreator } = this.props;
     const { setFastReportEditing } = fastReportActionCreator;
+    const { uploadImagesSuccess } = imageActionsCreator;
     setFastReportEditing(data);
+    console.log(data)
+    uploadImagesSuccess(data.images);
     const {
       showModal,
       changeModalTitle,
@@ -749,10 +753,10 @@ class FastReportDetail extends Component {
     let toolComplete;
     if (returnToolComplete.length === countToolId) toolComplete = true;
     else toolComplete = false;
-    if (!fastReport.userId) return <></>;
-    else if (fastReport.status === 'START' && user._id === fastReport.userId._id && fastReport.toolId.length === 0) {
-      return <Button variant="contained" color="primary" onClick={() => { this.onClickVerify(fastReport) }}>Lấy PCT Không Tool</Button>;
-    }
+    // if (!fastReport.userId) return <></>;
+    // else if (fastReport.status === 'START' && user._id === fastReport.userId._id && fastReport.toolId.length === 0) {
+    //   return <Button variant="contained" color="primary" onClick={() => { this.onClickVerify(fastReport) }}>Lấy PCT Không Tool</Button>;
+    // }
     switch (fastReport.status) {
       case 'START':
         if (user._id !== fastReport.userId._id) return <></>
@@ -803,9 +807,11 @@ class FastReportDetail extends Component {
     return ''
   }
   getImage = (images) => {
-    return images.map(img => ({
-      original: `${URL}/api/upload/image/${img.filename}`,
-      thumbnail: `${URL}/api/upload/image/${img.filename}`
+    console.log(images)
+    //console.log(`https://drive.google.com/uc?export=view&id=${images[0].idImage}`)
+    return images.map(image => ({
+      original: `https://drive.google.com/uc?export=view&id=${image.idImage}`,
+      thumbnail: `https://drive.google.com/uc?export=view&id=${image.idImage}`
     }))
   }
   addandremoveUserNV = (data) => {
@@ -835,8 +841,9 @@ class FastReportDetail extends Component {
     }
   }
   render() {
-    const { classes, fastReport, user, customers } = this.props
+    const { classes, fastReport, user, customers, images } = this.props
     const { showRightPanel, columnsGrid, columnsGridComplete, currentIdTool, fastReportAction } = this.state
+    console.log(images)
     return (
       <Fragment>
         <div className={classes.containerPanel}>
@@ -861,7 +868,7 @@ class FastReportDetail extends Component {
                       Trạng thái: {fastReport.status}{this.renderStatusText(fastReport.status)}
                     </Button>
                     &nbsp;
-                    {this.groupButtonActions()}
+                    {/* {this.groupButtonActions()} */}
                   </div>
                 </div>
                 {fastReport.userId && user._id !== fastReport.userId._id ? <div className='customer-field'>Người dùng: {fastReport.userId ? fastReport.userId.name : ''}</div> : ''}
@@ -904,15 +911,15 @@ class FastReportDetail extends Component {
                     disable={this.classAddTool(fastReport) === 'hide'}
                   />
                 </Grid>
-                <div className={classes.boxActions}>
+                {/* <div className={classes.boxActions}>
                   <Button className={this.classAddTool(fastReport)} variant="contained" color="secondary" onClick={() => this.generateDox(fastReport)}>
                     IN PHIẾU
                   </Button> &nbsp;
                   <Button className={this.classAddTool(fastReport)} variant="contained" color="primary" onClick={() => { this.onClickAddTool('/admin/tool/' + fastReport._id) }}>
                     Thêm tool
                   </Button>
-                </div>
-                <Grid className={classes.dataTable}>
+                </div> */}
+                {/* <Grid className={classes.dataTable}>
                   <DataTable
                     noHeader={true}
                     keyField={'_id'}
@@ -928,18 +935,15 @@ class FastReportDetail extends Component {
                     onRowClicked={this.onClickShowTool}
                     noDataComponent='Chưa thêm công cụ'
                   />
-                </Grid>
+                </Grid> */}
               </div>
             </Grid>
-            <Grid className='right-panel'>
-              <div className='block'>
-                <div>Tên công cụ: {currentIdTool.name}</div>
-                <div>Hãng: {currentIdTool.manufacturer}</div>
-                <div>Loại: {currentIdTool.type}</div>
+            <Grid>
+              <div>
                 <div>Hình ảnh:</div>
                 {
-                  (currentIdTool.images || []).length === 0 ? <></>
-                    : <ImageGallery items={this.getImage(currentIdTool.images)} />
+                  (images || []).length === 0 ? <></>
+                    : <ImageGallery items={this.getImage(images)} />
                 }
               </div>
             </Grid>
@@ -980,9 +984,11 @@ const mapStateToProps = (state, ownProps) => {
       NV: state.fastReports.fastReport ? state.fastReports.fastReport.NV : [],
       note: state.fastReports.fastReport ? state.fastReports.fastReport.note : '',
       _id: state.fastReports.fastReport ? state.fastReports.fastReport._id : '',
-      isAction: true
+      isAction: true,
+      images: state.fastReports.fastReport ? state.fastReports.fastReport.images : []
     },
-    user: state.auth.user || {}
+    images: state.fastReports.fastReport ? state.fastReports.fastReport.images : [],
+    user: state.auth.user || {},
   }
 }
 
@@ -991,7 +997,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     customerActionCreator: bindActionCreators(customerActions, dispatch),
     toolActionCreator: bindActionCreators(toolActions, dispatch),
     fastReportActionCreator: bindActionCreators(fastReportActions, dispatch),
-    modalActionsCreator: bindActionCreators(modalActions, dispatch)
+    modalActionsCreator: bindActionCreators(modalActions, dispatch),
+    imageActionsCreator: bindActionCreators(imageActions, dispatch)
   }
 }
 

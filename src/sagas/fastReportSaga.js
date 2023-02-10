@@ -40,6 +40,7 @@ function* getAllFastReportSaga({ payload }) {
   const token = yield call(getToken);
   const resp = yield call(getAllFastReport, token, payload);
   const { status, data } = resp;
+  console.log('get all')
   if (status === STATUS_CODE.SUCCESS) {
     yield put(listAllFastReportsSuccess(data))
   } else {
@@ -54,6 +55,7 @@ function* searchFastReportSaga({ payload }) {
   const token = yield call(getToken);
   const resp = yield call(searchFastReport, token, payload);
   const { status, data } = resp;
+  console.log('search')
   if (status === STATUS_CODE.SUCCESS) {
     yield put(searchFastReportSuccess(data, payload))
   } else {

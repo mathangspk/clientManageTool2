@@ -23,6 +23,7 @@ import * as bbdgktActions from '../../../actions/bbdgktActions';
 import * as bptcActions from '../../../actions/bptcActions';
 import * as customerActions from '../../../actions/customerActions';
 import * as toolActions from '../../../actions/toolActions';
+import * as fastReportActions from '../../../actions/fastReportActions';
 
 import styles from './styles';
 import CustomerForm from '../../../containers/CustomerForm';
@@ -110,6 +111,7 @@ class Header extends Component {
       cgsatActionsCreator,
       bbdgktActionsCreator,
       bptcActionsCreator,
+      fastReportActionsCreator,
       form: FormComponent,
       labelButtonAdd } = this.props;
     const { setToolEditing } = toolActionsCreator;
@@ -126,6 +128,9 @@ class Header extends Component {
     setBbdgktEditing(null);
     const { setBptcEditing } = bptcActionsCreator;
     setBptcEditing(null);
+    const { setFastReportEditing } = fastReportActionsCreator;
+    setFastReportEditing(null);
+
     const {
       showModal,
       changeModalTitle,
@@ -277,7 +282,7 @@ class Header extends Component {
         delete params.skip;
         delete params.limit;
         delete params.userId;
-        header = ["Số BBDGKT","Phân xưởng thực hiện","Nội dung công tác", "Work Order", "Ngày thực hiện", "Ghi chú"];
+        header = ["Số BBDGKT", "Phân xưởng thực hiện", "Nội dung công tác", "Work Order", "Ngày thực hiện", "Ghi chú"];
         genData = this.generateBbdgkt;
         url = 'api/bbdgkts/search';
         dataBind = 'data.Data.Row';
@@ -289,7 +294,7 @@ class Header extends Component {
         delete params.skip;
         delete params.limit;
         delete params.userId;
-        header = ["Số BPTC","Số JSA","Nội dung công tác", "Ghi chú"];
+        header = ["Số BPTC", "Số JSA", "Nội dung công tác", "Ghi chú"];
         genData = this.generateBptc;
         url = 'api/bptcs/search';
         dataBind = 'data.Data.Row';
@@ -337,6 +342,7 @@ class Header extends Component {
     if (labelButtonAdd === 'Phiếu Đổi GSAT' && user && !user.admin) return true
     if (labelButtonAdd === 'Biên bản ĐGKT' && user && !user.admin) return true
     if (labelButtonAdd === 'BPTC & JSA' && user && !user.admin) return true
+    if (labelButtonAdd === 'FAST REPORT' && user && !user.admin) return true
     return true
   }
   showExportToolType = () => {
@@ -371,7 +377,7 @@ class Header extends Component {
               aria-label="open drawer"
               onClick={this.handleToggleSidebar}
             >
-              
+
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" noWrap>
@@ -426,7 +432,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     bbdgktActionsCreator: bindActionCreators(bbdgktActions, dispatch),
     bptcActionsCreator: bindActionCreators(bptcActions, dispatch),
     customerActionsCreator: bindActionCreators(customerActions, dispatch),
-    toolActionsCreator: bindActionCreators(toolActions, dispatch)
+    toolActionsCreator: bindActionCreators(toolActions, dispatch),
+    fastReportActionsCreator: bindActionCreators(fastReportActions, dispatch)
   };
 };
 
@@ -439,7 +446,8 @@ const mapStateToProps = (state, ownProps) => {
     bbdgkt: state.bbdgkts,
     bptc: state.bptcs,
     cgsat: state.cgsats,
-    tools: state.tools
+    tools: state.tools,
+    fastReport: state.fastReport
   };
 };
 

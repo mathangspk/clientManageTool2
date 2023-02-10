@@ -180,7 +180,7 @@ export const ADMIN_ROUTES = [
   {
     path: '/admin/fastReport-detail',
     params: [":fastReportId"],
-    name: 'Chi tiết Bao cao nhanh',
+    name: 'Chi tiết Báo cáo nhanh',
     exact: false,
     component: FastReportDetail,
     form: FastReportForm,

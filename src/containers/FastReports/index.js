@@ -210,6 +210,7 @@ class FastReports extends Component {
       limit: pagination.rowPerPage,
       [event.target.name]: event.target.value
     }
+    console.log(search)
     this.setState({ dataSearch: search });
     searchFastReport(search);
   }
@@ -303,6 +304,16 @@ class FastReports extends Component {
                 id="search_content"
                 name="content"
                 label="Nội dung công tác"
+                variant="filled"
+                onInput={this.handleSearch}
+              />
+            </div>
+            <div className="field-search">
+              <TextField
+                fullWidth
+                id="search_kks"
+                name="kks"
+                label="KKS"
                 variant="filled"
                 onInput={this.handleSearch}
               />
