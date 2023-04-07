@@ -1,0 +1,13 @@
+export const GET_FILE = 'GET_FILE';
+export const GET_FILE_SUCCESS = 'GET_FILE_SUCCESS';
+export const GET_FILE_FAIL = 'GET_FILE_FAIL';
+
+export const UPLOAD_FILE = 'UPLOAD_FILE';
+export const UPLOAD_FILE_SUCCESS = 'UPLOAD_FILE_SUCCESS';
+export const UPLOAD_FILE_FAIL = 'UPLOAD_FILE_FAIL';
+
+export const DELETE_FILE = 'DELETE_FILE';
+export const DELETE_FILE_SUCCESS = 'DELETE_FILE_SUCCESS';
+export const DELETE_FILE_FAIL = 'DELETE_FILE_FAIL';
+
+export const CLEAN_FILES = 'CLEAN_FILES';

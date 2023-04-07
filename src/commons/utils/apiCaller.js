@@ -14,7 +14,7 @@ export function getWithToken(endpoint, token, data) {
     //const url = "https://api.yensaochampa.icu/api/orders";
     let params = []
     if (data) {
-        Object.keys(data.params).forEach(function(key) {
+        Object.keys(data.params).forEach(function (key) {
             params.push(`${key}=${data.params[key]}`)
         });
     }
@@ -65,6 +65,7 @@ export function postImagesWithToken(endpoint, token, listFile) {
     const config = {
         headers: { 'content-type': 'multipart/form-data', 'auth-token': token },
     }
+    console.log(listFile)
     let formData = new FormData();
     for (let i = 0; i < listFile[0].length; i++) {
         formData.append('photos', listFile[0][i])
@@ -74,6 +75,30 @@ export function postImagesWithToken(endpoint, token, listFile) {
 
 
 export function deleteImageWithToken(endpoint, token, filename) {
+    const url = `${Config.API_ENDPOINT}/${endpoint}/${filename}`
+    const options = {
+        method: 'DELETE',
+        headers: { "Content-type": "application/json", 'auth-token': token },
+        url, //@https://api.yensaochampa.icu/api/upload/image/:filename,
+    };
+    return axios(options)
+}
+export function postFilesWithToken(endpoint, token, listFile) {
+
+    const url = `${Config.API_ENDPOINT}/${endpoint}/`; //@https://api.yensaochampa.icu/api/upload/upload-photos,
+    const config = {
+        headers: { 'content-type': 'multipart/form-data', 'auth-token': token },
+    }
+    let formData = new FormData();
+    console.log(listFile.length)
+    for (let i = 0; i < listFile.length; i++) {
+        formData.append('files', listFile[i])
+    }
+    return axios.post(url, formData, config)
+}
+
+
+export function deleteFileWithToken(endpoint, token, filename) {
     const url = `${Config.API_ENDPOINT}/${endpoint}/${filename}`
     const options = {
         method: 'DELETE',

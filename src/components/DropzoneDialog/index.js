@@ -7,7 +7,7 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import imageCompression from 'browser-image-compression';
 import * as imageActions from '../../actions/imageActions';
-import * as tempImageForToolAction from '../../actions/tempImageForToolAction';
+
 
 var resizeImage = function (settings) {
     var file = settings.file;
@@ -88,6 +88,7 @@ class DropzoneDialogExample extends Component {
         console.log('dropzone submit')
         if (this.state.listFile && this.state.listFile.length > 0) {
             var { listFile } = this.state;
+
             uploadImages(listFile[listFile.length - 1]);
             this.setState({
                 listFile: []
@@ -156,8 +157,6 @@ class DropzoneDialogExample extends Component {
             listFile: [...this.state.listFile, [arrayImage]]
         })
     }
-
-
     render() {
         return (
             <div>

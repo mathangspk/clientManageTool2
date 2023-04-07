@@ -19,7 +19,7 @@ import ImageGallery from 'react-image-gallery';
 import { Multiselect } from 'multiselect-react-dropdown';
 import { AlignmentType, Document, BfastReportStyle, HeadingLevel, Packer, Paragraph, TabStopPosition, TabStopType, TextRun, Table as TableD, TableCell as TableCellD, TableRow as TableRowD, WidthType, convertInchesToTwip } from 'docx';
 import { saveAs } from "file-saver";
-
+import FileInput from '../../components/FileInput';
 import "react-image-gallery/styles/css/image-gallery.css";
 
 const PHONE_NUMBER = "02903 650140";
@@ -380,37 +380,37 @@ class FastReportDetail extends Component {
       fastReportAction: true,
       columnsGrid: [
         { selector: 'name', name: 'Tên công cụ', width: '100% - 300px', sortable: true },
-        {
-          selector: 'status', name: 'Trạng thái', width: '130px', sortable: true,
-          cell: (param) => {
-            let { fastReport } = this.props;
-            //if (!fastReport.isAction) return <></>
-            let status = 'READY'
-            let className = 'ready'
-            switch (param.status + "") {
-              case "1":
-                status = 'RETURNED';
-                className = 'ready';
-                break;
-              case "2":
-                status = 'IN USE';
-                className = 'in-use';
-                break;
-              case "3":
-                status = 'BAD'
-                className = 'bad';
-                break;
-              case "4":
-                status = 'LOST';
-                className = 'lost';
-                break;
-              default:
-                status = 'READY'
-                break;
-            }
-            return <div className={'lb-status color-' + className}>{status}</div>;
-          }
-        },
+        // {
+        //   selector: 'status', name: 'Trạng thái', width: '130px', sortable: true,
+        //   cell: (param) => {
+        //     let { fastReport } = this.props;
+        //     //if (!fastReport.isAction) return <></>
+        //     let status = 'READY'
+        //     let className = 'ready'
+        //     switch (param.status + "") {
+        //       case "1":
+        //         status = 'RETURNED';
+        //         className = 'ready';
+        //         break;
+        //       case "2":
+        //         status = 'IN USE';
+        //         className = 'in-use';
+        //         break;
+        //       case "3":
+        //         status = 'BAD'
+        //         className = 'bad';
+        //         break;
+        //       case "4":
+        //         status = 'LOST';
+        //         className = 'lost';
+        //         break;
+        //       default:
+        //         status = 'READY'
+        //         break;
+        //     }
+        //     return <div className={'lb-status color-' + className}>{status}</div>;
+        //   }
+        // },
         // { selector: 'type', name: 'Loại', width: 'calc((100% - 100px) / 3)', sortable: true },
         {
           name: 'Hành động', width: '100px',
@@ -677,7 +677,7 @@ class FastReportDetail extends Component {
     const { setFastReportEditing } = fastReportActionCreator;
     const { uploadImagesSuccess } = imageActionsCreator;
     setFastReportEditing(data);
-    console.log(data)
+    //console.log(data)
     uploadImagesSuccess(data.images);
     const {
       showModal,
@@ -807,7 +807,7 @@ class FastReportDetail extends Component {
     return ''
   }
   getImage = (images) => {
-    console.log(images)
+    //console.log(images)
     //console.log(`https://drive.google.com/uc?export=view&id=${images[0].idImage}`)
     return images.map(image => ({
       original: `https://drive.google.com/uc?export=view&id=${image.idImage}`,
@@ -841,9 +841,9 @@ class FastReportDetail extends Component {
     }
   }
   render() {
-    const { classes, fastReport, user, customers, images } = this.props
+    const { classes, fastReport, fastReports, user, customers, images } = this.props
     const { showRightPanel, columnsGrid, columnsGridComplete, currentIdTool, fastReportAction } = this.state
-    console.log(images)
+    console.log(fastReports)
     return (
       <Fragment>
         <div className={classes.containerPanel}>
@@ -862,13 +862,7 @@ class FastReportDetail extends Component {
                     <Button className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.onClickEdit(fastReport) }}>
                       <Edit style={{ 'color': '#fff' }} fontSize="small" />&nbsp;Chỉnh sửa
                     </Button>
-                  </div>
-                  <div className='group'>
-                    <Button variant="contained" color="primary">
-                      Trạng thái: {fastReport.status}{this.renderStatusText(fastReport.status)}
-                    </Button>
                     &nbsp;
-                    {/* {this.groupButtonActions()} */}
                   </div>
                 </div>
                 {fastReport.userId && user._id !== fastReport.userId._id ? <div className='customer-field'>Người dùng: {fastReport.userId ? fastReport.userId.name : ''}</div> : ''}
@@ -878,10 +872,16 @@ class FastReportDetail extends Component {
                       <TextField id="wo" value={fastReport.WO} label="Work FastReport" InputProps={{ readOnly: true }} />
                     </FormControl>
                     <FormControl className='field' fullWidth>
-                      <TextField id="pct" value={fastReport.PCT} label="PCT" InputProps={{ readOnly: true }} />
+                      <TextField id="employ" value={fastReport.employ} label="Nhân sự" InputProps={{ readOnly: true }} />
+                    </FormControl>
+                    <FormControl className='field' fullWidth>
+                      <TextField id="kks" value={fastReport.KKS} label="KKS/ Hệ thống" InputProps={{ readOnly: true }} />
                     </FormControl>
                   </div>
                   <div className='col-wo-50'>
+                    <FormControl className='field' fullWidth>
+                      <TextField id="time" value={fastReport.time} label="Tổng thời gian thực hiện" InputProps={{ readOnly: true }} />
+                    </FormControl>
                     <FormControl className='field' fullWidth>
                       <TextField id="date_start" value={moment(fastReport.timeStart).format('DD/MM/YYYY')} label="Ngày bắt đầu" InputProps={{ readOnly: true }} />
                     </FormControl>
@@ -896,11 +896,17 @@ class FastReportDetail extends Component {
                   </div>
                   <div className='col-wo-100'>
                     <FormControl className='field' fullWidth>
-                      <TextField id="note" multiline value={fastReport.note || ''} label="Ghi chú" onBlur={this.onBlurNote} onChange={this.onChangeNote} InputProps={{ readOnly: this.classAddTool(fastReport) === 'hide' }} />
+                      <TextField id="content" multiline value={fastReport.error || ' '} label="Hiện tượng lỗi" InputProps={{ readOnly: true }} />
                     </FormControl>
                   </div>
+                  <div className='col-wo-100'>
+                    <FormControl className='field' fullWidth>
+                      <TextField id="result" multiline value={fastReport.result || ' '} label="Kết quả xử lý" InputProps={{ readOnly: true }} />
+                    </FormControl>
+                  </div>
+                  <FileInput />
                 </div>
-                <Grid>
+                {/* <Grid>
                   <Multiselect
                     options={(customers || []).filter(c => c._id !== user._id)}
                     selectedValues={fastReport.NV}
@@ -910,7 +916,7 @@ class FastReportDetail extends Component {
                     placeholder={this.classAddTool(fastReport) === 'hide' ? "" : "Nhân viên nhóm công tác"}
                     disable={this.classAddTool(fastReport) === 'hide'}
                   />
-                </Grid>
+                </Grid> */}
                 {/* <div className={classes.boxActions}>
                   <Button className={this.classAddTool(fastReport)} variant="contained" color="secondary" onClick={() => this.generateDox(fastReport)}>
                     IN PHIẾU
@@ -967,7 +973,7 @@ class FastReportDetail extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     customers: state.customers.customers,
-    fastReports: state.fastReports.fastReports,
+    fastReports: state.fastReports.fastReport,
     fastReport: {
       WO: state.fastReports.fastReport ? state.fastReports.fastReport.WO : '',
       PCT: state.fastReports.fastReport ? state.fastReports.fastReport.PCT : '',
@@ -978,6 +984,10 @@ const mapStateToProps = (state, ownProps) => {
       timeStop: state.fastReports.fastReport ? state.fastReports.fastReport.timeStop : '',
       toolId: state.fastReports.fastReport ? state.fastReports.fastReport.toolId : [],
       content: state.fastReports.fastReport ? state.fastReports.fastReport.content : '',
+      error: state.fastReports.fastReport ? state.fastReports.fastReport.error : '',
+      employ: state.fastReports.fastReport ? state.fastReports.fastReport.employ : '',
+      result: state.fastReports.fastReport ? state.fastReports.fastReport.result : '',
+      time: state.fastReports.fastReport ? state.fastReports.fastReport.time : '',
       location: state.fastReports.fastReport ? state.fastReports.fastReport.location : '',
       KKS: state.fastReports.fastReport ? state.fastReports.fastReport.KKS : '',
       userId: state.fastReports.fastReport ? state.fastReports.fastReport.userId : {},

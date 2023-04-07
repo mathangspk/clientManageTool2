@@ -14,6 +14,7 @@ import thongkeSaga from '../sagas/thongkeSaga';
 import customerSaga from '../sagas/customerSaga';
 import toolSaga from '../sagas/toolSaga';
 import imageSaga from '../sagas/imageSaga';
+import fileSaga from '../sagas/fileSaga';
 
 const composeEnhancers =
   process.env.NODE_ENV !== 'toolion' &&
@@ -35,6 +36,7 @@ const configureStore = () => {
   sagaMiddleware.run(customerSaga);
   sagaMiddleware.run(toolSaga);
   sagaMiddleware.run(imageSaga);
+  sagaMiddleware.run(fileSaga);
   sagaMiddleware.run(cchttSaga);
   sagaMiddleware.run(cgsatSaga);
   sagaMiddleware.run(bbdgktSaga);

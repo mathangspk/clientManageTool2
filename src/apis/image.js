@@ -7,9 +7,9 @@ export const uploadImagesRequest = (token, listFile) => {
 };
 
 export const deleteImageRequest = (token, filename) => {
-    return deleteImageWithToken('api/upload/image', token, filename).then(res=> {
+    return deleteImageWithToken('api/upload/image', token, filename).then(res => {
         return res;
-    }).catch(err => {return err.response});
+    }).catch(err => { return err.response });
 }
 
 
