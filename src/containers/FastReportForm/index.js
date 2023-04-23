@@ -382,7 +382,7 @@ const mapStateToProps = (state, ownProps) => {
       WO: state.fastReports.fastReport ? state.fastReports.fastReport.WO : null,
       PCT: state.fastReports.fastReport ? state.fastReports.fastReport.PCT : null,
       location: state.fastReports.fastReport ? state.fastReports.fastReport.location : null,
-      KKS: state.fastReports.fastReport ? state.fastReports.fastReport.KKS : null,
+      KKS: state.fastReports.fastReport ? state.fastReports.fastReport.KKS : '',
       content: state.fastReports.fastReport ? state.fastReports.fastReport.content : '',
       error: state.fastReports.fastReport ? state.fastReports.fastReport.error : '',
       result: state.fastReports.fastReport ? state.fastReports.fastReport.result : '',
