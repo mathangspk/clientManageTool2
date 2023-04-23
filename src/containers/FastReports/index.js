@@ -85,31 +85,31 @@ class FastReports extends Component {
           }
         },
         { selector: 'WO', name: 'Work FastReport', width: '120px', sortable: true, center: true },
-        { selector: 'PCT', name: 'PCT', width: '120px', sortable: true, center: true },
+        // { selector: 'PCT', name: 'PCT', width: '120px', sortable: true, center: true },
         { selector: 'userId.name', name: 'Tạo bởi', width: '180px', sortable: true },
-        {
-          selector: 'status', name: 'Trạng thái', width: '160px', sortable: true, center: true,
-          cell: (param) => {
-            let { user } = this.props;
-            let checkPkt = (user.pkt);
-            return <>
-              <div className={'lb-status color-' + param.status.toLowerCase().split(' ').join('-')}>
-                {param.status}
-              </div>
-              {/* { checkPkt && param.status === "COMPLETE" ? <>&nbsp; 
-              <Fab
-                color="default"
-                aria-label="Đóng WO"
-                size='small'
-                onClick={() => {
-                  this.onCloseWo(param)
-                }}
-              >
-                <Lock color="primary" />
-              </Fab> </> : <></>} */}
-            </>
-          }
-        },
+        // {
+        //   selector: 'status', name: 'Trạng thái', width: '160px', sortable: true, center: true,
+        //   cell: (param) => {
+        //     let { user } = this.props;
+        //     let checkPkt = (user.pkt);
+        //     return <>
+        //       <div className={'lb-status color-' + param.status.toLowerCase().split(' ').join('-')}>
+        //         {param.status}
+        //       </div>
+        //       {/* { checkPkt && param.status === "COMPLETE" ? <>&nbsp; 
+        //       <Fab
+        //         color="default"
+        //         aria-label="Đóng WO"
+        //         size='small'
+        //         onClick={() => {
+        //           this.onCloseWo(param)
+        //         }}
+        //       >
+        //         <Lock color="primary" />
+        //       </Fab> </> : <></>} */}
+        //     </>
+        //   }
+        // },
         { selector: 'location', name: 'Địa điểm công tác', width: '150px' },
         { selector: 'KKS', name: 'Hệ thống/KKS', width: '150px' },
         { selector: 'content', name: 'Nội dung công tác', width: '500px' },
@@ -264,7 +264,7 @@ class FastReports extends Component {
                 onInput={this.handleSearch}
               />
             </div>
-            <div className="field-search">
+            {/* <div className="field-search">
               <TextField
                 fullWidth
                 id="search_pct"
@@ -273,7 +273,7 @@ class FastReports extends Component {
                 variant="filled"
                 onInput={this.handleSearch}
               />
-            </div>
+            </div> */}
             <div className="field-search">
               <FormControl fullWidth className="multiple-select">
                 <InputLabel className="lb-user" id="lb-user">Tạo bởi</InputLabel>
@@ -318,7 +318,7 @@ class FastReports extends Component {
                 onInput={this.handleSearch}
               />
             </div>
-            <div className="field-search">
+            {/* <div className="field-search">
               <FormControl fullWidth variant="filled">
                 <InputLabel htmlFor="status">Trạng thái</InputLabel>
                 <Select
@@ -341,7 +341,7 @@ class FastReports extends Component {
                   <option value="CLOSE">CLOSE</option>
                 </Select>
               </FormControl>
-            </div>
+            </div> */}
           </div>
           <Grid className={classes.dataTable}>
             <DataTable

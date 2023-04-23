@@ -74,7 +74,7 @@ class FastReportForm extends Component {
     console.log(newFastReport)
     console.log(fastReportEditting)
     if (fastReportEditting) {
-      newFastReport.PCT = fastReportEditting.PCT
+      // newFastReport.PCT = fastReportEditting.PCT
       newFastReport.toolId = fastReportEditting.toolId
       newFastReport.userId = fastReportEditting.userId
       newFastReport.status = fastReportEditting.status
@@ -140,8 +140,6 @@ class FastReportForm extends Component {
       anchorEl: null,
     });
   }
-
-
   renderDetailPicture = () => {
     const { anchorEl } = this.state;
     const isMenuOpen = Boolean(anchorEl);
@@ -180,7 +178,8 @@ class FastReportForm extends Component {
       submitting,
       // customers,
       // user,
-      initialValues
+      initialValues,
+      fastReportEditting
     } = this.props;
 
     const { hideModal } = modalActionsCreator;
@@ -220,13 +219,13 @@ class FastReportForm extends Component {
                 component={renderTextField}
               ></Field>
             </Grid>
-            {
+            {/* {
               initialValues.WO ?
                 <Grid style={{ fontSize: "16px", paddingTop: "16px" }} item md={12}>
                   <label>PCT: {initialValues.PCT}</label>
                 </Grid>
                 : <></>
-            }
+            } */}
             <Grid item md={12}>
               <Field
                 id="timeStart"
@@ -273,19 +272,27 @@ class FastReportForm extends Component {
                 component={renderTextField}
               ></Field>
             </Grid>
-            <Grid item md={12}>
-              <Grid item md={12}>
-                <DropzoneDialog />
-              </Grid>
-            </Grid>
-            <Grid item md={12} xs={12} className={classes.showImage}>
-              <Grid item>
-                <Typography variant="h6" >Hình ảnh hiện tượng lỗi</Typography>
-              </Grid>
-              <Grid container spacing={3} className={classes.showImage} >
-                {this.renderToolImages()}
-              </Grid>
-            </Grid>
+            {
+              fastReportEditting ?
+                <Fragment>
+                  <Grid item md={12}>
+                    <Grid item md={12}>
+                      <DropzoneDialog />
+                    </Grid>
+                  </Grid>
+                  <Grid item md={12} xs={12} className={classes.showImage}>
+                    <Grid item>
+                      <Typography variant="h6" >Hình ảnh hiện tượng lỗi</Typography>
+                    </Grid>
+                    <Grid container spacing={3} className={classes.showImage} >
+                      {this.renderToolImages()}
+                    </Grid>
+                  </Grid>
+                </Fragment>
+
+                : <></>
+            }
+
             <Grid item md={12}>
               <Field
                 id="result"
