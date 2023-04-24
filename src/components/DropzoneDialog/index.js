@@ -114,19 +114,6 @@ class DropzoneDialogExample extends Component {
         try {
             const compressedFile = await imageCompression(_image, options);
             return compressedFile
-            // var FR = new FileReader();
-
-            // await FR.addEventListener("load", function(e) {
-            //     let data = {
-            //         filename: e.target.result,
-            //         mimetype: _image.type,
-            //         name: _image.name,
-            //         size: _image.size
-            //     }
-            //     resolve(data)
-            // }); 
-
-            // await FR.readAsDataURL(compressedFile);
         } catch (error) {
             console.log(error);
         }
