@@ -995,9 +995,11 @@ const mapStateToProps = (state, ownProps) => {
       note: state.fastReports.fastReport ? state.fastReports.fastReport.note : '',
       _id: state.fastReports.fastReport ? state.fastReports.fastReport._id : '',
       isAction: true,
-      images: state.fastReports.fastReport ? state.fastReports.fastReport.images : []
+      images: state.fastReports.fastReport ? state.fastReports.fastReport.images : [],
+      files: state.fastReports.fastReport ? state.fastReports.fastReport.files : []
     },
     images: state.fastReports.fastReport ? state.fastReports.fastReport.images : [],
+    files: state.fastReports.fastReport ? state.fastReports.fastReport.files : [],
     user: state.auth.user || {},
   }
 }

@@ -16,6 +16,8 @@ import renderTextField from '../../components/FormHelper/TextField';
 import moment from 'moment';
 import { ConsoleWriter } from 'istanbul-lib-report';
 import DropzoneDialog from '../../components/DropzoneDialog';
+import FileInput from '../../components/FileInput';
+
 const menuId = 'primary-search-account-menu';
 class FastReportForm extends Component {
   constructor(props) {
@@ -279,6 +281,9 @@ class FastReportForm extends Component {
                     <Grid item md={12}>
                       <DropzoneDialog />
                     </Grid>
+                    <Grid item md={12}>
+                      <FileInput />
+                    </Grid>
                   </Grid>
                   <Grid item md={12} xs={12} className={classes.showImage}>
                     <Grid item>
@@ -411,7 +416,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     modalActionsCreator: bindActionCreators(modalActions, dispatch),
     fastReportActionsCreator: bindActionCreators(FastReportActions, dispatch),
     customerActionCreator: bindActionCreators(customerActions, dispatch),
-    imageActionsCreator: bindActionCreators(imageActions, dispatch)
+    imageActionsCreator: bindActionCreators(imageActions, dispatch),
   };
 };
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
