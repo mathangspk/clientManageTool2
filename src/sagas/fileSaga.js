@@ -26,7 +26,7 @@ import { hideTempModal, showModal } from '../actions/modal';
 
 function* uploadFilesSaga({ payload }) {
   const token = yield call(getToken);
-  yield put(hideTempModal());
+  //yield put(hideTempModal());
   yield put(showLoading());
   console.log('file saga')
   console.log(payload)
@@ -40,7 +40,7 @@ function* uploadFilesSaga({ payload }) {
     yield put(returnErrors(data, status, 'UPLOAD_FILES_FAIL'));
   }
   yield put(hideLoading());
-  yield put(showModal());
+  //yield put(showModal());
 }
 
 function* deleteFileSaga({ payload }) {
