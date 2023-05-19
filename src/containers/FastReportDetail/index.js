@@ -690,9 +690,8 @@ class FastReportDetail extends Component {
     changeModalContent(<FastReportForm />);
   }
   saveFileToData = (data) => {
-    const { fastReportActionsCreator, fastReportEditting, user, images, files } = this.props;
-    // const { userIdSelect } = this.state;
-    const { addFastReport, updateFastReport } = fastReportActionsCreator;
+    const { fastReportActionCreator, fastReportEditting, user, images, files } = this.props;
+    const { addFastReport, updateFastReport } = fastReportActionCreator;
     const { WO, timeStart, timeStop, content, location, KKS, error, result, employ, time, imageError, imageSuccess } = data;
     const newFastReport = {
       ...(fastReportEditting || {}),
@@ -948,7 +947,7 @@ class FastReportDetail extends Component {
                   </div>
                   <FileInput />
                   &nbsp;
-                  <Button className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.onClickEdit(fastReport) }}>
+                  <Button className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.saveFileToData(fastReport) }}>
                     <Edit style={{ 'color': '#fff' }} fontSize="small" />&nbsp;Lưu File
                   </Button>
                 </div>
@@ -1019,6 +1018,7 @@ class FastReportDetail extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     customers: state.customers.customers,
+    fastReportEditting: state.fastReports.fastReport,
     fastReports: state.fastReports.fastReport,
     fastReport: {
       WO: state.fastReports.fastReport ? state.fastReports.fastReport.WO : '',
