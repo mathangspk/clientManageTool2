@@ -5,6 +5,7 @@ import * as modalActions from '../../actions/modal';
 import * as toolActions from '../../actions/toolActions';
 import * as customerActions from '../../actions/customerActions';
 import * as imageActions from '../../actions/imageActions';
+import * as fileActions from '../../actions/fileActions';
 import { bindActionCreators, compose } from 'redux';
 import styles from './style';
 import { Grid, withStyles, Fab, TextField, FormControl, Button, Table } from '@material-ui/core';
@@ -688,6 +689,46 @@ class FastReportDetail extends Component {
     changeModalTitle('Sửa Work FastReport');
     changeModalContent(<FastReportForm />);
   }
+  saveFileToData = (data) => {
+    const { fastReportActionCreator, fastReportEditting, user, images, files } = this.props;
+    const { addFastReport, updateFastReport } = fastReportActionCreator;
+    const { WO, timeStart, timeStop, content, location, KKS, error, result, employ, time, imageError, imageSuccess } = data;
+    const newFastReport = {
+      ...(fastReportEditting || {}),
+      WO,
+      timeStart,
+      timeStop,
+      location,
+      KKS,
+      userId: user._id,
+      status: 'START',
+      statusTool: 'START',
+      content: content || '',
+      error,
+      result,
+      employ,
+      time,
+      images,
+      files
+    }
+    console.log(data)
+    console.log(newFastReport)
+    console.log(fastReportEditting)
+    if (fastReportEditting) {
+      // newFastReport.PCT = fastReportEditting.PCT
+      newFastReport.toolId = fastReportEditting.toolId
+      newFastReport.userId = fastReportEditting.userId
+      newFastReport.status = fastReportEditting.status
+      newFastReport.statusTool = fastReportEditting.statusTool
+      if (user.admin || newFastReport.userId._id === user._id) {
+        updateFastReport(newFastReport);
+      }
+    } else {
+      newFastReport.status = 'START'
+      newFastReport.statusTool = 'START'
+      addFastReport(newFastReport);
+    }
+  };
   onClickVerify = (data) => {
     const { fastReportActionCreator, user, fastReport } = this.props;
     const { updateFastReport } = fastReportActionCreator;
@@ -905,6 +946,10 @@ class FastReportDetail extends Component {
                     </FormControl>
                   </div>
                   <FileInput />
+                  &nbsp;
+                  <Button className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.saveFileToData(fastReport) }}>
+                    <Edit style={{ 'color': '#fff' }} fontSize="small" />&nbsp;Lưu File
+                  </Button>
                 </div>
                 {/* <Grid>
                   <Multiselect
@@ -973,6 +1018,7 @@ class FastReportDetail extends Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     customers: state.customers.customers,
+    fastReportEditting: state.fastReports.fastReport,
     fastReports: state.fastReports.fastReport,
     fastReport: {
       WO: state.fastReports.fastReport ? state.fastReports.fastReport.WO : '',
@@ -1010,7 +1056,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     toolActionCreator: bindActionCreators(toolActions, dispatch),
     fastReportActionCreator: bindActionCreators(fastReportActions, dispatch),
     modalActionsCreator: bindActionCreators(modalActions, dispatch),
-    imageActionsCreator: bindActionCreators(imageActions, dispatch)
+    imageActionsCreator: bindActionCreators(imageActions, dispatch),
+    fileActionsCreator: bindActionCreators(fileActions, dispatch)
   }
 }
 

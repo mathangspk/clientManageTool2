@@ -7,6 +7,7 @@ import * as modalActions from '../../actions/modal';
 import * as FastReportActions from '../../actions/fastReportActions';
 import * as customerActions from '../../actions/customerActions';
 import * as imageActions from '../../actions/imageActions';
+import * as fileActions from '../../actions/fileActions';
 import Alert from '@material-ui/lab/Alert';
 
 import { reduxForm, Field } from 'redux-form';
@@ -403,11 +404,13 @@ const mapStateToProps = (state, ownProps) => {
       timeStart: state.fastReports.fastReport ? moment(state.fastReports.fastReport.timeStart).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
       timeStop: state.fastReports.fastReport ? moment(state.fastReports.fastReport.timeStop).format('YYYY-MM-DD') : moment().format('YYYY-MM-DD'),
       image: state.fastReports.fastReport ? state.fastReports.fastReport.image : '',
+      files: state.fastReports.fastReport ? state.fastReports.fastReport.files : '',
     },
     customers: state.customers ? state.customers.customers : [],
     user: state.auth.user,
     msgError: state.error.msg,
     images: state.images.images,
+    files: state.images.files,
   };
 };
 
@@ -417,6 +420,7 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     fastReportActionsCreator: bindActionCreators(FastReportActions, dispatch),
     customerActionCreator: bindActionCreators(customerActions, dispatch),
     imageActionsCreator: bindActionCreators(imageActions, dispatch),
+    fileActionsCreator: bindActionCreators(fileActions, dispatch),
   };
 };
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
