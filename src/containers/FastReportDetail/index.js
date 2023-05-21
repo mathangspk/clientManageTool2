@@ -378,6 +378,7 @@ class FastReportDetail extends Component {
       urlRedirect: '',
       currentIdTool: {},
       isChange: false,
+      addFile: false,
       fastReportAction: true,
       columnsGrid: [
         { selector: 'name', name: 'Tên công cụ', width: '100% - 300px', sortable: true },
@@ -711,9 +712,9 @@ class FastReportDetail extends Component {
       images,
       files
     }
-    console.log(data)
+    console.log(files)
     console.log(newFastReport)
-    console.log(fastReportEditting)
+    //console.log(fastReportEditting)
     if (fastReportEditting) {
       // newFastReport.PCT = fastReportEditting.PCT
       newFastReport.toolId = fastReportEditting.toolId
@@ -728,6 +729,15 @@ class FastReportDetail extends Component {
       newFastReport.statusTool = 'START'
       addFastReport(newFastReport);
     }
+  };
+  addFile = (data) => {
+    const { fileActionsCreator } = this.props;
+    const { uploadFilesSuccess } = fileActionsCreator;
+    console.log(data)
+    uploadFilesSuccess(data.files)
+    this.setState({
+      addFile: true,
+    })
   };
   onClickVerify = (data) => {
     const { fastReportActionCreator, user, fastReport } = this.props;
@@ -882,9 +892,10 @@ class FastReportDetail extends Component {
     }
   }
   render() {
-    const { classes, fastReport, fastReports, user, customers, images } = this.props
-    const { showRightPanel, columnsGrid, columnsGridComplete, currentIdTool, fastReportAction } = this.state
-    console.log(fastReports)
+    const { classes, fastReport, fastReports, user, customers, images, fastReportActionCreator } = this.props
+    const { uploadFileSuccess } = fastReportActionCreator;
+    const { showRightPanel, columnsGrid, columnsGridComplete, currentIdTool, fastReportAction, addFile } = this.state
+    console.log(fastReport)
     return (
       <Fragment>
         <div className={classes.containerPanel}>
@@ -945,6 +956,9 @@ class FastReportDetail extends Component {
                       <TextField id="result" multiline value={fastReport.result || ' '} label="Kết quả xử lý" InputProps={{ readOnly: true }} />
                     </FormControl>
                   </div>
+                  {addFile ? <></> : <Button className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.addFile(fastReport) }}>
+                    <Edit style={{ 'color': '#fff' }} fontSize="small" />&nbsp;Thêm File
+                  </Button>}
                   <FileInput />
                   &nbsp;
                   <Button className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.saveFileToData(fastReport) }}>
@@ -1045,7 +1059,7 @@ const mapStateToProps = (state, ownProps) => {
       files: state.fastReports.fastReport ? state.fastReports.fastReport.files : []
     },
     images: state.fastReports.fastReport ? state.fastReports.fastReport.images : [],
-    files: state.fastReports.fastReport ? state.fastReports.fastReport.files : [],
+    files: state.files.files ? state.files.files : [],
     user: state.auth.user || {},
   }
 }

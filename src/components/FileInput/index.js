@@ -46,12 +46,14 @@ const mapStateToProps = (state, ownProps) => {
     return {
         name: state.form.TOOL_MANAGEMENT ? state.form.TOOL_MANAGEMENT.values.name : null,
         kks: state.form.FASTREPORT_MANAGEMENT ? state.form.FASTREPORT_MANAGEMENT.values.KKS : null,
+        files: state.fastReports.fastReport ? state.fastReports.fastReport.files : null,
     };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => {
     return {
         fileActionsCreator: bindActionCreators(fileActions, dispatch),
+
     };
 };
 const withConnect = connect(mapStateToProps, mapDispatchToProps);

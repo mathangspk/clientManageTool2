@@ -14,6 +14,8 @@ var myReducer = (state = initialState, action) => {
             }
         case types.UPLOAD_IMAGE_SUCCESS: {
             const data = action.payload;
+            console.log(data)
+            console.log(state)
             for (let i = 0; i < data.length; i++) {
                 state.images.push(data[i])
             }

@@ -14,6 +14,8 @@ var myReducer = (state = initialState, action) => {
             }
         case types.UPLOAD_FILE_SUCCESS: {
             const data = action.payload;
+            console.log(data)
+            console.log(state)
             for (let i = 0; i < data.length; i++) {
                 state.files.push(data[i])
             }

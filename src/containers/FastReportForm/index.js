@@ -409,8 +409,7 @@ const mapStateToProps = (state, ownProps) => {
     customers: state.customers ? state.customers.customers : [],
     user: state.auth.user,
     msgError: state.error.msg,
-    images: state.images.images,
-    files: state.images.files,
+    images: state.images.images
   };
 };
 
