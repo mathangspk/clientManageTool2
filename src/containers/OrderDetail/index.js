@@ -416,7 +416,7 @@ class OrderDetail extends Component {
           cell: (params) => {
             let { order } = this.props;
             console.log(order)
-            
+
             if (!order.isAction) return <></>
             let data = JSON.parse(JSON.stringify(params))
             console.log(data)
@@ -447,7 +447,7 @@ class OrderDetail extends Component {
                   >
                     <Add color="primary" fontSize="small" />
                   </Fab>
-            &nbsp;
+                  &nbsp;
                   <Fab
                     color="default"
                     aria-label="Remove"
@@ -472,7 +472,7 @@ class OrderDetail extends Component {
                   >
                     <KeyboardReturn fontSize="small" />
                   </Fab>
-            &nbsp;
+                  &nbsp;
                   <Fab
                     color="default"
                     aria-label="Remove"
@@ -798,7 +798,7 @@ class OrderDetail extends Component {
     const { user } = this.props
     if (!order.userId) return 'hide';
     if (!user.admin && (user._id !== order.userId._id || order.status !== 'START')) return 'hide';
-    if (user.admin &&  order.status === 'INPRG NO TOOL') return 'hide';
+    if (user.admin && order.status === 'INPRG NO TOOL') return 'hide';
     if (order.status === 'COMPLETE' || order.status === 'CLOSE') return 'hide';
     return ''
   }

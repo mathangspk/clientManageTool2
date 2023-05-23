@@ -381,114 +381,52 @@ class FastReportDetail extends Component {
       addFile: false,
       fastReportAction: true,
       columnsGrid: [
-        { selector: 'name', name: 'Tên công cụ', width: '100% - 300px', sortable: true },
-        // {
-        //   selector: 'status', name: 'Trạng thái', width: '130px', sortable: true,
-        //   cell: (param) => {
-        //     let { fastReport } = this.props;
-        //     //if (!fastReport.isAction) return <></>
-        //     let status = 'READY'
-        //     let className = 'ready'
-        //     switch (param.status + "") {
-        //       case "1":
-        //         status = 'RETURNED';
-        //         className = 'ready';
-        //         break;
-        //       case "2":
-        //         status = 'IN USE';
-        //         className = 'in-use';
-        //         break;
-        //       case "3":
-        //         status = 'BAD'
-        //         className = 'bad';
-        //         break;
-        //       case "4":
-        //         status = 'LOST';
-        //         className = 'lost';
-        //         break;
-        //       default:
-        //         status = 'READY'
-        //         break;
-        //     }
-        //     return <div className={'lb-status color-' + className}>{status}</div>;
-        //   }
-        // },
-        // { selector: 'type', name: 'Loại', width: 'calc((100% - 100px) / 3)', sortable: true },
+        { selector: 'name', name: 'Tên tài liệu', width: '100% - 300px', sortable: true },
+        {
+          selector: 'idFile', name: 'Link xem', width: 'calc((100% - 100px) / 3)',
+          cell: (params) => {
+            console.log(params.idFile)
+            return <>
+              <div>
+                <a href={`https://drive.google.com/file/d/${params.idFile}`} target="_blank">Click me</a>
+              </div>
+
+            </>
+          },
+          sortable: true
+        },
         {
           name: 'Hành động', width: '100px',
           cell: (params) => {
             let { fastReport } = this.props;
             console.log(fastReport)
 
-            if (!fastReport.isAction) return <></>
             let data = JSON.parse(JSON.stringify(params))
             console.log(data)
-            if (fastReport.status === "START") {
-              return <>
+            return <>
+              <div>
+                {/* <a href={`https://drive.google.com/file/d/${params.idFile}`} target="_blank">Click me</a> */}
                 <Fab
-                  color="default"
-                  aria-label="Remove"
                   size='small'
                   onClick={() => {
-                    this.onClickRemoveTool(data)
-                  }}
-                >
-                  <DeleteForever color="error" fontSize="small" />
-                </Fab>
-              </>
-            }
-            if (fastReport.status === "READY" || fastReport.status === "INPRG HAVE TOOL") {
-              if (data.status === 1) {
-                return <>
-                  <Fab
-                    color="default"
-                    aria-label="Return"
-                    size='small'
-                    onClick={() => {
-                      this.onClickAddToolInList(data)
-                    }}
-                  >
-                    <Add color="primary" fontSize="small" />
-                  </Fab>
-                  &nbsp;
-                  <Fab
-                    color="default"
-                    aria-label="Remove"
-                    size='small'
-                    onClick={() => {
-                      this.onClickRemoveTool(data)
-                    }}
-                  >
-                    <DeleteForever color="error" fontSize="small" />
-                  </Fab>
-                </>
-              }
-              if (data.status === 2) {
-                return <>
-                  <Fab
-                    color="default"
-                    aria-label="Return"
-                    size='small'
-                    onClick={() => {
-                      this.onClickReturnTool(data)
-                    }}
-                  >
-                    <KeyboardReturn fontSize="small" />
-                  </Fab>
-                  &nbsp;
-                  <Fab
-                    color="default"
-                    aria-label="Remove"
-                    size='small'
-                    onClick={() => {
-                      this.onClickRemoveTool(data)
-                    }}
-                  >
-                    <DeleteForever color="error" fontSize="small" />
-                  </Fab>
-                </>
-              }
-            }
+                    this.onClickRemoveDoc(data)
+                  }}>
+                  <DeleteForever color="error" fontSize="small" /></Fab>
+              </div>
+
+            </>
+            // return <>
+            //   <Fab
+            //     color="default"
+            //     aria-label="Remove"
+            //     size='small'
+            //     onClick={() => {
+            //       this.onClickRemoveTool(data)
+            //     }}
+            //   >
+            //     <DeleteForever color="error" fontSize="small" />
+            //   </Fab>
+            // </>
           }
         }
       ],
@@ -595,30 +533,28 @@ class FastReportDetail extends Component {
       urlRedirect
     })
   }
-  onClickRemoveTool = (data) => {
+  onClickRemoveDoc = (data) => {
     let self = this
+    console.log(data)
     popupConfirm({
       title: 'Delete',
-      html: "Bạn muốn bỏ công cụ này?",
+      html: "Bạn muốn bỏ tài liệu này?",
       ifOk: () => {
-        const { fastReportActionCreator, toolActionCreator, fastReport } = self.props;
+        const { fastReportActionCreator, toolActionCreator, fastReport, fileActionsCreator } = self.props;
         const { currentIdTool } = self.state;
+        console.log(currentIdTool)
         const { updateFastReport } = fastReportActionCreator;
-        const { updateTool } = toolActionCreator;
+        const { deleteFile } = fileActionsCreator;
         const newFastReport = JSON.parse(JSON.stringify(fastReport));
         const newTool = JSON.parse(JSON.stringify(data));
-        let indexTool = newFastReport.toolId.findIndex(function (item, i) {
+        let indexTool = newFastReport.files.findIndex(function (item, i) {
           return item._id === data._id
         });
-        //let indexTool = newFastReport.toolId.indexOf(data._id);
-        newFastReport.toolId.splice(indexTool, 1);
+        newFastReport.files.splice(indexTool, 1);
         newTool.wo = "";
         newTool.status = 1;
-        if (currentIdTool._id === data._id) {
-          self.setState({ currentIdTool: {} });
-        }
         updateFastReport(newFastReport);
-        updateTool(newTool);
+        deleteFile(data.idFile);
       }
     })
   }
@@ -691,6 +627,9 @@ class FastReportDetail extends Component {
     changeModalContent(<FastReportForm />);
   }
   saveFileToData = (data) => {
+    this.setState({
+      addFile: false,
+    })
     const { fastReportActionCreator, fastReportEditting, user, images, files } = this.props;
     const { addFastReport, updateFastReport } = fastReportActionCreator;
     const { WO, timeStart, timeStop, content, location, KKS, error, result, employ, time, imageError, imageSuccess } = data;
@@ -959,7 +898,7 @@ class FastReportDetail extends Component {
                   {addFile ? <></> : <Button className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.addFile(fastReport) }}>
                     <Edit style={{ 'color': '#fff' }} fontSize="small" />&nbsp;Thêm File
                   </Button>}
-                  <FileInput />
+                  {addFile ? <FileInput /> : <></>}
                   &nbsp;
                   <Button className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.saveFileToData(fastReport) }}>
                     <Edit style={{ 'color': '#fff' }} fontSize="small" />&nbsp;Lưu File
@@ -984,7 +923,7 @@ class FastReportDetail extends Component {
                     Thêm tool
                   </Button>
                 </div> */}
-                {/* <Grid className={classes.dataTable}>
+                <Grid className={classes.dataTable}>
                   <DataTable
                     noHeader={true}
                     keyField={'_id'}
@@ -992,15 +931,15 @@ class FastReportDetail extends Component {
                       || fastReport.status === "READY"
                       || fastReport.status === "INPRG HAVE TOOL"
                       ? columnsGrid : columnsGridComplete}
-                    data={this.genarateTools(fastReport)}
+                    data={this.genarateDocs(fastReport)}
                     striped={true}
                     pagination
                     paginationPerPage={20}
                     paginationRowsPerPageOptions={[10, 20, 50]}
-                    onRowClicked={this.onClickShowTool}
-                    noDataComponent='Chưa thêm công cụ'
+                    //onRowClicked={this.onClickShowTool}
+                    noDataComponent='Chưa thêm tài liệu'
                   />
-                </Grid> */}
+                </Grid>
               </div>
             </Grid>
             <Grid>
@@ -1017,14 +956,13 @@ class FastReportDetail extends Component {
       </Fragment>
     );
   }
-  genarateTools = (fastReport) => {
+  genarateDocs = (fastReport) => {
     const { user } = this.props;
     if (!user && !user._id) return [];
     fastReport.isAction = true
-    if (!user.admin && fastReport.userId && (fastReport.status !== 'START' || user._id !== fastReport.userId._id)) fastReport.isAction = false;
-    if (fastReport.status === 'COMPLETE') fastReport.isAction = false
-    if (fastReport && fastReport.toolId && fastReport.toolId.length > 0 && fastReport.toolId[0]._id) {
-      return fastReport.toolId
+    if (!user.admin && fastReport.userId && (user._id !== fastReport.userId._id)) fastReport.isAction = false;
+    if (fastReport && fastReport.files && fastReport.files.length > 0) {
+      return fastReport.files
     }
     return []
   }
