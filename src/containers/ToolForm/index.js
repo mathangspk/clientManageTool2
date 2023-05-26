@@ -158,6 +158,7 @@ class ToolForm extends Component {
     );
   };
   setValueStatus = (event) => {
+    console.log(event.target.value)
     const { statusSelected } = this.state;
     if (statusSelected + '' === event.target.value + '') {
       return

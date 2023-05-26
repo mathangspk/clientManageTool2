@@ -4,6 +4,7 @@ import { toastError, toastSuccess } from '../helpers/toastHelper';
 var initialState = {
     images: [],
     loading: false,
+    imagesSaveDB: []
 }
 var myReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -12,6 +13,11 @@ var myReducer = (state = initialState, action) => {
             return {
                 ...state,
             }
+        // case types.GET_IMAGE_IN_DB:
+        //     const data = action.payload;
+        //     return {
+        //         imagesSaveDB: data
+        //     }
         case types.UPLOAD_IMAGE_SUCCESS: {
             const data = action.payload;
             console.log(data)
@@ -19,12 +25,13 @@ var myReducer = (state = initialState, action) => {
             for (let i = 0; i < data.length; i++) {
                 state.images.push(data[i])
             }
+
             if (state.images && state.images.length > 0) {
                 toastSuccess('Upload ảnh thành công!')
             }
             return {
                 ...state,
-                images: state.images,
+                images: state.images
             };
         }
         case types.UPLOAD_IMAGE_FAIL: {

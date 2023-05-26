@@ -967,6 +967,7 @@ const mapStateToProps = (state, ownProps) => {
     order: {
       WO: state.orders.order ? state.orders.order.WO : '',
       PCT: state.orders.order ? state.orders.order.PCT : '',
+      workType: state.orders.order ? state.orders.order.workType : '',
       date: state.orders.order ? state.orders.order.date : '',
       status: state.orders.order ? state.orders.order.status : '',
       statusTool: state.orders.order ? state.orders.order.statusTool : '',

@@ -23,7 +23,8 @@ class OrderForm extends Component {
       openSelectCustomer: false,
       nameCustomer: '',
       userIdSelect: '',
-      msgError: ''
+      msgError: '',
+      workTypeSelected: '',
     }
   }
   //@check login success adn error
@@ -42,18 +43,20 @@ class OrderForm extends Component {
     }
   }
   componentDidMount() {
-    const { customerActionCreator } = this.props;
+    const { customerActionCreator, orderEditting } = this.props;
+    this.setState({ workTypeSelected: orderEditting ? orderEditting.workType : 'PM' })
     const { listAllCustomers } = customerActionCreator;
     listAllCustomers();
   }
   handleSubmitForm = (data) => {
     const { orderActionsCreator, orderEditting, user } = this.props;
-    // const { userIdSelect } = this.state;
+    const { workTypeSelected } = this.state;
     const { addOrder, updateOrder } = orderActionsCreator;
     const { WO, timeStart, timeStop, content, location, KKS } = data;
     const newOrder = {
       ...(orderEditting || {}),
       WO,
+      workType: workTypeSelected || "PM",
       timeStart,
       timeStop,
       location,
@@ -63,7 +66,7 @@ class OrderForm extends Component {
       statusTool: 'START',
       content: content || ''
     }
-    console.log(data)
+    console.log(this.state)
     console.log(newOrder)
     console.log(orderEditting)
     if (orderEditting) {
@@ -72,6 +75,7 @@ class OrderForm extends Component {
       newOrder.userId = orderEditting.userId
       newOrder.status = orderEditting.status
       newOrder.statusTool = orderEditting.statusTool
+      newOrder.workType = workTypeSelected
       if (user.admin || newOrder.userId._id === user._id) {
         updateOrder(newOrder);
       }
@@ -96,6 +100,17 @@ class OrderForm extends Component {
     </Alert>) : null
     return xhtml;
   }
+  setValueWorkType = (event) => {
+    console.log(event.target.value)
+    const { workTypeSelected } = this.state;
+    if (workTypeSelected + '' === event.target.value + '') {
+      console.log('sss')
+      return
+    } else {
+      this.setState({ workTypeSelected: event.target.value })
+      console.log('aaa')
+    }
+  }
   render() {
     var {
       classes,
@@ -103,16 +118,14 @@ class OrderForm extends Component {
       handleSubmit,
       invalid,
       submitting,
-      // customers,
-      // user,
       initialValues
     } = this.props;
-
+    const { workTypeSelected } = this.state;
+    //console.log(orderEditting.workType)
     const { hideModal } = modalActionsCreator;
     return (
       <form onSubmit={handleSubmit(this.handleSubmitForm)}>
         <Grid container className={classes.form}>
-
           <Grid item md={12}>
             <Field
               id="WO"
@@ -123,6 +136,29 @@ class OrderForm extends Component {
               component={renderTextField}
             ></Field>
           </Grid>
+          <Grid item md={12} xs={12}>
+            <FormControl fullWidth style={{ 'marginTop': '16px' }}>
+              <InputLabel htmlFor="workType">Work Type</InputLabel>
+              <Select
+                fullWidth
+                native
+                value={workTypeSelected}
+                onChange={this.setValueWorkType}
+                inputProps={{
+                  name: "workType",
+                  id: "workType",
+                }}
+              >
+                <option value="CM">Bất Thường</option>
+                <option value="PM">Thường Xuyên</option>
+                <option value="A">Tiểu Tu</option>
+                <option value="B">Trung Tu</option>
+                <option value="C">Đại Tu</option>
+              </Select>
+            </FormControl>
+          </Grid>
+
+
           <Grid item md={12}>
             <Field
               id="location"
@@ -154,7 +190,7 @@ class OrderForm extends Component {
             <Field
               id="timeStart"
               name="timeStart"
-              label={initialValues.WO == null ? "Ngày bắt đầu dự kiến": "Ngày bắt đầu thực tế"} 
+              label={initialValues.WO == null ? "Ngày bắt đầu dự kiến" : "Ngày bắt đầu thực tế"}
               type="date"
               className={classes.TextField}
               margin="normal"
@@ -165,7 +201,7 @@ class OrderForm extends Component {
             <Field
               id="timeStop"
               name="timeStop"
-              label=  {initialValues.WO == null ? "Ngày kết thúc dự kiến": "Ngày kết thúc thực tế"} 
+              label={initialValues.WO == null ? "Ngày kết thúc dự kiến" : "Ngày kết thúc thực tế"}
               type="date"
               className={classes.TextField}
               margin="normal"

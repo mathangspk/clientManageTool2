@@ -64,7 +64,7 @@ class Bbdgkts extends Component {
                     >
                       <Edit color="primary" />
                     </Fab>
-                  &nbsp;&nbsp;
+                    &nbsp;&nbsp;
 
                     {/* <Fab
                     color="default"
@@ -89,9 +89,9 @@ class Bbdgkts extends Component {
           cell: (params) => moment(params.time).format('DD/MM/YYYY')
         },
         { selector: 'WO', name: 'Work Order', width: '120px', sortable: true, center: true },
-        
+
         { selector: 'userId.name', name: 'Người thực hiện', width: '180px', sortable: true },
-        
+
         { selector: 'note', name: 'Ghi chú', width: '300px', sortable: true },
       ]
     }
@@ -213,7 +213,7 @@ class Bbdgkts extends Component {
   }
 
   render() {
-    const { bbdgkts, customers, BbdgktsTotal, classes } = this.props;
+    const { bbdgkts, customers, bbdgktsTotal, classes } = this.props;
     const { columnsGrid, pagination, dataSearch } = this.state;
     return (
       <Fragment>
@@ -311,7 +311,7 @@ class Bbdgkts extends Component {
               paginationDefaultPage={pagination.page}
               paginationPerPage={pagination.rowPerPage}
               paginationRowsPerPageOptions={pagination.rowPerPageOption}
-              paginationTotalRows={BbdgktsTotal}
+              paginationTotalRows={bbdgktsTotal}
               onChangePage={this.handleChangePage}
               onChangeRowsPerPage={this.handleChangeRowsPerPage}
             />

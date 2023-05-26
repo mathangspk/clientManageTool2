@@ -17,7 +17,6 @@ import renderTextField from '../../components/FormHelper/TextField';
 import moment from 'moment';
 import { ConsoleWriter } from 'istanbul-lib-report';
 import DropzoneDialog from '../../components/DropzoneDialog';
-import FileInput from '../../components/FileInput';
 
 const menuId = 'primary-search-account-menu';
 class FastReportForm extends Component {
@@ -47,8 +46,11 @@ class FastReportForm extends Component {
     }
   }
   componentDidMount() {
-    const { customerActionCreator } = this.props;
+    const { customerActionCreator, fastReportEditting, imageActionsCreator } = this.props;
     const { listAllCustomers } = customerActionCreator;
+    const { getImagesInDb } = imageActionsCreator;
+    console.log(fastReportEditting ? fastReportEditting : 'ko co du lieu')
+    getImagesInDb(fastReportEditting.images)
     listAllCustomers();
   }
   handleSubmitForm = (data) => {
@@ -143,6 +145,7 @@ class FastReportForm extends Component {
       anchorEl: null,
     });
   }
+
   renderDetailPicture = () => {
     const { anchorEl } = this.state;
     const isMenuOpen = Boolean(anchorEl);
@@ -172,6 +175,11 @@ class FastReportForm extends Component {
     </Alert>) : null
     return xhtml;
   }
+  notSave = () => {
+    const { modalActionsCreator } = this.props;
+    const { hideModal } = modalActionsCreator;
+    hideModal();
+  }
   render() {
     const {
       classes,
@@ -185,7 +193,7 @@ class FastReportForm extends Component {
       fastReportEditting
     } = this.props;
 
-    const { hideModal } = modalActionsCreator;
+
     return (
       <Fragment>
         {this.renderDetailPicture()}
@@ -282,9 +290,6 @@ class FastReportForm extends Component {
                     <Grid item md={12}>
                       <DropzoneDialog />
                     </Grid>
-                    <Grid item md={12}>
-                      <FileInput />
-                    </Grid>
                   </Grid>
                   <Grid item md={12} xs={12} className={classes.showImage}>
                     <Grid item>
@@ -367,10 +372,8 @@ class FastReportForm extends Component {
               justify="flex-end"
               alignItems="flex-end"
             >
-
               {this.renderFastReportFail()}
-
-              <Button onClick={hideModal}>Hủy</Button>
+              <Button onClick={this.notSave}>Hủy</Button>
               <Button disabled={invalid || submitting} type="submit">
                 Lưu
               </Button>

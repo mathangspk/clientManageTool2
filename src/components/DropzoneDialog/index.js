@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
+import styles from './style';
 import Resizer from 'react-image-file-resizer';
+import { withStyles } from '@material-ui/core';
 import { DropzoneDialog } from 'material-ui-dropzone'
 import Button from '@material-ui/core/Button';
 import { limitSizeImage } from '../../constants';
@@ -97,7 +99,7 @@ class DropzoneDialogExample extends Component {
             alert('Vui long chon anh ...')
         }
     }
-    handleOpen() {
+    handleOpen = () => {
         this.setState({
             open: true,
         });
@@ -145,9 +147,10 @@ class DropzoneDialogExample extends Component {
         })
     }
     render() {
+        const { classes } = this.props;
         return (
             <div>
-                <Button onClick={this.handleOpen.bind(this)}>
+                <Button className={classes.button} onClick={this.handleOpen}>
                     add images
                 </Button>
                 <DropzoneDialog
@@ -178,5 +181,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 export default compose(
+    withStyles(styles),
     withConnect,
 )(DropzoneDialogExample);
+
+

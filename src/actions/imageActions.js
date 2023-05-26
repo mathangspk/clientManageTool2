@@ -28,6 +28,12 @@ export const uploadImages = (payload) => {
     payload,
   };
 };
+export const getImagesInDb = (payload) => {
+  return {
+    type: imageConstants.GET_IMAGE_IN_DB,
+    payload,
+  };
+};
 
 export const uploadImagesSuccess = (payload) => {
   return {

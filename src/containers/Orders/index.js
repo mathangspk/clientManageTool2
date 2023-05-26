@@ -29,7 +29,8 @@ class Orders extends Component {
         WO: '',
         PCT: '',
         userId: [],
-        status: 'ALL'
+        status: 'ALL',
+        workType: 'ALL'
       },
       columnsGrid: [
         {
@@ -38,7 +39,7 @@ class Orders extends Component {
             let { user } = this.props;
             let data = JSON.parse(JSON.stringify(params));
             let checkUser = (user.admin || user._id === params.userId._id);
-            
+
 
             //console.log(user)
             return <>
@@ -66,7 +67,7 @@ class Orders extends Component {
                     >
                       <Edit color="primary" />
                     </Fab>
-                  &nbsp;&nbsp;
+                    &nbsp;&nbsp;
 
                     {/* <Fab
                     color="default"
@@ -84,8 +85,25 @@ class Orders extends Component {
           }
         },
         { selector: 'WO', name: 'Work Order', width: '120px', sortable: true, center: true },
+
         { selector: 'PCT', name: 'PCT', width: '120px', sortable: true, center: true },
         { selector: 'userId.name', name: 'Tạo bởi', width: '180px', sortable: true },
+        {
+          selector: 'workType', name: 'Work Type', width: '120px', sortable: true, center: true,
+          cell: (param) => {
+            let workTypeLong;
+            if (param.workType == 'PM') workTypeLong = 'Thường Xuyên'
+            else if (param.workType == 'CM') workTypeLong = "Bất Thường"
+            else if (param.workType == 'A') workTypeLong = "Tiểu Tu"
+            else if (param.workType == 'B') workTypeLong = "Trung Tu"
+            else if (param.workType == 'C') workTypeLong = "Đại Tu"
+            return <>
+              < div className={'lb-status color-' + param.status.toLowerCase().split(' ').join('-')} >
+                {workTypeLong}
+              </div >
+            </>
+          }
+        },
         {
           selector: 'status', name: 'Trạng thái', width: '160px', sortable: true, center: true,
           cell: (param) => {
@@ -106,7 +124,7 @@ class Orders extends Component {
               >
                 <Lock color="primary" />
               </Fab> </> : <></>} */}
-              </>
+            </>
           }
         },
         { selector: 'location', name: 'Địa điểm công tác', width: '150px' },
@@ -206,6 +224,7 @@ class Orders extends Component {
       limit: pagination.rowPerPage,
       [event.target.name]: event.target.value
     }
+    console.log(search)
     this.setState({ dataSearch: search });
     searchOrder(search);
   }
@@ -324,6 +343,28 @@ class Orders extends Component {
                   <option value="INPRG HAVE TOOL">INPRG HAVE TOOL</option>
                   <option value="COMPLETE">COMPLETE</option>
                   <option value="CLOSE">CLOSE</option>
+                </Select>
+              </FormControl>
+            </div>
+            <div className="field-search">
+              <FormControl fullWidth variant="filled">
+                <InputLabel htmlFor="workType">Work Type</InputLabel>
+                <Select
+                  fullWidth
+                  native
+                  value={dataSearch.workType}
+                  onChange={this.handleSearch}
+                  inputProps={{
+                    name: 'workType',
+                    id: 'workType',
+                  }}
+                >
+                  <option value="ALL">Tất cả</option>
+                  <option value="CM">Bất Thường</option>
+                  <option value="PM">Thường Xuyên</option>
+                  <option value="A">Tiểu Tu</option>
+                  <option value="B">Trung Tu</option>
+                  <option value="C">Đại Tu</option>
                 </Select>
               </FormControl>
             </div>

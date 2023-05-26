@@ -64,7 +64,7 @@ class Changechtts extends Component {
                     >
                       <Edit color="primary" />
                     </Fab>
-                  &nbsp;&nbsp;
+                    &nbsp;&nbsp;
 
                     {/* <Fab
                     color="default"
@@ -305,7 +305,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     customers: state.customers.customers,
     cchtts: state.cchtts.cchtts,
-    cchttsTotal: state.cchtts.total,
+    CchttsTotal: state.cchtts.total,
     user: state.auth.user
   }
 }

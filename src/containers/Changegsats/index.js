@@ -64,7 +64,7 @@ class Changegsats extends Component {
                     >
                       <Edit color="primary" />
                     </Fab>
-                  &nbsp;&nbsp;
+                    &nbsp;&nbsp;
 
                     {/* <Fab
                     color="default"
@@ -305,7 +305,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     customers: state.customers.customers,
     cgsats: state.cgsats.cgsats,
-    cgsatsTotal: state.cgsats.total,
+    CgsatsTotal: state.cgsats.total,
     user: state.auth.user
   }
 }

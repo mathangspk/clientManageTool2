@@ -1,4 +1,5 @@
 export const GET_IMAGE = 'GET_IMAGE';
+export const GET_IMAGE_IN_DB = 'GET_IMAGE_IN_DB';
 export const GET_IMAGE_SUCCESS = 'GET_IMAGE_SUCCESS';
 export const GET_IMAGE_FAIL = 'GET_IMAGE_FAIL';
 

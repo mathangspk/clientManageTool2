@@ -64,7 +64,7 @@ class Bptcs extends Component {
                     >
                       <Edit color="primary" />
                     </Fab>
-                  &nbsp;&nbsp;
+                    &nbsp;&nbsp;
 
                     {/* <Fab
                     color="default"
@@ -83,7 +83,7 @@ class Bptcs extends Component {
         },
         { selector: 'BPTC', name: 'Số Biện Pháp Thi Công', width: '200px', sortable: true, center: true },
         { selector: 'JSA', name: 'Số JSA', width: '200px', sortable: true, center: true },
-        { selector: 'content', name: 'Nội dung công tác', width: '500px', sortable: true, center: true },       
+        { selector: 'content', name: 'Nội dung công tác', width: '500px', sortable: true, center: true },
         { selector: 'note', name: 'Ghi chú', width: '300px', sortable: true },
       ]
     }
@@ -300,7 +300,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     customers: state.customers.customers,
     bptcs: state.bptcs.bptcs,
-    bptcsTotal: state.bptcs.total,
+    BptcsTotal: state.bptcs.total,
     user: state.auth.user
   }
 }
