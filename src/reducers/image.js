@@ -14,9 +14,9 @@ var myReducer = (state = initialState, action) => {
                 ...state,
             }
         // case types.GET_IMAGE_IN_DB:
-        //     const data = action.payload;
+        //     //     const data = action.payload;
         //     return {
-        //         imagesSaveDB: data
+        //         imagesSaveDB: []
         //     }
         case types.UPLOAD_IMAGE_SUCCESS: {
             const data = action.payload;

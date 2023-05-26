@@ -4,6 +4,7 @@ import { toastError, toastSuccess } from '../helpers/toastHelper';
 var initialState = {
     files: [],
     loading: false,
+    upFileSuccess: false
 }
 var myReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -11,6 +12,7 @@ var myReducer = (state = initialState, action) => {
         case types.UPLOAD_FILE:
             return {
                 ...state,
+                upFileSuccess: false
             }
         case types.UPLOAD_FILE_SUCCESS: {
             const data = action.payload;
@@ -25,6 +27,7 @@ var myReducer = (state = initialState, action) => {
             return {
                 ...state,
                 files: state.files,
+                upFileSuccess: true
             };
         }
         case types.UPLOAD_FILE_FAIL: {

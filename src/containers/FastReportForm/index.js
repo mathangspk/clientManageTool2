@@ -27,7 +27,8 @@ class FastReportForm extends Component {
       openSelectCustomer: false,
       nameCustomer: '',
       userIdSelect: '',
-      msgError: ''
+      msgError: '',
+      imageInDB: []
     }
   }
   //@check login success adn error
@@ -46,12 +47,12 @@ class FastReportForm extends Component {
     }
   }
   componentDidMount() {
-    const { customerActionCreator, fastReportEditting, imageActionsCreator } = this.props;
+    const { customerActionCreator, fastReportEditting } = this.props;
     const { listAllCustomers } = customerActionCreator;
-    const { getImagesInDb } = imageActionsCreator;
-    console.log(fastReportEditting ? fastReportEditting : 'ko co du lieu')
-    getImagesInDb(fastReportEditting.images)
     listAllCustomers();
+    this.setState({
+      imageInDB: fastReportEditting.images
+    })
   }
   handleSubmitForm = (data) => {
     const { fastReportActionsCreator, fastReportEditting, user, images } = this.props;
@@ -103,23 +104,26 @@ class FastReportForm extends Component {
     let { images } = this.props;
     let xhtml = null;
     //console.log(link.webViewLink);
-    if (images.length > 0) {
-      xhtml = images.map((image, index) => {
-        console.log(image)
-        return <Grid item key={image.id} >
-          <Paper>
-            <img
-              //src={`${API_ENDPOINT}/api/upload/image/${image.filename}`}
-              src={`https://drive.google.com/uc?export=view&id=${image.idImage}`}
-              // alt={image.name}
-              // className={classes.picture}
-              data-filename={image.idImage}
-              onClick={this.onClickPicture}
-            />
-          </Paper>
-        </Grid>
-      })
+    if (images) {
+      if (images.length > 0) {
+        xhtml = images.map((image, index) => {
+          console.log(image)
+          return <Grid item key={image.id} >
+            <Paper>
+              <img
+                //src={`${API_ENDPOINT}/api/upload/image/${image.filename}`}
+                src={`https://drive.google.com/uc?export=view&id=${image.idImage}`}
+                // alt={image.name}
+                // className={classes.picture}
+                data-filename={image.idImage}
+                onClick={this.onClickPicture}
+              />
+            </Paper>
+          </Grid>
+        })
+      }
     }
+
     return xhtml;
   };
   onClickPicture = (event) => {
@@ -164,7 +168,24 @@ class FastReportForm extends Component {
       </Menu>
     );
   };
+  compareArrays = (arr1, arr2) => {
+    const differentElements = [];
 
+    // Tìm các phần tử không giống nhau giữa hai mảng
+    for (let i = 0; i < arr1.length; i++) {
+      if (!arr2.includes(arr1[i])) {
+        differentElements.push(arr1[i]);
+      }
+    }
+
+    for (let i = 0; i < arr2.length; i++) {
+      if (!arr1.includes(arr2[i])) {
+        differentElements.push(arr2[i]);
+      }
+    }
+
+    return differentElements;
+  }
 
   renderFastReportFail = () => {
     const { msgError } = this.state;
@@ -176,8 +197,19 @@ class FastReportForm extends Component {
     return xhtml;
   }
   notSave = () => {
-    const { modalActionsCreator } = this.props;
+    const { modalActionsCreator, images, imageActionsCreator } = this.props;
+    const { deleteImage } = imageActionsCreator;
+    const { imageInDB } = this.state;
+    console.log(imageInDB);
+    let imageDif = []
     const { hideModal } = modalActionsCreator;
+    imageDif = this.compareArrays(imageInDB, images)
+    console.log(imageDif)
+    // Loop through imageDif and delete images
+    imageDif.forEach((image) => {
+      deleteImage(image.idImage); // Assuming deleteImage takes an image as an argument
+    });
+
     hideModal();
   }
   render() {

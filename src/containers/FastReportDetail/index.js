@@ -11,6 +11,7 @@ import styles from './style';
 import { Grid, withStyles, Fab, TextField, FormControl, Button, Table } from '@material-ui/core';
 import { Redirect } from "react-router-dom";
 import { DeleteForever, ArrowBackIos, Edit, KeyboardReturn, Add } from '@material-ui/icons';
+import CancelIcon from '@material-ui/icons/Cancel';
 import DataTable from 'react-data-table-component';
 import { API_ENDPOINT as URL } from '../../constants';
 import FastReportForm from '../FastReportForm';
@@ -831,8 +832,8 @@ class FastReportDetail extends Component {
     }
   }
   render() {
-    const { classes, fastReport, fastReports, user, customers, images, fastReportActionCreator } = this.props
-    const { uploadFileSuccess } = fastReportActionCreator;
+    const { classes, fastReport, fastReports, user, customers, images, fastReportActionCreator, upFileSuccess } = this.props
+    console.log(upFileSuccess)
     const { showRightPanel, columnsGrid, columnsGridComplete, currentIdTool, fastReportAction, addFile } = this.state
     console.log(fastReport)
     return (
@@ -900,9 +901,20 @@ class FastReportDetail extends Component {
                   </Button>}
                   {addFile ? <FileInput /> : <></>}
                   &nbsp;
-                  <Button className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.saveFileToData(fastReport) }}>
+                  {upFileSuccess ? <Button className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.saveFileToData(fastReport) }}>
                     <Edit style={{ 'color': '#fff' }} fontSize="small" />&nbsp;Lưu File
-                  </Button>
+                  </Button> : <></>}
+                  {upFileSuccess ? <Button
+                    className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'}
+                    variant="contained"
+                    color="secondary" // Change the color to "secondary" for red color
+                    onClick={() => { this.saveFileToData(fastReport) }}
+                  >
+                    <CancelIcon style={{ color: '#fff' }} fontSize="small" /> {/* Change the icon to "cancel" */}
+                    &nbsp;Hủy
+                  </Button> : <></>}
+
+
                 </div>
                 {/* <Grid>
                   <Multiselect
@@ -998,6 +1010,7 @@ const mapStateToProps = (state, ownProps) => {
     },
     images: state.fastReports.fastReport ? state.fastReports.fastReport.images : [],
     files: state.files.files ? state.files.files : [],
+    upFileSuccess: state.files.files ? state.files.upFileSuccess : [],
     user: state.auth.user || {},
   }
 }
