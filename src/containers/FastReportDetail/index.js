@@ -380,6 +380,7 @@ class FastReportDetail extends Component {
       currentIdTool: {},
       isChange: false,
       addFile: false,
+      fileInDB: [],
       fastReportAction: true,
       columnsGrid: [
         { selector: 'name', name: 'Tên tài liệu', width: '100% - 300px', sortable: true },
@@ -509,6 +510,10 @@ class FastReportDetail extends Component {
     const { listAllCustomers } = customerActionCreator;
     getIdFastReport(params.fastReportId);
     listAllCustomers();
+    console.log(fastReport)
+    this.setState({
+      fileInDB: fastReport.files
+    })
   }
   onClickShowTool = (data) => {
     if (data._id === this.state.currentIdTool._id) {
@@ -610,6 +615,40 @@ class FastReportDetail extends Component {
         updateTool(newTool);
       }
     })
+  }
+  compareArrays = (arr1, arr2) => {
+    const differentElements = [];
+
+    // Tìm các phần tử không giống nhau giữa hai mảng
+    for (let i = 0; i < arr1.length; i++) {
+      if (!arr2.includes(arr1[i])) {
+        differentElements.push(arr1[i]);
+      }
+    }
+
+    for (let i = 0; i < arr2.length; i++) {
+      if (!arr1.includes(arr2[i])) {
+        differentElements.push(arr2[i]);
+      }
+    }
+
+    return differentElements;
+  }
+
+  notSave = () => {
+    const { files, fileActionsCreator } = this.props;
+    const { deleteFile } = fileActionsCreator;
+    const { fileInDB } = this.state;
+    console.log(fileInDB);
+    console.log(files)
+    let fileDif = []
+
+    fileDif = this.compareArrays(fileInDB, files)
+    console.log(fileDif)
+    // Loop through imageDif and delete images
+    fileDif.forEach((file) => {
+      deleteFile(file.idFile); // Assuming deleteImage takes an image as an argument
+    });
   }
   onClickEdit = (data) => {
     const { fastReportActionCreator, modalActionsCreator, imageActionsCreator } = this.props;
@@ -908,7 +947,7 @@ class FastReportDetail extends Component {
                     className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'}
                     variant="contained"
                     color="secondary" // Change the color to "secondary" for red color
-                    onClick={() => { this.saveFileToData(fastReport) }}
+                    onClick={() => { this.notSave() }}
                   >
                     <CancelIcon style={{ color: '#fff' }} fontSize="small" /> {/* Change the icon to "cancel" */}
                     &nbsp;Hủy
