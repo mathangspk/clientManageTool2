@@ -18,12 +18,15 @@ var myReducer = (state = initialState, action) => {
             const data = action.payload;
             console.log(data)
             console.log(state)
-            for (let i = 0; i < data.length; i++) {
-                state.files.push(data[i])
+            if (data) {
+                for (let i = 0; i < data.length; i++) {
+                    state.files.push(data[i])
+                }
+                if (state.files && state.files.length > 0) {
+                    toastSuccess('Upload file thành công!')
+                }
             }
-            if (state.files && state.files.length > 0) {
-                toastSuccess('Upload file thành công!')
-            }
+
             return {
                 ...state,
                 files: state.files,

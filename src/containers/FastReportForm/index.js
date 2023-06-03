@@ -51,7 +51,7 @@ class FastReportForm extends Component {
     const { listAllCustomers } = customerActionCreator;
     listAllCustomers();
     this.setState({
-      imageInDB: fastReportEditting.images
+      imageInDB: fastReportEditting ? fastReportEditting.images : []
     })
   }
   handleSubmitForm = (data) => {
@@ -425,7 +425,7 @@ FastReportForm.propTypes = {
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    fastReportEditting: state.fastReports.fastReport,
+    fastReportEditting: state.fastReports.fastReport ? state.fastReports.fastReport : null,
     initialValues: {
       WO: state.fastReports.fastReport ? state.fastReports.fastReport.WO : null,
       PCT: state.fastReports.fastReport ? state.fastReports.fastReport.PCT : null,

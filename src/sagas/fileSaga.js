@@ -12,7 +12,7 @@ import {
   deleteFileFail,
 } from '../actions/fileActions';
 
-import { uploadFilesRequest, deleteFileRequest } from '../apis/file';
+import { uploadFilesRequest, deleteFileRequest, addFileRequest } from '../apis/file';
 import { getToken } from '../apis/auth';
 
 import * as fileTypes from '../constants/file';
@@ -36,6 +36,22 @@ function* uploadFilesSaga({ payload }) {
   if (status === STATUS_CODE.SUCCESS) {
     yield put(uploadFilesSuccess(data.data));
     console.log(data.data)
+    const fastReportEditting = yield select((state) => state.fastReports.fastReport);
+    console.log(fastReportEditting)
+    let arrayFiles = fastReportEditting.files
+    console.log(arrayFiles)
+    if (fastReportEditting.files) {
+      for (let i = 0; i < data.data.length; i++) {
+        arrayFiles.push(data.data[i])
+      }
+    }
+    const idFastReport = fastReportEditting._id
+    const dataSend = {
+      id: idFastReport,
+      listFile: arrayFiles
+    }
+    const addFile = yield call(addFileRequest, token, idFastReport, dataSend);
+    console.log(addFile)
   } else {
     yield put(uploadFilesFail(data));
     yield put(returnErrors(data, status, 'UPLOAD_FILES_FAIL'));

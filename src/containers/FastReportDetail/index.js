@@ -417,25 +417,9 @@ class FastReportDetail extends Component {
               </div>
 
             </>
-            // return <>
-            //   <Fab
-            //     color="default"
-            //     aria-label="Remove"
-            //     size='small'
-            //     onClick={() => {
-            //       this.onClickRemoveTool(data)
-            //     }}
-            //   >
-            //     <DeleteForever color="error" fontSize="small" />
-            //   </Fab>
-            // </>
           }
         }
       ],
-      columnsGridComplete: [
-        { selector: 'name', name: 'Tên công cụ', width: '100% - 300px', sortable: true },
-        // { selector: 'type', name: 'Loại', width: 'calc((100% - 100px) / 3)', sortable: true },
-      ]
     }
   }
 
@@ -870,11 +854,25 @@ class FastReportDetail extends Component {
       this.setState({ isChange: false });
     }
   }
+  genarateDocs = (fastReport) => {
+    console.log('generate bang')
+    console.log(fastReport)
+    const { user } = this.props;
+    if (!user && !user._id) return [];
+    fastReport.isAction = true
+    if (!user.admin && fastReport.userId && (user._id !== fastReport.userId._id)) fastReport.isAction = false;
+    if (fastReport && fastReport.files && fastReport.files.length > 0) {
+      return fastReport.files
+    }
+    return []
+  }
   render() {
     const { classes, fastReport, fastReports, user, customers, images, fastReportActionCreator, upFileSuccess } = this.props
     console.log(upFileSuccess)
     const { showRightPanel, columnsGrid, columnsGridComplete, currentIdTool, fastReportAction, addFile } = this.state
     console.log(fastReport)
+    let dataTable = this.genarateDocs(fastReport)
+    console.log(dataTable)
     return (
       <Fragment>
         <div className={classes.containerPanel}>
@@ -940,49 +938,13 @@ class FastReportDetail extends Component {
                   </Button>}
                   {addFile ? <FileInput /> : <></>}
                   &nbsp;
-                  {upFileSuccess ? <Button className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.saveFileToData(fastReport) }}>
-                    <Edit style={{ 'color': '#fff' }} fontSize="small" />&nbsp;Lưu File
-                  </Button> : <></>}
-                  {upFileSuccess ? <Button
-                    className={fastReport.userId && (user.admin || user._id === fastReport.userId._id) ? '' : 'hide'}
-                    variant="contained"
-                    color="secondary" // Change the color to "secondary" for red color
-                    onClick={() => { this.notSave() }}
-                  >
-                    <CancelIcon style={{ color: '#fff' }} fontSize="small" /> {/* Change the icon to "cancel" */}
-                    &nbsp;Hủy
-                  </Button> : <></>}
-
-
                 </div>
-                {/* <Grid>
-                  <Multiselect
-                    options={(customers || []).filter(c => c._id !== user._id)}
-                    selectedValues={fastReport.NV}
-                    onSelect={this.addandremoveUserNV}
-                    onRemove={this.addandremoveUserNV}
-                    displayValue="name"
-                    placeholder={this.classAddTool(fastReport) === 'hide' ? "" : "Nhân viên nhóm công tác"}
-                    disable={this.classAddTool(fastReport) === 'hide'}
-                  />
-                </Grid> */}
-                {/* <div className={classes.boxActions}>
-                  <Button className={this.classAddTool(fastReport)} variant="contained" color="secondary" onClick={() => this.generateDox(fastReport)}>
-                    IN PHIẾU
-                  </Button> &nbsp;
-                  <Button className={this.classAddTool(fastReport)} variant="contained" color="primary" onClick={() => { this.onClickAddTool('/admin/tool/' + fastReport._id) }}>
-                    Thêm tool
-                  </Button>
-                </div> */}
                 <Grid className={classes.dataTable}>
                   <DataTable
                     noHeader={true}
                     keyField={'_id'}
-                    columns={fastReport.status === "START"
-                      || fastReport.status === "READY"
-                      || fastReport.status === "INPRG HAVE TOOL"
-                      ? columnsGrid : columnsGridComplete}
-                    data={this.genarateDocs(fastReport)}
+                    columns={columnsGrid}
+                    data={dataTable}
                     striped={true}
                     pagination
                     paginationPerPage={20}
@@ -1007,16 +969,7 @@ class FastReportDetail extends Component {
       </Fragment>
     );
   }
-  genarateDocs = (fastReport) => {
-    const { user } = this.props;
-    if (!user && !user._id) return [];
-    fastReport.isAction = true
-    if (!user.admin && fastReport.userId && (user._id !== fastReport.userId._id)) fastReport.isAction = false;
-    if (fastReport && fastReport.files && fastReport.files.length > 0) {
-      return fastReport.files
-    }
-    return []
-  }
+
 }
 const mapStateToProps = (state, ownProps) => {
   return {
