@@ -1,11 +1,12 @@
 const style = (theme) => ({
   containerPanel: {
     marginTop: '65px',
-    '& .hide' : {
+    '& .hide': {
       display: 'none !important'
     },
     '& .box-panel': {
       display: 'flex',
+      flexDirection: 'column',
       '& .block': {
         padding: '15px',
         background: '#fff',
@@ -40,25 +41,30 @@ const style = (theme) => ({
         justifyContent: 'space-between'
       },
       '& .left-panel': {
-        width: '50%',
-        marginLeft: '25%',
+        width: '100%',
         transition: 'all 1s ease-in-out',
         '& .field': {
-          margin: '10px 0'
+          margin: '10px 0',
+          fontSize: '0.8rem'
         }
       },
       '& .right-panel': {
-        width: '50%',
         display: 'none',
       },
-      '&.show-right-panel': {
-        '& .left-panel': {
-          marginLeft: '0',
-          paddingRight: '10px'
-        },
-        '& .right-panel': {
-          display: 'block',
-          paddingLeft: '10px'
+      '@media (min-width: 768px)': {
+        // Thiết lập cho laptop và desktop
+        '&.show-right-panel': {
+          flexDirection: 'row',
+          '& .left-panel': {
+            width: '75%',
+            marginLeft: '25%',
+            paddingRight: '10px'
+          },
+          '& .right-panel': {
+            width: '25%',
+            display: 'block',
+            paddingLeft: '10px'
+          }
         }
       }
     }
@@ -89,7 +95,7 @@ const style = (theme) => ({
           borderBottom: '1px solid rgba(0,0,0,.12)'
         }
       },
-    
+
     },
     '& .lb-status': {
       width: '90px',
@@ -131,4 +137,5 @@ const style = (theme) => ({
     zIndex: 1
   }
 });
+
 export default style;

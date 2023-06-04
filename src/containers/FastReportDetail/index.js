@@ -382,6 +382,7 @@ class FastReportDetail extends Component {
       addFile: false,
       fileInDB: [],
       fastReportAction: true,
+      selectedImage: null,
       columnsGrid: [
         { selector: 'name', name: 'Tên tài liệu', width: '100% - 300px', sortable: true },
         {
@@ -854,7 +855,7 @@ class FastReportDetail extends Component {
       this.setState({ isChange: false });
     }
   }
-  genarateDocs = (fastReport) => {
+  generateDocs = (fastReport) => {
     console.log('generate bang')
     console.log(fastReport)
     const { user } = this.props;
@@ -866,12 +867,70 @@ class FastReportDetail extends Component {
     }
     return []
   }
+  renderToolImages = () => {
+    let { images, classes } = this.props;
+    let { selectedImage } = this.state;
+    let xhtml = null;
+    if (images) {
+      if (images.length > 0) {
+        xhtml = (
+          <div style={{ display: 'flex', overflowX: 'auto' }}>
+            {images.map((image, index) => (
+              <div key={image.id} style={{ marginRight: '10px' }} >
+                <img
+                  src={`https://drive.google.com/uc?export=view&id=${image.idImage}`}
+                  data-filename={image.idImage}
+                  style={{ height: '200px', objectFit: 'cover', cursor: 'pointer' }}
+                  onClick={() => this.onClickPicture(image)}
+                />
+              </div>
+            ))}
+          </div>
+        );
+      }
+    }
+    return xhtml;
+  };
+  onClickPicture = (image) => {
+    this.setState({ selectedImage: image });
+  };
+  onCloseFullScreen = () => {
+    this.setState({ selectedImage: null });
+  };
+  renderFullScreenImage = () => {
+    let { selectedImage } = this.state;
+
+    if (selectedImage) {
+      return (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.9)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 9999,
+          }}
+          onClick={this.onCloseFullScreen}
+        >
+          <img
+            src={`https://drive.google.com/uc?export=view&id=${selectedImage.idImage}`}
+            style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
+          />
+        </div>
+      );
+    }
+
+    return null;
+  };
   render() {
-    const { classes, fastReport, fastReports, user, customers, images, fastReportActionCreator, upFileSuccess } = this.props
-    console.log(upFileSuccess)
-    const { showRightPanel, columnsGrid, columnsGridComplete, currentIdTool, fastReportAction, addFile } = this.state
-    console.log(fastReport)
-    let dataTable = this.genarateDocs(fastReport)
+    const { classes, fastReport, user, images, upFileSuccess } = this.props
+    const { showRightPanel, columnsGrid, addFile } = this.state
+    let dataTable = this.generateDocs(fastReport)
     console.log(dataTable)
     return (
       <Fragment>
@@ -958,11 +1017,16 @@ class FastReportDetail extends Component {
             <Grid>
               <div>
                 <div>Hình ảnh:</div>
-                {
-                  (images || []).length === 0 ? <></>
-                    : <ImageGallery items={this.getImage(images)} />
-                }
+                {(images || []).length === 0 ? (
+                  <></>
+                ) : (
+                  <>
+                    {this.renderToolImages()}
+                    {this.renderFullScreenImage()}
+                  </>
+                )}
               </div>
+
             </Grid>
           </Grid>
         </div>

@@ -35,11 +35,6 @@ class FastReportForm extends Component {
   componentDidUpdate(nextprops) {
     const { msgError } = this.props;
 
-    // if (isAuthenticated !== nextprops.isAuthenticated) {
-    //   if (isAuthenticated) {
-    //     history.push('/admin/fastReport');
-    //   }
-    // }
     if (msgError !== nextprops.msgError) {
       this.setState({
         msgError
@@ -101,29 +96,26 @@ class FastReportForm extends Component {
     });
   };
   renderToolImages = () => {
-    let { images } = this.props;
+    let { images, classes } = this.props;
     let xhtml = null;
-    //console.log(link.webViewLink);
     if (images) {
       if (images.length > 0) {
-        xhtml = images.map((image, index) => {
-          console.log(image)
-          return <Grid item key={image.id} >
-            <Paper>
-              <img
-                //src={`${API_ENDPOINT}/api/upload/image/${image.filename}`}
-                src={`https://drive.google.com/uc?export=view&id=${image.idImage}`}
-                // alt={image.name}
-                // className={classes.picture}
-                data-filename={image.idImage}
-                onClick={this.onClickPicture}
-              />
-            </Paper>
-          </Grid>
-        })
+        xhtml = (
+          <div style={{ display: 'flex', overflowX: 'auto' }}>
+            {images.map((image, index) => (
+              <div key={image.id} style={{ marginRight: '10px' }} >
+                <img
+                  src={`https://drive.google.com/uc?export=view&id=${image.idImage}`}
+                  data-filename={image.idImage}
+                  style={{ height: '200px', objectFit: 'cover' }}
+                  onClick={this.onClickPicture}
+                />
+              </div>
+            ))}
+          </div>
+        );
       }
     }
-
     return xhtml;
   };
   onClickPicture = (event) => {
@@ -163,8 +155,8 @@ class FastReportForm extends Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        {/* <MenuItem onClick={this.deleteImage}>Xóa</MenuItem> */}
-        <MenuItem onClick={this.deleteImage}>Hủy bỏ</MenuItem>
+        <MenuItem onClick={this.deleteImage}>Xóa</MenuItem>
+        <MenuItem onClick={this.cancelSelectImage}>Hủy bỏ</MenuItem>
       </Menu>
     );
   };
@@ -262,13 +254,6 @@ class FastReportForm extends Component {
                 component={renderTextField}
               ></Field>
             </Grid>
-            {/* {
-              initialValues.WO ?
-                <Grid style={{ fontSize: "16px", paddingTop: "16px" }} item md={12}>
-                  <label>PCT: {initialValues.PCT}</label>
-                </Grid>
-                : <></>
-            } */}
             <Grid item md={12}>
               <Field
                 id="timeStart"
@@ -323,14 +308,12 @@ class FastReportForm extends Component {
                       <DropzoneDialog />
                     </Grid>
                   </Grid>
-                  <Grid item md={12} xs={12} className={classes.showImage}>
+                  <Grid item md={12} xs={12}>
                     <Grid item>
                       <Typography variant="h6" >Hình ảnh hiện tượng lỗi</Typography>
                     </Grid>
-                    <Grid container spacing={3} className={classes.showImage} >
-                      {this.renderToolImages()}
-                    </Grid>
                   </Grid>
+                  {this.renderToolImages()}
                 </Fragment>
 
                 : <></>

@@ -46,8 +46,20 @@ const styles = (theme) => ({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  picture: {
+    width: '100%',
+    height: '200px'
+  },
   showImage: {
     marginTop: 20,
+    display: 'flex', // Add display flex
+    justifyContent: 'flex-start', // Align the thumbnails to the left
+    overflowY: 'auto', // Allow horizontal scrolling
+    "& > img": {
+      width: 50, // Adjust the width of the thumbnails as per your requirement
+      height: 50, // Adjust the height of the thumbnails as per your requirement
+      margin: 5, // Add margin between the thumbnails
+    },
   },
 });
 

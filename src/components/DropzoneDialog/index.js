@@ -9,7 +9,7 @@ import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import imageCompression from 'browser-image-compression';
 import * as imageActions from '../../actions/imageActions';
-
+//import sharp from 'sharp';
 
 var resizeImage = function (settings) {
     var file = settings.file;
@@ -108,8 +108,8 @@ class DropzoneDialogExample extends Component {
     async compressImage(_image) {
         // return new Promise(async (resolve, reject) => {
         const options = {
-            maxSizeMB: 1,
-            maxWidthOrHeight: 600,
+            maxSizeMB: 2,
+            maxWidthOrHeight: 3000,
             useWebWorker: true,
             fileType: 'image/*'
         }
@@ -122,13 +122,18 @@ class DropzoneDialogExample extends Component {
         // })
     }
 
+
     onChange = async (image) => {
         const { name, kks } = this.props;
+        const width = 800;
+        const height = 600;
+        const quality = 80;
         console.log(kks)
         let arrayImage = [];
         // Read in file
         for (let i = 0; i < image.length; i++) {
             var fileCompress = await this.compressImage(image[i])
+
             console.log(kks)
             //var fileFinal = new File([fileCompress], image[i].name, { type: image[i].type, lastModified: Date.now() });
             if (name) var fileFinal = new File([fileCompress], `${name}.jpg`, { type: image[i].type, lastModified: Date.now() });
