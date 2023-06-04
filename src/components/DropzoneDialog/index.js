@@ -110,6 +110,7 @@ class DropzoneDialogExample extends Component {
         const options = {
             maxSizeMB: 1,
             maxWidthOrHeight: 800,
+            quality: 1, // Giữ nguyên chất lượng ảnh sau khi nén
             useWebWorker: true,
             fileType: 'image/*'
         }
