@@ -108,8 +108,8 @@ class DropzoneDialogExample extends Component {
     async compressImage(_image) {
         // return new Promise(async (resolve, reject) => {
         const options = {
-            maxSizeMB: 2,
-            maxWidthOrHeight: 3000,
+            maxSizeMB: 1,
+            maxWidthOrHeight: 800,
             useWebWorker: true,
             fileType: 'image/*'
         }
@@ -125,9 +125,6 @@ class DropzoneDialogExample extends Component {
 
     onChange = async (image) => {
         const { name, kks } = this.props;
-        const width = 800;
-        const height = 600;
-        const quality = 80;
         console.log(kks)
         let arrayImage = [];
         // Read in file
