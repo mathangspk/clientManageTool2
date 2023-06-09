@@ -601,40 +601,7 @@ class FastReportDetail extends Component {
       }
     })
   }
-  compareArrays = (arr1, arr2) => {
-    const differentElements = [];
 
-    // Tìm các phần tử không giống nhau giữa hai mảng
-    for (let i = 0; i < arr1.length; i++) {
-      if (!arr2.includes(arr1[i])) {
-        differentElements.push(arr1[i]);
-      }
-    }
-
-    for (let i = 0; i < arr2.length; i++) {
-      if (!arr1.includes(arr2[i])) {
-        differentElements.push(arr2[i]);
-      }
-    }
-
-    return differentElements;
-  }
-
-  notSave = () => {
-    const { files, fileActionsCreator } = this.props;
-    const { deleteFile } = fileActionsCreator;
-    const { fileInDB } = this.state;
-    console.log(fileInDB);
-    console.log(files)
-    let fileDif = []
-
-    fileDif = this.compareArrays(fileInDB, files)
-    console.log(fileDif)
-    // Loop through imageDif and delete images
-    fileDif.forEach((file) => {
-      deleteFile(file.idFile); // Assuming deleteImage takes an image as an argument
-    });
-  }
   onClickEdit = (data) => {
     const { fastReportActionCreator, modalActionsCreator, imageActionsCreator } = this.props;
     const { setFastReportEditing } = fastReportActionCreator;

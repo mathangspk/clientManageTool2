@@ -201,19 +201,92 @@ class FastReports extends Component {
     changeModalContent(<FastReportForm />);
   }
   handleSearch = (event) => {
-    const { fastReportActionCreator } = this.props;
+    const { name, value } = event.target;
+    const { fastReportActionCreator, customers } = this.props;
     const { pagination, dataSearch } = this.state;
     const { searchFastReport } = fastReportActionCreator;
+
+    let selectedUserIds = [];
+    let users = customers;
+
     let search = {
       ...dataSearch,
       skip: 0,
       limit: pagination.rowPerPage,
-      [event.target.name]: event.target.value
+    };
+
+    if (name === "userId") {
+      if (value.length > 0) {
+        console.log(value);
+        selectedUserIds = users
+          .filter(user => value.includes(user.group))
+          .map(user => user._id);
+      }
+      search[name] = selectedUserIds;
+    } else {
+      search[name] = value;
     }
-    console.log(search)
+
+    console.log(search);
+
     this.setState({ dataSearch: search });
     searchFastReport(search);
-  }
+  };
+
+
+  // handleSearch = (event) => {
+  //   const { fastReportActionCreator } = this.props;
+  //   const { pagination, dataSearch } = this.state;
+  //   const { searchFastReport } = fastReportActionCreator;
+  //   const { name, value } = event.target;
+
+  //   if (name === "userId" && value.length > 0) {
+
+  //     const { customers } = this.props;
+  //     let selectedUserIds = []
+  //     const selectedGroup = value;
+  //     console.log(selectedGroup)
+  //     if (value.length > 0) {
+  //       console.log(value[0]);
+
+  //       selectedUserIds = customers
+  //         .filter(user => {
+  //           //console.log(user.group);
+  //           return user.group === value[0];
+  //         })
+  //         .map(user => user._id);
+  //     }
+
+  //     console.log(selectedUserIds)
+  //     const updatedDataSearch = {
+  //       ...dataSearch,
+  //       [name]: selectedUserIds
+  //     };
+
+  //     this.setState({ dataSearch: updatedDataSearch });
+
+  //     searchFastReport({
+  //       ...updatedDataSearch,
+  //       skip: 0,
+  //       limit: pagination.rowPerPage
+  //     });
+  //   } else {
+  //     const updatedDataSearch = {
+  //       ...dataSearch,
+  //       [name]: value
+  //     };
+
+  //     this.setState({ dataSearch: updatedDataSearch });
+
+  //     searchFastReport({
+  //       ...updatedDataSearch,
+  //       skip: 0,
+  //       limit: pagination.rowPerPage
+  //     });
+  //   }
+  // };
+
+
   handleChangePage = (page, total) => {
     const { fastReportActionCreator } = this.props;
     const { pagination, dataSearch } = this.state;
@@ -264,16 +337,30 @@ class FastReports extends Component {
                 onInput={this.handleSearch}
               />
             </div>
-            {/* <div className="field-search">
-              <TextField
-                fullWidth
-                id="search_pct"
-                name="pct"
-                label="PCT"
-                variant="filled"
-                onInput={this.handleSearch}
-              />
-            </div> */}
+            <div className="field-search">
+              <FormControl fullWidth className="multiple-select">
+                <InputLabel className="lb-user" id="lb-user">Tổ</InputLabel>
+                <Select
+                  labelId="lb-user"
+                  id="userId"
+                  className="sl-user"
+                  multiple
+                  value={dataSearch.userId}
+                  onChange={this.handleSearch}
+                  inputProps={{
+                    name: 'userId',
+                    id: 'userId',
+                  }}
+                  input={<Input />}
+                >
+                  {customers && Array.from(new Set(customers.map(customers => customers.group))).map(group => (
+                    <MenuItem key={group} value={group}>
+                      {group}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
             <div className="field-search">
               <FormControl fullWidth className="multiple-select">
                 <InputLabel className="lb-user" id="lb-user">Tạo bởi</InputLabel>
