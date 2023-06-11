@@ -336,7 +336,7 @@ class FastReports extends Component {
                   labelId="lb-user"
                   id="userId"
                   className="sl-user"
-                  multiple
+                  //multiple
                   value={dataSearch.userId}
                   onChange={this.handleSearch}
                   inputProps={{
