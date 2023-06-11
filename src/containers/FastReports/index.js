@@ -39,7 +39,7 @@ class FastReports extends Component {
             let { user } = this.props;
             let data = JSON.parse(JSON.stringify(params));
             let checkUser = (user.admin || user._id === params.userId._id);
-
+            let checkVip = (user.vip)
 
             //console.log(user)
             return <>
@@ -54,7 +54,7 @@ class FastReports extends Component {
                 <Visibility color="primary" />
               </Fab>
               {
-                checkUser ?
+                checkUser ? (
                   <>
                     &nbsp;&nbsp;
                     <Fab
@@ -69,17 +69,22 @@ class FastReports extends Component {
                     </Fab>
                     &nbsp;&nbsp;
 
-                    {/* <Fab
-                    color="default"
-                    aria-label="Xóa WO"
-                    size='small'
-                    onClick={() => {
-                      this.onClickDelete(data)
-                    }}
-                    >
-                    <DeleteForever color="error" fontSize="small" />
-                  </Fab> */}
-                  </> : <></>
+                    {
+                      checkVip && (
+                        <Fab
+                          color="default"
+                          aria-label="Xóa WO"
+                          size='small'
+                          onClick={() => {
+                            this.onClickDelete(data)
+                          }}
+                        >
+                          <DeleteForever color="error" fontSize="small" />
+                        </Fab>
+                      )
+                    }
+                  </>
+                ) : <></>
               }
             </>
           }
@@ -200,6 +205,40 @@ class FastReports extends Component {
     changeModalTitle('Sửa Work FastReport');
     changeModalContent(<FastReportForm />);
   }
+  // handleSearch = (event) => {
+  //   const { name, value } = event.target;
+  //   const { fastReportActionCreator, customers } = this.props;
+  //   const { pagination, dataSearch } = this.state;
+  //   const { searchFastReport } = fastReportActionCreator;
+
+  //   let selectedUserIds = [];
+  //   let users = customers;
+
+  //   let search = {
+  //     ...dataSearch,
+  //     skip: 0,
+  //     limit: pagination.rowPerPage,
+  //   };
+
+  //   if (name === "userId") {
+  //     if (value.length > 0) {
+  //       console.log(value);
+  //       selectedUserIds = users
+  //         .filter(user => value.includes(user.group))
+  //         .map(user => user._id);
+  //     }
+  //     search[name] = selectedUserIds;
+  //   } else {
+  //     search[name] = value;
+  //   }
+
+  //   console.log(search);
+
+  //   this.setState({ dataSearch: search });
+  //   searchFastReport(search);
+  // };
+
+
   handleSearch = (event) => {
     const { name, value } = event.target;
     const { fastReportActionCreator, customers } = this.props;
@@ -216,15 +255,20 @@ class FastReports extends Component {
     };
 
     if (name === "userId") {
-      if (value.length > 0) {
+      if (value.length > 0 && users.some(user => user._id === value[0])) {
+        search[name] = value;
+      } else {
         console.log(value);
         selectedUserIds = users
           .filter(user => value.includes(user.group))
           .map(user => user._id);
+        search[name] = selectedUserIds;
       }
-      search[name] = selectedUserIds;
     } else {
       search[name] = value;
+      if (name === "group") {
+        search["userId"] = [];
+      }
     }
 
     console.log(search);
@@ -233,58 +277,6 @@ class FastReports extends Component {
     searchFastReport(search);
   };
 
-
-  // handleSearch = (event) => {
-  //   const { fastReportActionCreator } = this.props;
-  //   const { pagination, dataSearch } = this.state;
-  //   const { searchFastReport } = fastReportActionCreator;
-  //   const { name, value } = event.target;
-
-  //   if (name === "userId" && value.length > 0) {
-
-  //     const { customers } = this.props;
-  //     let selectedUserIds = []
-  //     const selectedGroup = value;
-  //     console.log(selectedGroup)
-  //     if (value.length > 0) {
-  //       console.log(value[0]);
-
-  //       selectedUserIds = customers
-  //         .filter(user => {
-  //           //console.log(user.group);
-  //           return user.group === value[0];
-  //         })
-  //         .map(user => user._id);
-  //     }
-
-  //     console.log(selectedUserIds)
-  //     const updatedDataSearch = {
-  //       ...dataSearch,
-  //       [name]: selectedUserIds
-  //     };
-
-  //     this.setState({ dataSearch: updatedDataSearch });
-
-  //     searchFastReport({
-  //       ...updatedDataSearch,
-  //       skip: 0,
-  //       limit: pagination.rowPerPage
-  //     });
-  //   } else {
-  //     const updatedDataSearch = {
-  //       ...dataSearch,
-  //       [name]: value
-  //     };
-
-  //     this.setState({ dataSearch: updatedDataSearch });
-
-  //     searchFastReport({
-  //       ...updatedDataSearch,
-  //       skip: 0,
-  //       limit: pagination.rowPerPage
-  //     });
-  //   }
-  // };
 
 
   handleChangePage = (page, total) => {

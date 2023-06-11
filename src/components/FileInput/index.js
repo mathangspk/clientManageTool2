@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 // import { google } from 'googleapis';
+import styles from './style';
+import { withStyles } from '@material-ui/core';
 import { bindActionCreators, compose } from 'redux';
 import { connect } from 'react-redux';
 import * as fileActions from '../../actions/fileActions';
@@ -30,13 +32,16 @@ class FileInput extends React.Component {
     };
 
     render() {
+        const { classes } = this.props;
         const { selectedFiles } = this.state;
         //console.log(selectedFiles)
         return (
             <div>
-                <input type="file" multiple onChange={this.handleFileInputChange} />
+                <label htmlFor="file-input" className={classes.fileUpload}>
+                    <input id="file-input" type="file" multiple onChange={this.handleFileInputChange} />
+                </label>
                 {selectedFiles && <p>{selectedFiles.length} file(s) selected</p>}
-                <button onClick={this.handleFileUpload}>Upload</button>
+                <button onClick={this.handleFileUpload}> Tải lên </button>
             </div>
         );
     }
@@ -58,5 +63,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 };
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 export default compose(
+    withStyles(styles),
     withConnect,
 )(FileInput);
+
+

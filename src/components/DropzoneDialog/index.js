@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import styles from './style';
-import Resizer from 'react-image-file-resizer';
 import { withStyles } from '@material-ui/core';
 import { DropzoneDialog } from 'material-ui-dropzone'
 import Button from '@material-ui/core/Button';
