@@ -260,7 +260,7 @@ class FastReports extends Component {
       } else {
         console.log(value);
         selectedUserIds = users
-          .filter(user => value.includes(user.group))
+          .filter(user => value.includes(user.group) || value.includes(user.department))
           .map(user => user._id);
         search[name] = selectedUserIds;
       }
@@ -355,6 +355,30 @@ class FastReports extends Component {
             </div>
             <div className="field-search">
               <FormControl fullWidth className="multiple-select">
+                <InputLabel className="lb-user" id="lb-user">Phân xưởng</InputLabel>
+                <Select
+                  labelId="lb-user"
+                  id="userId"
+                  className="sl-user"
+                  //multiple
+                  value={dataSearch.userId}
+                  onChange={this.handleSearch}
+                  inputProps={{
+                    name: 'userId',
+                    id: 'userId',
+                  }}
+                  input={<Input />}
+                >
+                  {customers && Array.from(new Set(customers.map(customers => customers.department))).map(department => (
+                    <MenuItem key={department} value={department}>
+                      {department}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </div>
+            <div className="field-search">
+              <FormControl fullWidth className="multiple-select">
                 <InputLabel className="lb-user" id="lb-user">Tạo bởi</InputLabel>
                 <Select
                   labelId="lb-user"
@@ -393,6 +417,26 @@ class FastReports extends Component {
                 id="search_kks"
                 name="kks"
                 label="KKS"
+                variant="filled"
+                onInput={this.handleSearch}
+              />
+            </div>
+            <div className="field-search">
+              <TextField
+                fullWidth
+                id="search_date_from"
+                name="dateFrom"
+                label="Từ ngày"
+                variant="filled"
+                onInput={this.handleSearch}
+              />
+            </div>
+            <div className="field-search">
+              <TextField
+                fullWidth
+                id="search_date_to"
+                name="dateTo"
+                label="Đến ngày"
                 variant="filled"
                 onInput={this.handleSearch}
               />
