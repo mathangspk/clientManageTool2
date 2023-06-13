@@ -49,8 +49,8 @@ import DescriptionIcon from '@material-ui/icons/Description';
 import MenuBookIcon from '@material-ui/icons/MenuBook';
 import BuildIcon from '@material-ui/icons/Build';
 //export const API_ENDPOINT = 'https://api.yensaochampa.icu';
-//export const API_ENDPOINT = 'http://localhost:4001';
-export const API_ENDPOINT = 'http://113.161.220.166:4001';
+export const API_ENDPOINT = 'http://localhost:4001';
+//export const API_ENDPOINT = 'http://113.161.220.166:4001';
 
 export const STATUSES = [
   {
