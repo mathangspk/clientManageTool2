@@ -192,6 +192,9 @@ class Header extends Component {
   generateBptc = (item) => {
     return [item.BPTC, item.JSA, item.content, item.note]
   }
+  generateFastReport = (item) => {
+    return [item.userId.name, item.WO, item.location, item.KKS, item.content, moment(item.timeStart).format('DD-MM-YYYY'), moment(item.timeStop).format('DD-MM-YYYY'), item.userId.department]
+  }
   generateTool = (item) => {
     if (item.woInfo && item.woInfo.length > 0) {
       let woInfo = item.woInfo.filter(wo => wo.status !== 'COMPLETE');
@@ -222,7 +225,7 @@ class Header extends Component {
     return [item.name, item.manufacturer, item.type, item.woName || '', item.userName || '', status]
   }
   handleExport = async () => {
-    const { labelButtonAdd, order, tools, cchtt, cgsat, bbdgkt, bptc } = this.props;
+    const { labelButtonAdd, order, tools, cchtt, cgsat, bbdgkt, bptc, fastReports } = this.props;
     console.log(labelButtonAdd)
     let url = '';
     let params = {};
@@ -301,6 +304,18 @@ class Header extends Component {
         nameSheet = "BPTC&JSA"
         console.log(params)
         break;
+      case 'FAST REPORT':
+        params = JSON.parse(JSON.stringify(fastReports.params));
+        console.log(params)
+        delete params.skip;
+        delete params.limit;
+        header = ["Họ tên người báo cáo", "Số WO", "Địa điểm công tác", "Hệ thống/KKS", "Nội dung công tác", "Ngày bắt đầu", "Ngày kết thúc", "Phân xưởng"];
+        genData = this.generateFastReport;
+        url = 'api/fastReports/search';
+        dataBind = 'data.Data.Row';
+        nameSheet = "FAST REPORT"
+
+        break;
 
       default:
         break;
@@ -309,7 +324,7 @@ class Header extends Component {
     let token = await getToken();
     getWithToken(url, token, { params }).then(res => {
       let path = dataBind.split('.')
-
+      console.log(params)
       let array = res;
       path.forEach(i => {
         array = array[i];
@@ -447,7 +462,7 @@ const mapStateToProps = (state, ownProps) => {
     bptc: state.bptcs,
     cgsat: state.cgsats,
     tools: state.tools,
-    fastReport: state.fastReport
+    fastReports: state.fastReports
   };
 };
 
