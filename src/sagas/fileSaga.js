@@ -12,7 +12,7 @@ import {
   deleteFileFail,
 } from '../actions/fileActions';
 
-import { uploadFilesRequest, deleteFileRequest, addFileRequest, addFileRequestToBBDGKT } from '../apis/file';
+import { uploadFilesRequest, deleteFileRequest, addFileRequest, addFileRequestToBBDGKT, addFileRequestToBPTC } from '../apis/file';
 import { getToken } from '../apis/auth';
 
 import * as fileTypes from '../constants/file';
@@ -74,6 +74,23 @@ function* uploadFilesSaga({ payload }) {
         listFile: arrayFilesbbdgkt
       }
       const addFile = yield call(addFileRequestToBBDGKT, token, idbbdgkt, dataSend);
+      console.log(addFile)
+    }
+    const bptcEditting = yield select((state) => state.bptcs.bptc);
+    let idbptc = '';
+
+    if (bptcEditting !== undefined && bptcEditting !== null) {
+      let arrayFilesbptc = bptcEditting.files
+      console.log(arrayFilesbptc)
+      for (let i = 0; i < data.data.length; i++) {
+        arrayFilesbptc.push(data.data[i])
+      }
+      idbptc = bptcEditting._id
+      dataSend = {
+        id: idbptc,
+        listFile: arrayFilesbptc
+      }
+      const addFile = yield call(addFileRequestToBPTC, token, idbptc, dataSend);
       console.log(addFile)
     }
 
