@@ -4,6 +4,8 @@ import * as orderActions from '../../actions/orderActions';
 import * as modalActions from '../../actions/modal';
 import * as toolActions from '../../actions/toolActions';
 import * as customerActions from '../../actions/customerActions';
+import * as FastReportActions from '../../actions/fastReportActions';
+
 import { bindActionCreators, compose } from 'redux';
 import styles from './style';
 import { Grid, withStyles, Fab, TextField, FormControl, Button, Table } from '@material-ui/core';
@@ -684,6 +686,81 @@ class OrderDetail extends Component {
     changeModalTitle('Sửa Work Order');
     changeModalContent(<OrderForm />);
   }
+  onClickCreateFastReport = (data) => {
+    console.log(data)
+    const { fastReportActionsCreator, fastReportEditting, user, images, orderActionCreator, orderEditting } = this.props;
+    const { updateOrder } = orderActionCreator;
+
+    const { addFastReport, updateFastReport } = fastReportActionsCreator;
+    const { WO, timeStart, timeStop, content, location, KKS, userId, workType } = data;
+    const id = userId._id
+    console.log(id)
+
+    const newFastReport = {
+      WO,
+      timeStart,
+      timeStop,
+      location,
+      KKS,
+      userId: id,
+      content: content || '',
+      error: "",
+      result: "",
+      employ: "",
+      time: "",
+      images: [],
+    }
+    // console.log(data)
+    // console.log(newFastReport)
+    // console.log(fastReportEditting)
+    if (fastReportEditting) {
+      // newFastReport.PCT = fastReportEditting.PCT
+      newFastReport.toolId = fastReportEditting.toolId
+      newFastReport.userId = fastReportEditting.userId
+      newFastReport.status = fastReportEditting.status
+      newFastReport.statusTool = fastReportEditting.statusTool
+      if (user.admin || newFastReport.userId._id === user._id) {
+        updateFastReport(newFastReport);
+      }
+    } else {
+      newFastReport.status = 'START'
+      newFastReport.statusTool = 'START'
+      addFastReport(newFastReport);
+      // }
+    }
+    const newOrder = {
+      ...(orderEditting || {}),
+      WO,
+      workType,
+      timeStart,
+      timeStop,
+      location,
+      KKS,
+      userId: user._id,
+      status: 'START',
+      statusTool: 'START',
+      content: content || ''
+    }
+    console.log(this.state)
+    console.log(newOrder)
+    console.log(orderEditting)
+    if (orderEditting) {
+      newOrder.PCT = orderEditting.PCT
+      newOrder.toolId = orderEditting.toolId
+      newOrder.userId = orderEditting.userId
+      newOrder.status = orderEditting.status
+      newOrder.statusTool = orderEditting.statusTool
+      newOrder.fastReport = true
+      if (user.admin || newOrder.userId._id === user._id) {
+        updateOrder(newOrder);
+      }
+    }
+    // else {
+    //   newOrder.status = 'START'
+    //   newOrder.statusTool = 'START'
+    //   addOrder(newOrder);
+    // }
+  }
   onClickVerify = (data) => {
     const { orderActionCreator, user, order } = this.props;
     const { updateOrder } = orderActionCreator;
@@ -837,6 +914,7 @@ class OrderDetail extends Component {
   render() {
     const { classes, order, user, customers } = this.props
     const { showRightPanel, columnsGrid, columnsGridComplete, currentIdTool, orderAction } = this.state
+    const fastReport = order.fastReport ? order.fastReport : false
     return (
       <Fragment>
         <div className={classes.containerPanel}>
@@ -855,6 +933,11 @@ class OrderDetail extends Component {
                     <Button className={order.userId && (user.admin || user._id === order.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.onClickEdit(order) }}>
                       <Edit style={{ 'color': '#fff' }} fontSize="small" />&nbsp;Chỉnh sửa
                     </Button>
+                    &nbsp;
+                    {fastReport ? <></> : <Button className={order.userId && (user.admin || user._id === order.userId._id) ? '' : 'hide'} variant="contained" color="primary" onClick={() => { this.onClickCreateFastReport(order) }}>
+                      <Edit style={{ 'color': '#fff' }} fontSize="small" />&nbsp;Tạo Báo cáo nhanh
+                    </Button>}
+
                   </div>
                   <div className='group'>
                     <Button variant="contained" color="primary">
@@ -964,6 +1047,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     customers: state.customers.customers,
     orders: state.orders.orders,
+    orderEditting: state.orders.order,
     order: {
       WO: state.orders.order ? state.orders.order.WO : '',
       PCT: state.orders.order ? state.orders.order.PCT : '',
@@ -980,6 +1064,7 @@ const mapStateToProps = (state, ownProps) => {
       userId: state.orders.order ? state.orders.order.userId : {},
       NV: state.orders.order ? state.orders.order.NV : [],
       note: state.orders.order ? state.orders.order.note : '',
+      fastReport: state.orders.order ? state.orders.order.fastReport : false,
       _id: state.orders.order ? state.orders.order._id : '',
       isAction: true
     },
@@ -992,7 +1077,8 @@ const mapDispatchToProps = (dispatch, ownProps) => {
     customerActionCreator: bindActionCreators(customerActions, dispatch),
     toolActionCreator: bindActionCreators(toolActions, dispatch),
     orderActionCreator: bindActionCreators(orderActions, dispatch),
-    modalActionsCreator: bindActionCreators(modalActions, dispatch)
+    modalActionsCreator: bindActionCreators(modalActions, dispatch),
+    fastReportActionsCreator: bindActionCreators(FastReportActions, dispatch),
   }
 }
 
