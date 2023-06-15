@@ -25,6 +25,7 @@ class OrderForm extends Component {
       userIdSelect: '',
       msgError: '',
       workTypeSelected: '',
+      fastReport: false,
     }
   }
   //@check login success adn error
@@ -50,7 +51,7 @@ class OrderForm extends Component {
   }
   handleSubmitForm = (data) => {
     const { orderActionsCreator, orderEditting, user } = this.props;
-    const { workTypeSelected } = this.state;
+    const { workTypeSelected, fastReport } = this.state;
     const { addOrder, updateOrder } = orderActionsCreator;
     const { WO, timeStart, timeStop, content, location, KKS } = data;
     const newOrder = {
@@ -64,7 +65,9 @@ class OrderForm extends Component {
       userId: user._id,
       status: 'START',
       statusTool: 'START',
-      content: content || ''
+      content: content || '',
+      fastReport: false
+
     }
     console.log(this.state)
     console.log(newOrder)
@@ -82,6 +85,7 @@ class OrderForm extends Component {
     } else {
       newOrder.status = 'START'
       newOrder.statusTool = 'START'
+      newOrder.fastReport = false
       addOrder(newOrder);
     }
   };
